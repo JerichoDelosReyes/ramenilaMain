@@ -40,7 +40,7 @@ Welcome to the Ramenila Admin Dashboard! This project is a comprehensive admin p
 ## 🚀 Live Preview
 
 Check out the live preview of the Ramenila website here:
-[https://jerichodelosreyes.github.io/ramenilaRevamped/](https://jerichodelosreyes.github.io/ramenilaRevamped/)
+[https://jerichodelosreyes.github.io/ramenilaMain/](https://jerichodelosreyes.github.io/ramenilaMain/)
 
 *(Note: The live preview includes both the client-facing menu and admin dashboard)*
 
