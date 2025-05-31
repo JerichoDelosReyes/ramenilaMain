@@ -154,7 +154,7 @@ class POSSystem {    constructor() {
                 category: 'toppings',
                 price: 35.00,
                 stock: 28,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfpJU8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
+                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfpJU8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
             },
             {
                 id: 14,
@@ -163,7 +163,7 @@ class POSSystem {    constructor() {
                 category: 'toppings',
                 price: 45.00,
                 stock: 35,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCf35w8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
+                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCf35w8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
             }
         ];
 
@@ -322,13 +322,51 @@ class POSSystem {    constructor() {
             processOrderBtn.addEventListener('click', () => {
                 this.processOrder();
             });
-        }
-
-        // Proceed to Payment button (new ID)
+        }        // Proceed to Payment button (new ID)
         const proceedToPaymentBtn = document.getElementById('proceedToPaymentBtn');
         if (proceedToPaymentBtn) {
             proceedToPaymentBtn.addEventListener('click', () => {
+                this.showPaymentModal();
+            });
+        }
+
+        // Payment modal event listeners
+        const closePaymentModal = document.getElementById('closePaymentModal');
+        if (closePaymentModal) {
+            closePaymentModal.addEventListener('click', () => {
+                this.closePaymentModal();
+            });
+        }
+
+        const cancelPaymentBtn = document.getElementById('cancelPaymentBtn');
+        if (cancelPaymentBtn) {
+            cancelPaymentBtn.addEventListener('click', () => {
+                this.closePaymentModal();
+            });
+        }
+
+        const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+        if (confirmPaymentBtn) {
+            confirmPaymentBtn.addEventListener('click', () => {
                 this.processOrder();
+            });
+        }
+
+        // Payment type change in modal
+        const paymentType = document.getElementById('paymentType');
+        if (paymentType) {
+            paymentType.addEventListener('change', (e) => {
+                this.paymentMethod = e.target.value;
+                this.togglePaymentFields();
+                this.calculateChangeInModal();
+            });
+        }
+
+        // Amount received in payment modal
+        const modalAmountReceived = document.getElementById('amountReceived');
+        if (modalAmountReceived) {
+            modalAmountReceived.addEventListener('input', () => {
+                this.calculateChangeInModal();
             });
         }
 
@@ -354,12 +392,27 @@ class POSSystem {    constructor() {
             printReceiptBtn.addEventListener('click', () => {
                 this.printReceipt();
             });
-        }
-
-        // Click outside modal to close
+        }        // Click outside modal - prevent closing to ensure user interaction
         window.addEventListener('click', (e) => {
+            // Only allow closing via close buttons, not by clicking outside
+            // This prevents accidental closure and ensures user completes the action
             if (e.target.classList.contains('modal')) {
-                e.target.style.display = 'none';
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+
+        // Prevent scrolling when modal is open
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const paymentModal = document.getElementById('paymentModal');
+                const orderModal = document.getElementById('orderModal');
+                
+                if (paymentModal && paymentModal.classList.contains('show')) {
+                    this.closePaymentModal();
+                } else if (orderModal && orderModal.classList.contains('show')) {
+                    this.closeOrderModal();
+                }
             }
         });
     }    addToCart(item) {
@@ -370,7 +423,6 @@ class POSSystem {    constructor() {
             this.cart.push({...item, quantity: 1});
         }
         this.updateCartDisplay();
-        this.showNotification(`${item.name} added to cart`, 'success');
     }
 
     removeFromCart(itemId) {
@@ -498,13 +550,157 @@ class POSSystem {    constructor() {
         if (proceedToPaymentBtn) proceedToPaymentBtn.disabled = this.cart.length === 0;
 
         this.calculateChange();
-    }
-
-    clearCart() {
+    }    clearCart() {
         this.cart = [];
         this.updateCartDisplay();
         this.showNotification('Cart cleared', 'info');
-    }    toggleCashPaymentFields() {
+    }
+
+    // Payment Modal Methods
+    showPaymentModal() {
+        if (this.cart.length === 0) {
+            this.showNotification('Cart is empty', 'error');
+            return;
+        }
+
+        const modal = document.getElementById('paymentModal');
+        if (modal) {
+            this.populatePaymentModal();
+            modal.classList.add('show');
+            modal.style.display = 'flex';
+        }
+    }
+
+    closePaymentModal() {
+        const modal = document.getElementById('paymentModal');
+        if (modal) {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        }
+    }
+
+    populatePaymentModal() {
+        // Calculate totals
+        const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const discount = this.calculateDiscount(subtotal);
+        const discountedSubtotal = subtotal - discount;
+        const tax = discountedSubtotal * 0.12;
+        const total = discountedSubtotal + tax;        // Populate order summary
+        const orderSummary = document.getElementById('paymentOrderSummary');
+        if (orderSummary) {
+            let itemsHtml = '';
+            this.cart.forEach(item => {
+                // Get product image
+                const categoryImage = this.getCategoryImage(item.category);
+                itemsHtml += `
+                    <div class="payment-item">
+                        <div class="payment-item-image">
+                            <img src="${categoryImage}" alt="${item.name}" class="payment-product-image">
+                        </div>
+                        <div class="payment-item-info">
+                            <div class="payment-item-name">${item.name}</div>
+                            <div class="payment-item-details">Qty: ${item.quantity} × ₱${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="payment-item-price">₱${(item.price * item.quantity).toFixed(2)}</div>
+                    </div>
+                `;
+            });
+            orderSummary.innerHTML = itemsHtml;
+        }
+
+        // Populate totals
+        const paymentSubtotal = document.getElementById('paymentSubtotal');
+        const paymentDiscount = document.getElementById('paymentDiscount');
+        const paymentDiscountRow = document.getElementById('paymentDiscountRow');
+        const paymentDiscountType = document.getElementById('paymentDiscountType');
+        const paymentTax = document.getElementById('paymentTax');
+        const paymentTotal = document.getElementById('paymentTotal');
+
+        if (paymentSubtotal) paymentSubtotal.textContent = `₱${subtotal.toFixed(2)}`;
+        if (paymentTax) paymentTax.textContent = `₱${tax.toFixed(2)}`;
+        if (paymentTotal) paymentTotal.textContent = `₱${total.toFixed(2)}`;
+
+        if (discount > 0) {
+            if (paymentDiscountRow) paymentDiscountRow.style.display = 'flex';
+            if (paymentDiscount) paymentDiscount.textContent = `-₱${discount.toFixed(2)}`;
+            if (paymentDiscountType) {
+                const discountLabel = this.customerType === 'pwd' ? '20% PWD Discount:' : 
+                                    this.customerType === 'senior' ? '20% Senior Discount:' : 
+                                    'Discount:';
+                paymentDiscountType.textContent = discountLabel;
+            }
+        } else {
+            if (paymentDiscountRow) paymentDiscountRow.style.display = 'none';
+        }
+
+        // Reset form fields
+        const customerName = document.getElementById('customerName');
+        const orderType = document.getElementById('orderType');
+        const paymentType = document.getElementById('paymentType');
+        const amountReceived = document.getElementById('amountReceived');
+        const referenceNumber = document.getElementById('referenceNumber');
+
+        if (customerName) customerName.value = '';
+        if (orderType) orderType.value = 'dine-in';
+        if (paymentType) paymentType.value = 'cash';
+        if (amountReceived) amountReceived.value = '';
+        if (referenceNumber) referenceNumber.value = '';
+
+        // Reset payment method
+        this.paymentMethod = 'cash';
+        this.togglePaymentFields();
+        this.calculateChangeInModal();
+    }    togglePaymentFields() {
+        const cashFields = document.getElementById('cashPaymentFields');
+        const digitalFields = document.getElementById('digitalPaymentFields');
+        const paymentMethodInfo = document.querySelector('.payment-method-info');
+
+        if (cashFields && digitalFields) {
+            if (this.paymentMethod === 'cash') {
+                cashFields.style.display = 'block';
+                digitalFields.style.display = 'none';
+            } else {
+                cashFields.style.display = 'none';
+                digitalFields.style.display = 'block';
+                
+                // Hide the payment method cards for digital payments
+                if (paymentMethodInfo) {
+                    paymentMethodInfo.style.display = 'none';
+                }
+            }
+        }
+    }
+
+    calculateChangeInModal() {
+        if (this.paymentMethod !== 'cash') return;
+
+        const amountReceived = document.getElementById('amountReceived');
+        const changeAmount = document.getElementById('changeAmount');
+
+        if (amountReceived && changeAmount) {
+            const received = parseFloat(amountReceived.value) || 0;
+            const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const discount = this.calculateDiscount(subtotal);
+            const discountedSubtotal = subtotal - discount;
+            const tax = discountedSubtotal * 0.12;
+            const total = discountedSubtotal + tax;
+            
+            const change = received - total;
+            
+            if (received === 0) {
+                changeAmount.textContent = '₱0.00';
+                changeAmount.style.color = '#666';
+            } else if (change >= 0) {
+                changeAmount.textContent = `₱${change.toFixed(2)}`;
+                changeAmount.style.color = 'var(--success-color)';
+            } else {
+                changeAmount.textContent = `₱${Math.abs(change).toFixed(2)} short`;
+                changeAmount.style.color = 'var(--error-color)';
+            }
+        }
+    }
+
+    toggleCashPaymentFields() {
         const cashPayment = document.getElementById('cashPayment');
         if (cashPayment) {
             if (this.paymentMethod === 'cash') {
@@ -542,6 +738,11 @@ class POSSystem {    constructor() {
             return;
         }
 
+        // Get payment modal data
+        const customerName = document.getElementById('customerName')?.value.trim() || 'Walk-in Customer';
+        const orderType = document.getElementById('orderType')?.value || 'dine-in';
+        const paymentType = document.getElementById('paymentType')?.value || 'cash';
+        
         // Calculate final total with discount and tax
         const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const discount = this.calculateDiscount(subtotal);
@@ -550,28 +751,40 @@ class POSSystem {    constructor() {
         const total = discountedSubtotal + tax;
         
         // Validate payment for cash transactions
-        if (this.paymentMethod === 'cash') {
-            const amountReceived = document.getElementById('amountReceived');
-            const received = parseFloat(amountReceived.value) || 0;
+        if (paymentType === 'cash') {
+            const amountReceivedInput = document.getElementById('amountReceived');
+            const received = parseFloat(amountReceivedInput?.value) || 0;
             
             if (received < total) {
                 this.showNotification('Insufficient amount received', 'error');
                 return;
             }
-        }
+        } else {
+            // Validate digital payment reference number
+            const referenceNumber = document.getElementById('referenceNumber')?.value.trim();
+            if (!referenceNumber) {
+                this.showNotification('Reference number is required for digital payments', 'error');
+                return;
+            }
+        }        // Close payment modal
+        this.closePaymentModal();
 
-        // Show processing notification
-        this.showNotification('Processing order...', 'info');
+        // Show processing spinner
+        this.showProcessingSpinner();
 
         // Simulate processing delay
         setTimeout(() => {
-            this.completeTransaction(total, subtotal, discount, tax);
+            this.hideProcessingSpinner();
+            this.completeTransaction(total, subtotal, discount, tax, customerName, orderType, paymentType);
         }, 2000);
-    }    completeTransaction(total, subtotal, discount, tax) {
-        const customerName = 'Walk-in Customer'; // Default since customer name field was removed
-        const orderType = 'dine-in'; // Default to dine-in since order type field was removed
-        
-        const transaction = {
+    }
+
+    completeTransaction(total, subtotal, discount, tax, customerName, orderType, paymentType) {
+        // Get additional payment data
+        const referenceNumber = paymentType !== 'cash' ? document.getElementById('referenceNumber')?.value.trim() : null;
+        const amountReceived = paymentType === 'cash' ? parseFloat(document.getElementById('amountReceived')?.value) : total;
+        const change = paymentType === 'cash' ? amountReceived - total : 0;
+          const transaction = {
             orderNumber: this.orderNumber,
             customerName: customerName,
             customerType: this.customerType,
@@ -582,7 +795,10 @@ class POSSystem {    constructor() {
             discountType: this.customerType !== 'regular' ? this.getDiscountTypeLabel() : null,
             tax: tax,
             total: total,
-            paymentMethod: this.paymentMethod,
+            paymentMethod: paymentType,
+            amountReceived: amountReceived,
+            change: change,
+            referenceNumber: referenceNumber,
             timestamp: new Date().toISOString(),
             status: 'completed'
         };
@@ -591,24 +807,19 @@ class POSSystem {    constructor() {
         this.saveTransaction(transaction);
 
         // Show order completion modal
-        this.showOrderModal(transaction);
-
-        // Reset for next order
+        this.showOrderModal(transaction);        // Reset for next order
         this.cart = [];
         this.orderNumber = this.generateOrderNumber();
         this.updateCartDisplay();
         
         // Clear payment fields
-        const amountReceived = document.getElementById('amountReceived');
-        if (amountReceived) amountReceived.value = '';
-          // Reset customer type to regular for next order
+        const amountReceivedField = document.getElementById('amountReceived');
+        if (amountReceivedField) amountReceivedField.value = '';        // Reset customer type to regular for next order
         const customerTypeSelect = document.getElementById('customerType');
         if (customerTypeSelect) {
             customerTypeSelect.value = 'regular';
             this.customerType = 'regular';
         }
-        
-        this.showNotification('Order completed successfully!', 'success');
     }
 
     saveTransaction(transaction) {
@@ -644,16 +855,17 @@ class POSSystem {    constructor() {
                         <span>-₱${transaction.discount.toFixed(2)}</span>
                     </div>
                 `;
-            }
-
-            orderReceipt.innerHTML = `
+            }            orderReceipt.innerHTML = `
                 <div class="receipt-header">
                     <h3>Ramenila</h3>
                     <p>Order #${transaction.orderNumber}</p>
                     <p>${new Date(transaction.timestamp).toLocaleString()}</p>
-                </div>                <div class="receipt-details">
+                </div>
+                
+                <div class="receipt-details">
                     <p><strong>Customer:</strong> ${transaction.customerName}</p>
                     <p><strong>Customer Type:</strong> ${transaction.customerType.charAt(0).toUpperCase() + transaction.customerType.slice(1)}</p>
+                    <p><strong>Order Type:</strong> ${transaction.orderType.charAt(0).toUpperCase() + transaction.orderType.slice(1)}</p>
                     <p><strong>Payment Method:</strong> ${transaction.paymentMethod.toUpperCase()}</p>
                 </div>
                 <div class="receipt-items">
@@ -674,6 +886,22 @@ class POSSystem {    constructor() {
                         <strong>Total: ₱${transaction.total.toFixed(2)}</strong>
                     </div>
                 </div>
+                <div class="receipt-payment-info">
+                    <div class="receipt-item">
+                        <span>Amount Paid:</span>
+                        <span>₱${transaction.amountReceived.toFixed(2)}</span>
+                    </div>
+                    ${transaction.paymentMethod === 'cash' ? `
+                    <div class="receipt-item">
+                        <span>Change:</span>
+                        <span>₱${transaction.change.toFixed(2)}</span>
+                    </div>` : ''}
+                    ${transaction.referenceNumber ? `
+                    <div class="receipt-item">
+                        <span>Reference Number:</span>
+                        <span>${transaction.referenceNumber}</span>
+                    </div>` : ''}
+                </div>
             `;
 
             modal.style.display = 'block';
@@ -692,8 +920,160 @@ class POSSystem {    constructor() {
         // Cart is already cleared in completeTransaction
     }
 
+    showProcessingSpinner() {
+        const spinner = document.getElementById('processingSpinner');
+        if (spinner) {
+            spinner.style.display = 'flex';
+        }
+    }    hideProcessingSpinner() {
+        const spinner = document.getElementById('processingSpinner');
+        if (spinner) {
+            spinner.style.display = 'none';
+        }
+    }
+
     printReceipt() {
-        window.print();
+        // Ensure the order modal is visible and properly styled for printing
+        const modal = document.getElementById('orderModal');
+        if (modal) {
+            // Temporarily hide any notifications
+            const notifications = document.querySelectorAll('.notification, .notyf, .notyf__toast, .notyf-container');
+            notifications.forEach(notif => {
+                notif.style.display = 'none';
+            });
+            
+            // Ensure modal is visible
+            modal.style.display = 'block';
+            modal.style.visibility = 'visible';
+            
+            // Force A5 print settings by injecting print styles
+            const printStyles = document.createElement('style');
+            printStyles.id = 'temp-print-styles';
+            printStyles.innerHTML = `
+                @media print {
+                    @page { 
+                        size: A5 portrait !important; 
+                        margin: 8mm !important; 
+                    }
+                    body { 
+                        font-size: 10pt !important; 
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                }
+            `;
+            document.head.appendChild(printStyles);
+            
+            // Add a small delay to ensure everything is rendered
+            setTimeout(() => {
+                // Try to create a dedicated print window for better A5 control
+                if (window.chrome || window.navigator.userAgent.includes('Chrome')) {
+                    // For Chrome, create a new window with A5 formatting
+                    const printWindow = window.open('', '_blank', 'width=595,height=842');
+                    const receiptContent = modal.querySelector('#orderReceipt').innerHTML;
+                    
+                    printWindow.document.write(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Receipt - ${this.orderNumber}</title>
+                            <style>
+                                @page { 
+                                    size: A5 portrait; 
+                                    margin: 8mm; 
+                                }
+                                body { 
+                                    font-family: 'Courier New', monospace; 
+                                    font-size: 10pt; 
+                                    margin: 0; 
+                                    padding: 0; 
+                                    color: black;
+                                    background: white;
+                                }
+                                .receipt-header { 
+                                    text-align: center; 
+                                    margin-bottom: 8pt; 
+                                    border-bottom: 1px solid #000; 
+                                    padding-bottom: 6pt; 
+                                }
+                                .receipt-header h3 { 
+                                    font-size: 14pt; 
+                                    font-weight: bold; 
+                                    margin: 0 0 3pt 0; 
+                                }
+                                .receipt-header p { 
+                                    font-size: 8pt; 
+                                    margin: 1pt 0; 
+                                }
+                                .receipt-details, .receipt-items, .receipt-summary, .receipt-payment-info { 
+                                    margin-bottom: 6pt; 
+                                }
+                                .receipt-details p { 
+                                    font-size: 8pt; 
+                                    margin: 1pt 0; 
+                                }
+                                .receipt-items h4 { 
+                                    font-size: 10pt; 
+                                    font-weight: bold; 
+                                    margin: 0 0 3pt 0; 
+                                    border-bottom: 1px solid #000; 
+                                    padding-bottom: 1pt; 
+                                }
+                                .receipt-item { 
+                                    display: flex; 
+                                    justify-content: space-between; 
+                                    font-size: 8pt; 
+                                    margin: 1pt 0; 
+                                    line-height: 1.2; 
+                                }
+                                .receipt-item.total { 
+                                    font-size: 10pt; 
+                                    font-weight: bold; 
+                                    border-top: 1px solid #000; 
+                                    padding-top: 3pt; 
+                                    margin-top: 3pt; 
+                                }
+                                .receipt-summary { 
+                                    border-top: 1px solid #000; 
+                                    padding-top: 3pt; 
+                                }
+                                .receipt-payment-info { 
+                                    border-top: 1px dashed #000; 
+                                    padding-top: 3pt; 
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            ${receiptContent}
+                        </body>
+                        </html>
+                    `);
+                    printWindow.document.close();
+                    printWindow.focus();
+                    
+                    setTimeout(() => {
+                        printWindow.print();
+                        printWindow.close();
+                    }, 500);
+                } else {
+                    // For other browsers, use regular print
+                    window.print();
+                }
+                
+                // Clean up and restore notifications after printing
+                setTimeout(() => {
+                    const tempStyles = document.getElementById('temp-print-styles');
+                    if (tempStyles) {
+                        document.head.removeChild(tempStyles);
+                    }
+                    notifications.forEach(notif => {
+                        notif.style.display = '';
+                    });
+                }, 1000);
+            }, 100);
+        } else {
+            this.showNotification('No receipt to print', 'error');
+        }
     }
 
     showNotification(message, type = 'info') {
