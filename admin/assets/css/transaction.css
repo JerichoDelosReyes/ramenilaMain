@@ -1045,7 +1045,163 @@
     transform: translateX(-50%) translateY(0);
 }
 
+/* Processing Spinner */
+.processing-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.spinner-content {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #873E23;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner-text {
+    color: #873E23;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Print Styles - A5 Format */
+@media print {
+    /* Hide everything except the order modal */
+    body * {
+        visibility: hidden;
+    }
+    
+    /* Hide notifications completely */
+    .notification,
+    .notyf,
+    .notyf__toast,
+    .processing-spinner {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    
+    /* Show only the order modal content */
+    #orderModal,
+    #orderModal * {
+        visibility: visible;
+    }
+    
+    /* Page setup for A5 */
+    @page {
+        size: A5;
+        margin: 10mm;
+    }
+    
+    /* Reset modal styles for print */
+    #orderModal {
+        position: static !important;
+        display: block !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    .modal-content {
+        position: static !important;
+        transform: none !important;
+        background: white !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Hide modal header and actions for print */
+    .modal-header,
+    .modal-actions {
+        display: none !important;
+    }
+    
+    /* Style the receipt for print */
+    .order-receipt {
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    .receipt-header {
+        text-align: center;
+        margin-bottom: 15pt;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10pt;
+    }
+    
+    .receipt-header h3 {
+        font-size: 18pt;
+        font-weight: bold;
+        margin-bottom: 5pt;
+    }
+    
+    .receipt-details,
+    .receipt-items,
+    .receipt-summary {
+        margin-bottom: 15pt;
+    }
+    
+    .receipt-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 3pt;
+        page-break-inside: avoid;
+    }
+    
+    .receipt-item.total {
+        font-weight: bold;
+        font-size: 14pt;
+        border-top: 2px solid #000;
+        padding-top: 5pt;
+        margin-top: 10pt;
+    }
+    
+    .receipt-payment-info {
+        border-top: 1px solid #000;
+        padding-top: 10pt;
+        margin-top: 15pt;
+    }
+}
+
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .pos-container {
+        grid-template-columns: 1fr 350px;
+    }
+}
+
 @media (max-width: 768px) {
     .pos-container {
         grid-template-columns: 1fr;
@@ -1053,21 +1209,11 @@
     }
     
     .cart-section {
-        order: -1;
-        max-height: 400px;
+        order: 1;
     }
     
-    .menu-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    }
-    
-    .category-tabs {
-        justify-content: center;
-    }
-    
-    .tab-btn {
-        font-size: 0.8rem;
-        padding: 6px 12px;
+    .menu-section {
+        order: 2;
     }
     
     .modal-content {

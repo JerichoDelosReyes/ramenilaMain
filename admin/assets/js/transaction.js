@@ -154,7 +154,7 @@ class POSSystem {    constructor() {
                 category: 'toppings',
                 price: 35.00,
                 stock: 28,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfpJU8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
+                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfpJU8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
             },
             {
                 id: 14,
@@ -163,7 +163,7 @@ class POSSystem {    constructor() {
                 category: 'toppings',
                 price: 45.00,
                 stock: 35,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCf35w8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
+                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCf35w8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
             }
         ];
 
@@ -766,16 +766,15 @@ class POSSystem {    constructor() {
                 this.showNotification('Reference number is required for digital payments', 'error');
                 return;
             }
-        }
-
-        // Close payment modal
+        }        // Close payment modal
         this.closePaymentModal();
 
-        // Show processing notification
-        this.showNotification('Processing order...', 'info');
+        // Show processing spinner
+        this.showProcessingSpinner();
 
         // Simulate processing delay
         setTimeout(() => {
+            this.hideProcessingSpinner();
             this.completeTransaction(total, subtotal, discount, tax, customerName, orderType, paymentType);
         }, 2000);
     }
@@ -856,16 +855,17 @@ class POSSystem {    constructor() {
                         <span>-₱${transaction.discount.toFixed(2)}</span>
                     </div>
                 `;
-            }
-
-            orderReceipt.innerHTML = `
+            }            orderReceipt.innerHTML = `
                 <div class="receipt-header">
                     <h3>Ramenila</h3>
                     <p>Order #${transaction.orderNumber}</p>
                     <p>${new Date(transaction.timestamp).toLocaleString()}</p>
-                </div>                <div class="receipt-details">
+                </div>
+                
+                <div class="receipt-details">
                     <p><strong>Customer:</strong> ${transaction.customerName}</p>
                     <p><strong>Customer Type:</strong> ${transaction.customerType.charAt(0).toUpperCase() + transaction.customerType.slice(1)}</p>
+                    <p><strong>Order Type:</strong> ${transaction.orderType.charAt(0).toUpperCase() + transaction.orderType.slice(1)}</p>
                     <p><strong>Payment Method:</strong> ${transaction.paymentMethod.toUpperCase()}</p>
                 </div>
                 <div class="receipt-items">
@@ -886,6 +886,22 @@ class POSSystem {    constructor() {
                         <strong>Total: ₱${transaction.total.toFixed(2)}</strong>
                     </div>
                 </div>
+                <div class="receipt-payment-info">
+                    <div class="receipt-item">
+                        <span>Amount Paid:</span>
+                        <span>₱${transaction.amountReceived.toFixed(2)}</span>
+                    </div>
+                    ${transaction.paymentMethod === 'cash' ? `
+                    <div class="receipt-item">
+                        <span>Change:</span>
+                        <span>₱${transaction.change.toFixed(2)}</span>
+                    </div>` : ''}
+                    ${transaction.referenceNumber ? `
+                    <div class="receipt-item">
+                        <span>Reference Number:</span>
+                        <span>${transaction.referenceNumber}</span>
+                    </div>` : ''}
+                </div>
             `;
 
             modal.style.display = 'block';
@@ -902,6 +918,20 @@ class POSSystem {    constructor() {
     startNewOrder() {
         this.closeOrderModal();
         // Cart is already cleared in completeTransaction
+    }
+
+    showProcessingSpinner() {
+        const spinner = document.getElementById('processingSpinner');
+        if (spinner) {
+            spinner.style.display = 'flex';
+        }
+    }
+
+    hideProcessingSpinner() {
+        const spinner = document.getElementById('processingSpinner');
+        if (spinner) {
+            spinner.style.display = 'none';
+        }
     }
 
     printReceipt() {
