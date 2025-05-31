@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Ramenila Admin</title>
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="assets/css/settings.css">
+    <link rel="icon" href="assets/img/logo.png" type="image/png">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar collapsed" id="sidebar">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <img src="assets/img/logowhite.png" alt="Logo" class="logo">
+        </div>
+
+        <!-- Menu Items -->
+        <nav class="nav-menu">
+            <ul>                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link" data-tooltip="Dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="inventory.html" class="nav-link" data-tooltip="Inventory">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="transaction.html" class="nav-link" data-tooltip="Transaction">
+                        <i class="fas fa-credit-card"></i>
+                        <span class="nav-text">Transaction</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="transaction-history.html" class="nav-link" data-tooltip="Transaction History">
+                        <i class="fas fa-history"></i>
+                        <span class="nav-text">Transaction History</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="settings.html" class="nav-link" data-tooltip="Settings">
+                        <i class="fas fa-cog"></i>
+                        <span class="nav-text">Settings</span>
+                    </a>
+                </li>            </ul>
+        </nav>
+
+        <!-- Logout Section -->
+        <div class="logout-section">
+            <a href="../index.html" class="logout-link" data-tooltip="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="logout-text">Logout</span>
+            </a>
+        </div>
+
+        <!-- Toggle Button -->
+        <button class="toggle-btn" id="toggleSidebar">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="content-wrapper">
+            <!-- Header -->
+            <div class="page-header">
+                <h1><i class="fas fa-cog"></i> System Settings</h1>
+                <p>Configure your restaurant management system</p>
+            </div>
+
+            <!-- Settings Tabs -->
+            <div class="settings-tabs">
+                <button class="tab-btn active" data-tab="general">
+                    <i class="fas fa-cog"></i> General
+                </button>
+                <button class="tab-btn" data-tab="restaurant">
+                    <i class="fas fa-store"></i> Restaurant
+                </button>
+                <button class="tab-btn" data-tab="pos">
+                    <i class="fas fa-cash-register"></i> POS System
+                </button>
+                <button class="tab-btn" data-tab="notifications">
+                    <i class="fas fa-bell"></i> Notifications
+                </button>
+                <button class="tab-btn" data-tab="users">
+                    <i class="fas fa-users"></i> Users
+                </button>
+                <button class="tab-btn" data-tab="backup">
+                    <i class="fas fa-database"></i> Data & Backup
+                </button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="tab-content">
+                <!-- General Settings -->
+                <div id="general-tab" class="tab-pane active">
+                    <div class="settings-section">
+                        <h2>General Settings</h2>
+                        
+                        <div class="settings-grid">
+                            <div class="setting-card">
+                                <h3><i class="fas fa-palette"></i> Appearance</h3>
+                                <div class="form-group">
+                                    <label for="theme-select">Theme</label>
+                                    <select id="theme-select">
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                        <option value="auto">Auto (System)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="language-select">Language</label>
+                                    <select id="language-select">
+                                        <option value="en">English</option>
+                                        <option value="es">Spanish</option>
+                                        <option value="fr">French</option>
+                                        <option value="ja">Japanese</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="currency-select">Currency</label>
+                                    <select id="currency-select">
+                                        <option value="USD">USD ($)</option>
+                                        <option value="EUR">EUR (€)</option>
+                                        <option value="GBP">GBP (£)</option>
+                                        <option value="JPY">JPY (¥)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <h3><i class="fas fa-clock"></i> Date & Time</h3>
+                                <div class="form-group">
+                                    <label for="timezone-select">Timezone</label>
+                                    <select id="timezone-select">
+                                        <option value="America/New_York">Eastern Time (ET)</option>
+                                        <option value="America/Chicago">Central Time (CT)</option>
+                                        <option value="America/Denver">Mountain Time (MT)</option>
+                                        <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                                        <option value="UTC">UTC</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date-format">Date Format</label>
+                                    <select id="date-format">
+                                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="time-format">Time Format</label>
+                                    <select id="time-format">
+                                        <option value="12">12 Hour (AM/PM)</option>
+                                        <option value="24">24 Hour</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restaurant Settings -->
+                <div id="restaurant-tab" class="tab-pane">
+                    <div class="settings-section">
+                        <h2>Restaurant Information</h2>
+                        
+                        <div class="settings-grid">
+                            <div class="setting-card">
+                                <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                                <div class="form-group">
+                                    <label for="restaurant-name">Restaurant Name</label>
+                                    <input type="text" id="restaurant-name" value="Ramenila">
+                                </div>
+                                <div class="form-group">
+                                    <label for="restaurant-address">Address</label>
+                                    <textarea id="restaurant-address" rows="3" placeholder="Enter restaurant address"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="restaurant-phone">Phone Number</label>
+                                    <input type="tel" id="restaurant-phone" placeholder="+1 (555) 123-4567">
+                                </div>
+                                <div class="form-group">
+                                    <label for="restaurant-email">Email</label>
+                                    <input type="email" id="restaurant-email" placeholder="info@ramenila.com">
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <h3><i class="fas fa-clock"></i> Operating Hours</h3>
+                                <div class="hours-grid">
+                                    <div class="day-hours">
+                                        <label>Monday</label>
+                                        <input type="time" value="11:00"> - <input type="time" value="22:00">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked> Open
+                                        </label>
+                                    </div>
+                                    <div class="day-hours">
+                                        <label>Tuesday</label>
+                                        <input type="time" value="11:00"> - <input type="time" value="22:00">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked> Open
+                                        </label>
+                                    </div>
+                                    <div class="day-hours">
+                                        <label>Wednesday</label>
+                                        <input type="time" value="11:00"> - <input type="time" value="22:00">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked> Open
+                                        </label>
+                                    </div>
+                                    <div class="day-hours">
+                                        <label>Thursday</label>
+                                        <input type="time" value="11:00"> - <input type="time" value="22:00">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked> Open
+                                        </label>
+                                    </div>
+                                    <div class="day-hours">
+                                        <label>Friday</label>
+                                        <input type="time" value="11:00"> - <input type="time" value="23:00">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked> Open
+                                        </label>
+                                    </div>
+                                    <div class="day-hours">
+                                        <label>Saturday</label>
+                                        <input type="time" value="11:00"> - <input type="time" value="23:00">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked> Open
+                                        </label>
+                                    </div>
+                                    <div class="day-hours">
+                                        <label>Sunday</label>
+                                        <input type="time" value="12:00"> - <input type="time" value="21:00">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked> Open
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- POS Settings -->
+                <div id="pos-tab" class="tab-pane">
+                    <div class="settings-section">
+                        <h2>Point of Sale Configuration</h2>
+                        
+                        <div class="settings-grid">
+                            <div class="setting-card">
+                                <h3><i class="fas fa-credit-card"></i> Payment Methods</h3>
+                                <div class="payment-methods">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="cash-enabled" checked>
+                                        <i class="fas fa-money-bill"></i> Cash Payments
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="card-enabled" checked>
+                                        <i class="fas fa-credit-card"></i> Credit/Debit Cards
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="mobile-enabled">
+                                        <i class="fas fa-mobile-alt"></i> Mobile Payments
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tax-rate">Tax Rate (%)</label>
+                                    <input type="number" id="tax-rate" value="8.25" step="0.01" min="0" max="100">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tip-suggestions">Default Tip Suggestions (%)</label>
+                                    <input type="text" id="tip-suggestions" value="15,18,20,25" placeholder="15,18,20,25">
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <h3><i class="fas fa-print"></i> Receipt Settings</h3>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="auto-print" checked>
+                                        Auto-print receipts
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="email-receipts">
+                                        Email receipts to customers
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="receipt-footer">Receipt Footer Message</label>
+                                    <textarea id="receipt-footer" rows="2" placeholder="Thank you for visiting Ramenila!"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Settings -->
+                <div id="notifications-tab" class="tab-pane">
+                    <div class="settings-section">
+                        <h2>Notification Preferences</h2>
+                        
+                        <div class="settings-grid">
+                            <div class="setting-card">
+                                <h3><i class="fas fa-exclamation-triangle"></i> Inventory Alerts</h3>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="low-stock-alerts" checked>
+                                        Low stock alerts
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="low-stock-threshold">Low Stock Threshold</label>
+                                    <input type="number" id="low-stock-threshold" value="10" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="out-of-stock-alerts" checked>
+                                        Out of stock alerts
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="expiry-alerts" checked>
+                                        Product expiry alerts
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <h3><i class="fas fa-chart-line"></i> Sales Notifications</h3>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="daily-reports" checked>
+                                        Daily sales reports
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="weekly-reports">
+                                        Weekly summary reports
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="goal-alerts">
+                                        Sales goal notifications
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="daily-goal">Daily Sales Goal ($)</label>
+                                    <input type="number" id="daily-goal" value="1000" min="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Settings -->
+                <div id="users-tab" class="tab-pane">
+                    <div class="settings-section">
+                        <h2>User Management</h2>
+                        
+                        <div class="users-actions">
+                            <button class="btn btn-primary" id="add-user-btn">
+                                <i class="fas fa-plus"></i> Add New User
+                            </button>
+                        </div>
+
+                        <div class="users-table-container">
+                            <table class="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Last Login</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-tbody">
+                                    <tr>
+                                        <td><strong>Admin User</strong></td>
+                                        <td>admin@ramenila.com</td>
+                                        <td><span class="role-badge admin">Administrator</span></td>
+                                        <td>Today, 2:30 PM</td>
+                                        <td><span class="status-badge active">Active</span></td>
+                                        <td>
+                                            <button class="action-btn edit-btn">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Manager User</strong></td>
+                                        <td>manager@ramenila.com</td>
+                                        <td><span class="role-badge manager">Manager</span></td>
+                                        <td>Yesterday, 5:45 PM</td>
+                                        <td><span class="status-badge active">Active</span></td>
+                                        <td>
+                                            <button class="action-btn edit-btn">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete-btn">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cashier User</strong></td>
+                                        <td>cashier@ramenila.com</td>
+                                        <td><span class="role-badge cashier">Cashier</span></td>
+                                        <td>2 days ago</td>
+                                        <td><span class="status-badge inactive">Inactive</span></td>
+                                        <td>
+                                            <button class="action-btn edit-btn">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete-btn">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backup Settings -->
+                <div id="backup-tab" class="tab-pane">
+                    <div class="settings-section">
+                        <h2>Data Management & Backup</h2>
+                        
+                        <div class="settings-grid">
+                            <div class="setting-card">
+                                <h3><i class="fas fa-download"></i> Export Data</h3>
+                                <p>Download your data for backup or migration purposes.</p>
+                                <div class="backup-actions">
+                                    <button class="btn btn-primary" id="export-inventory">
+                                        <i class="fas fa-boxes"></i> Export Inventory
+                                    </button>
+                                    <button class="btn btn-primary" id="export-transactions">
+                                        <i class="fas fa-receipt"></i> Export Transactions
+                                    </button>
+                                    <button class="btn btn-success" id="export-all">
+                                        <i class="fas fa-database"></i> Export All Data
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <h3><i class="fas fa-upload"></i> Import Data</h3>
+                                <p>Import data from CSV files or restore from backup.</p>
+                                <div class="import-section">
+                                    <div class="form-group">
+                                        <label for="import-file">Select File</label>
+                                        <input type="file" id="import-file" accept=".csv,.json">
+                                    </div>
+                                    <button class="btn btn-info" id="import-data">
+                                        <i class="fas fa-upload"></i> Import Data
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="setting-card">
+                                <h3><i class="fas fa-trash-alt"></i> Reset Data</h3>
+                                <p>Clear all data and start fresh. <strong>This action cannot be undone!</strong></p>
+                                <div class="reset-actions">
+                                    <button class="btn btn-warning" id="clear-transactions">
+                                        <i class="fas fa-history"></i> Clear Transaction History
+                                    </button>
+                                    <button class="btn btn-danger" id="reset-all">
+                                        <i class="fas fa-exclamation-triangle"></i> Reset All Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="save-section">
+                <button class="btn btn-success btn-large" id="save-settings">
+                    <i class="fas fa-save"></i> Save All Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="add-user-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New User</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="add-user-form">
+                    <div class="form-group">
+                        <label for="user-name">Full Name</label>
+                        <input type="text" id="user-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email">Email Address</label>
+                        <input type="email" id="user-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-role">Role</label>
+                        <select id="user-role" required>
+                            <option value="">Select Role</option>
+                            <option value="admin">Administrator</option>
+                            <option value="manager">Manager</option>
+                            <option value="cashier">Cashier</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-password">Temporary Password</label>
+                        <input type="password" id="user-password" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="add-user-form" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add User
+                </button>
+                <button class="btn btn-secondary" onclick="document.getElementById('add-user-modal').style.display='none'">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/settings.js"></script>
+</body>
+</html>

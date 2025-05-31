@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management - Ramenila Admin</title>    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="assets/css/inventory.css">
+    <link rel="icon" href="assets/img/logo.png" type="image/png">
+    <!-- Cropper.js for image cropping -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar collapsed" id="sidebar">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <img src="assets/img/logowhite.png" alt="Logo" class="logo">
+        </div>
+
+        <!-- Menu Items -->
+        <nav class="nav-menu">
+            <ul>                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link" data-tooltip="Dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="inventory.html" class="nav-link" data-tooltip="Inventory">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="transaction.html" class="nav-link" data-tooltip="Transaction">
+                        <i class="fas fa-credit-card"></i>
+                        <span class="nav-text">Transaction</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="transaction-history.html" class="nav-link" data-tooltip="Transaction History">
+                        <i class="fas fa-history"></i>
+                        <span class="nav-text">Transaction History</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="settings.html" class="nav-link" data-tooltip="Settings">
+                        <i class="fas fa-cog"></i>
+                        <span class="nav-text">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Logout Section -->
+        <div class="logout-section">
+            <a href="../index.html" class="logout-link" data-tooltip="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="logout-text">Logout</span>
+            </a>
+        </div>
+
+        <!-- Toggle Button -->
+        <button class="toggle-btn" id="toggleBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content expanded" id="mainContent">
+        <div class="page-header">
+            <h1>Inventory</h1>
+            <button class="btn btn-primary" id="addProductBtn">
+                <i class="fas fa-plus"></i> Add New Product
+            </button>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search products...">
+            </div>
+            <div class="filter-controls">
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="ramen">Ramen</option>
+                    <option value="sides">Sides</option>
+                    <option value="drinks">Drinks</option>
+                    <option value="desserts">Desserts</option>
+                </select>
+                <select id="stockFilter">
+                    <option value="">All Stock Levels</option>
+                    <option value="in-stock">In Stock</option>
+                    <option value="low-stock">Low Stock</option>
+                    <option value="out-of-stock">Out of Stock</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            <!-- Product cards will be dynamically generated -->
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Product</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>            <form id="productForm">
+                <!-- Image Upload Section -->
+                <div class="form-group image-upload-section">
+                    <label>Product Image</label>
+                    <div class="image-upload-container">
+                        <div class="image-preview" id="imagePreview">
+                            <img id="previewImg" src="assets/img/ramen.png" alt="Product Preview">
+                            <div class="upload-overlay">
+                                <i class="fas fa-camera"></i>
+                                <span>Click to upload image</span>
+                            </div>
+                        </div>
+                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-secondary btn-small" id="uploadBtn">
+                            <i class="fas fa-upload"></i> Upload Image
+                        </button>
+                        <small class="form-help">Recommended size: 300x300px. Image will be automatically cropped to fit.</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="ramen">Ramen</option>
+                        <option value="toppings">Toppings</option>
+                        <option value="sides">Sides</option>
+                        <option value="drinks">Drinks</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productPrice">Price (₱)</label>
+                        <input type="number" id="productPrice" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productStock">Stock Quantity</label>
+                        <input type="number" id="productStock" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="minStock">Minimum Stock Alert</label>
+                        <input type="number" id="minStock" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productUnit">Unit</label>
+                        <input type="text" id="productUnit" placeholder="e.g., pieces, portions" required>
+                    </div>
+                </div>                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Product</button>
+                </div>
+            </form>        </div>    </div>
+
+    <!-- Image Crop Modal -->
+    <div class="modal" id="cropModal">
+        <div class="modal-content crop-modal-content">
+            <div class="modal-header">
+                <h2>Crop Product Image</h2>
+                <button class="close-btn" id="closeCropModal">&times;</button>
+            </div>
+            <div class="crop-container">
+                <div class="crop-area">
+                    <img id="cropImage" src="" alt="Image to crop">
+                </div>
+                <div class="crop-preview">
+                    <h4>Preview (300x300px)</h4>
+                    <div class="preview-container">
+                        <img id="cropPreview" src="" alt="Crop preview">
+                    </div>
+                </div>
+            </div>
+            <div class="crop-controls">
+                <button type="button" class="btn btn-secondary" id="cancelCrop">Cancel</button>
+                <button type="button" class="btn btn-primary" id="applyCrop">
+                    <i class="fas fa-check"></i> Apply Crop
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content delete-modal-content">
+            <div class="modal-header">
+                <h2>Confirm Deletion</h2>
+                <button class="close-btn" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="delete-modal-body">
+                <div class="delete-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="delete-message">
+                    <h3>Are you sure you want to delete this product?</h3>
+                    <p id="deleteProductName">This action cannot be undone.</p>
+                </div>
+            </div>
+            <div class="delete-modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancelDelete">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">
+                    <i class="fas fa-trash"></i> Delete Product
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/inventory.js"></script>
+</body>
+</html>

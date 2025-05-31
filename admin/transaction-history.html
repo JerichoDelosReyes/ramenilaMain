@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History - Ramenila Admin</title>
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="assets/css/transaction-history.css">
+    <link rel="icon" href="assets/img/logo.png" type="image/png">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar collapsed" id="sidebar">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <img src="assets/img/logowhite.png" alt="Logo" class="logo">
+        </div>
+
+        <!-- Menu Items -->
+        <nav class="nav-menu">
+            <ul>                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link" data-tooltip="Dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="inventory.html" class="nav-link" data-tooltip="Inventory">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="transaction.html" class="nav-link" data-tooltip="Transaction">
+                        <i class="fas fa-credit-card"></i>
+                        <span class="nav-text">Transaction</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="transaction-history.html" class="nav-link" data-tooltip="Transaction History">
+                        <i class="fas fa-history"></i>
+                        <span class="nav-text">Transaction History</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="settings.html" class="nav-link" data-tooltip="Settings">
+                        <i class="fas fa-cog"></i>
+                        <span class="nav-text">Settings</span>
+                    </a>
+                </li>            </ul>
+        </nav>
+
+        <!-- Logout Section -->
+        <div class="logout-section">
+            <a href="../index.html" class="logout-link" data-tooltip="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="logout-text">Logout</span>
+            </a>
+        </div>
+
+        <!-- Toggle Button -->
+        <button class="toggle-btn" id="toggleSidebar">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="content-wrapper">
+            <!-- Header -->
+            <div class="page-header">
+                <h1><i class="fas fa-history"></i> Transaction History</h1>
+                <p>View and manage all transaction records</p>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="filters-section">
+                <div class="search-filters">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-transactions" placeholder="Search by order number, items...">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <select id="status-filter">
+                            <option value="">All Status</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="refunded">Refunded</option>
+                        </select>
+                        
+                        <select id="payment-filter">
+                            <option value="">All Payment Methods</option>
+                            <option value="cash">Cash</option>
+                            <option value="card">Card</option>
+                        </select>
+                        
+                        <input type="date" id="date-from" title="From Date">
+                        <input type="date" id="date-to" title="To Date">
+                        
+                        <button id="apply-filters" class="btn btn-primary">
+                            <i class="fas fa-filter"></i> Apply Filters
+                        </button>
+                        
+                        <button id="clear-filters" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Clear
+                        </button>                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="total-transactions">0</h3>
+                        <p>Total Transactions</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="total-revenue">$0.00</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="today-transactions">0</h3>
+                        <p>Today's Transactions</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="avg-order-value">$0.00</h3>
+                        <p>Average Order Value</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Table -->
+            <div class="transactions-section">
+                <div class="section-header">
+                    <h2>Transaction Records</h2>
+                    <div class="pagination-info">
+                        <span id="showing-info">Showing 0 of 0 transactions</span>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Date & Time</th>
+                                <th>Items</th>
+                                <th>Payment Method</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-tbody">
+                            <!-- Transaction rows will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination">
+                    <button id="prev-page" class="btn btn-secondary" disabled>
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <span id="page-info">Page 1 of 1</span>
+                    <button id="next-page" class="btn btn-secondary" disabled>
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Details Modal -->
+    <div id="transaction-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Transaction Details</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="transaction-details">
+                <!-- Transaction details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button id="print-receipt-modal" class="btn btn-primary">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+                <button id="refund-transaction" class="btn btn-danger">
+                    <i class="fas fa-undo"></i> Process Refund
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Refund Modal -->
+    <div id="refund-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Process Refund</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="refund-reason">Refund Reason</label>
+                    <select id="refund-reason">
+                        <option value="customer-request">Customer Request</option>
+                        <option value="item-unavailable">Item Unavailable</option>
+                        <option value="quality-issue">Quality Issue</option>
+                        <option value="wrong-order">Wrong Order</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="refund-notes">Additional Notes</label>
+                    <textarea id="refund-notes" rows="3" placeholder="Enter additional notes..."></textarea>
+                </div>
+                <div class="refund-amount">
+                    <strong>Refund Amount: <span id="refund-amount">$0.00</span></strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-refund" class="btn btn-danger">
+                    <i class="fas fa-check"></i> Confirm Refund
+                </button>
+                <button class="btn btn-secondary" onclick="document.getElementById('refund-modal').style.display='none'">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/transaction-history.js"></script>
+</body>
+</html>

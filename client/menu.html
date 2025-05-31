@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Ramenila</title>
+    <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="assets/img/ramenlogo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="../index.html">
+                    <img src="assets/img/ramenlogo.png" alt="Ramenila Logo" class="logo-img">
+                    <span class="logo-text">Ramenila</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="../index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../index.html#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../index.html#locations" class="nav-link">Locations</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="kiosk-btn" onclick="showOrderModal('kiosk')">
+                    <i class="fas fa-utensils"></i>
+                    Order at Kiosk
+                </button>
+                <button class="cart-toggle" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <div class="nav-account">
+                    <a href="../admin/dashboard.html" class="account-link">
+                        <img src="assets/img/accounts.png" alt="Account" class="account-icon" id="account-icon">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Menu Hero Section -->
+    <section class="menu-hero">
+        <div class="container">
+            <div class="menu-hero-content">
+                <h1>Our Complete Menu</h1>
+                <p>Discover our full range of authentic Japanese ramen and delicious sides</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Categories -->
+    <section class="menu-section">
+        <div class="container">
+            <!-- Category Filter -->
+            <div class="menu-filter">
+                <button class="filter-btn active" data-category="all">All Items</button>
+                <a href="#ramen" class="filter-btn" data-category="ramen">Ramen</a>
+                <a href="#sides" class="filter-btn" data-category="sides">Sides</a>
+                <a href="#drinks" class="filter-btn" data-category="drinks">Drinks</a>
+                <a href="#desserts" class="filter-btn" data-category="desserts">Desserts</a>
+            </div>
+
+            <!-- Ramen Section -->
+            <div class="menu-category" id="ramen">
+                <h2>Signature Ramen</h2>
+                <div class="menu-grid">
+                    <div class="menu-item" data-category="ramen">
+                        <div class="menu-image">
+                            <img src="assets/img/HAKODATE.png" alt="Hakodate Ramen">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Hakodate Ramen</h3>
+                            <p>Traditional Hakodate-style ramen with rich seafood broth</p>
+                            <div class="menu-price">₱150</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="ramen">
+                        <div class="menu-image">
+                            <img src="assets/img/KITAKITA.png" alt="Kitakata Ramen">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Kitakata Ramen</h3>
+                            <p>Famous for its thick, wavy noodles and light soy sauce-based broth</p>
+                            <div class="menu-price">₱270</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="ramen">
+                        <div class="menu-image">
+                            <img src="assets/img/SPICYRAMEN.png" alt="Spicy Ramen">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Spicy Ramen</h3>
+                            <p>Hot and flavorful ramen with spicy miso-based broth</p>
+                            <div class="menu-price">₱150</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="ramen">
+                        <div class="menu-image">
+                            <img src="assets/img/SHOYURAMEN.png" alt="Shoyu Ramen">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Shoyu Ramen</h3>
+                            <p>Classic soy sauce-based ramen with tender chashu pork</p>
+                            <div class="menu-price">₱200</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="ramen">
+                        <div class="menu-image">
+                            <img src="assets/img/TOKUSHIMA.png" alt="Tokushima Ramen">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Tokushima Ramen</h3>
+                            <p>Rich pork bone broth with dark soy sauce and raw egg</p>
+                            <div class="menu-price">₱250</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="ramen">
+                        <div class="menu-image">
+                            <img src="assets/img/YAMAGATA.png" alt="Yamagata Ramen">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Yamagata Ramen</h3>
+                            <p>Regional specialty with chicken-based broth and thin noodles</p>
+                            <div class="menu-price">₱150</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="ramen">
+                        <div class="menu-image">
+                            <img src="assets/img/TAKAYAMARAMEN.png" alt="Takayama Ramen">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Takayama Ramen</h3>
+                            <p>Rich and savory broth with local mountain vegetables</p>
+                            <div class="menu-price">₱200</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="ramen">
+                        <div class="menu-image">
+                            <img src="assets/img/SHIORAMEN.png" alt="Shio Ramen">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Shio Ramen</h3>
+                            <p>Light and delicate salt-based broth with tender pork</p>
+                            <div class="menu-price">₱200</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="ramen">
+                        <div class="menu-image">
+                            <img src="assets/img/MISORAMEN.png" alt="Miso Ramen">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Miso Ramen</h3>
+                            <p>Hearty miso-based broth with corn and butter</p>
+                            <div class="menu-price">₱200</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sides Section -->
+            <div class="menu-category" id="sides">
+                <h2>Sides & Appetizers</h2>
+                <div class="menu-grid">
+                    <div class="menu-item" data-category="sides">
+                        <div class="menu-image">
+                            <img src="assets/img/PORKGYOZA.png" alt="Gyoza">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Pork Gyoza (6pcs)</h3>
+                            <p>Pan-fried dumplings with juicy pork filling</p>
+                            <div class="menu-price">₱150</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="sides">
+                        <div class="menu-image">
+                            <img src="assets/img/PORKKARAAGE.png" alt="Chicken Karaage">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Chicken Karaage</h3>
+                            <p>Crispy Japanese fried chicken with mayo dip</p>
+                            <div class="menu-price">₱180</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="sides">
+                        <div class="menu-image">
+                            <img src="assets/img/Edamame.png" alt="Edamame">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Edamame</h3>
+                            <p>Steamed young soybeans with sea salt</p>
+                            <div class="menu-price">₱120</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="sides">
+                        <div class="menu-image">
+                            <img src="assets/img/TAKOYAKI.png" alt="Takoyaki">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Takoyaki (6pcs)</h3>
+                            <p>Octopus balls with takoyaki sauce and bonito flakes</p>
+                            <div class="menu-price">₱160</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drinks Section -->
+            <div class="menu-category" id="drinks">
+                <h2>Beverages</h2>
+                <div class="menu-grid">
+                    <div class="menu-item" data-category="drinks">
+                        <div class="menu-image">
+                            <img src="assets/img/HOT GREEN TEA.png" alt="Green Tea">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Hot Green Tea</h3>
+                            <p>Traditional Japanese green tea</p>
+                            <div class="menu-price">₱80</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="drinks">
+                        <div class="menu-image">
+                            <img src="assets/img/ICED LEMON TEA.png" alt="Iced Tea">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Iced Lemon Tea</h3>
+                            <p>Refreshing iced tea with fresh lemon</p>
+                            <div class="menu-price">₱90</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="drinks">
+                        <div class="menu-image">
+                            <img src="assets/img/SOFTDRINKS.png" alt="Soft Drinks">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Soft Drinks</h3>
+                            <p>Coke, Sprite, Orange, or Royal</p>
+                            <div class="menu-price">₱60</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="drinks">
+                        <div class="menu-image">
+                            <img src="assets/img/BEER.png" alt="Japanese Beer">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Japanese Beer</h3>
+                            <p>Asahi or Sapporo (18+ only)</p>
+                            <div class="menu-price">₱150</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desserts Section -->
+            <div class="menu-category" id="desserts">
+                <h2>Desserts</h2>
+                <div class="menu-grid">
+                    <div class="menu-item" data-category="desserts">
+                        <div class="menu-image">
+                            <img src="assets/img/MOCHI.png" alt="Mochi Ice Cream">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Mochi Ice Cream (3pcs)</h3>
+                            <p>Vanilla, strawberry, and green tea flavors</p>
+                            <div class="menu-price">₱140</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" data-category="desserts">
+                        <div class="menu-image">
+                            <img src="assets/img/DORAYAKI.png" alt="Dorayaki">
+                        </div>
+                        <div class="menu-content">
+                            <h3>Dorayaki</h3>
+                            <p>Pancake sandwich with sweet red bean filling</p>
+                            <div class="menu-price">₱120</div>
+                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Order</h3>
+            <button class="cart-close" id="cart-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="empty-cart">Your cart is empty</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Total: ₱<span id="cart-total">0</span></strong>
+            </div>
+            <button class="checkout-btn" id="checkout-btn" disabled>
+                <i class="fas fa-shopping-cart"></i>
+                Proceed to Order
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/menu.js"></script>
+</body>
+</html>

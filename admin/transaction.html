@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Point of Sale - Ramenila Admin</title>
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="assets/css/transaction.css">
+    <link rel="icon" href="assets/img/logo.png" type="image/png">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar collapsed" id="sidebar">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <img src="assets/img/logowhite.png" alt="Logo" class="logo">
+        </div>
+
+        <!-- Menu Items -->
+        <nav class="nav-menu">
+            <ul>                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link" data-tooltip="Dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="inventory.html" class="nav-link" data-tooltip="Inventory">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="transaction.html" class="nav-link" data-tooltip="Transaction">
+                        <i class="fas fa-credit-card"></i>
+                        <span class="nav-text">Transaction</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="transaction-history.html" class="nav-link" data-tooltip="Transaction History">
+                        <i class="fas fa-history"></i>
+                        <span class="nav-text">Transaction History</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="settings.html" class="nav-link" data-tooltip="Settings">
+                        <i class="fas fa-cog"></i>
+                        <span class="nav-text">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Logout Section -->
+        <div class="logout-section">
+            <a href="../index.html" class="logout-link" data-tooltip="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="logout-text">Logout</span>
+            </a>
+        </div>
+
+        <!-- Toggle Button -->
+        <button class="toggle-btn" id="toggleBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content expanded" id="mainContent">
+        <div class="pos-container">
+            <!-- Left Side - Menu -->
+            <div class="menu-section">
+                <div class="section-header">
+                    <h2>Menu Items</h2>
+                    <div class="category-tabs">
+                        <button class="tab-btn active" data-category="all">All</button>
+                        <button class="tab-btn" data-category="ramen">Ramen</button>
+                        <button class="tab-btn" data-category="toppings">Toppings</button>
+                        <button class="tab-btn" data-category="sides">Sides</button>
+                        <button class="tab-btn" data-category="drinks">Drinks</button>
+                    </div>
+                </div>
+                  <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="menuSearch" placeholder="Search menu items...">
+                </div>
+                  <div class="menu-table-container">
+                    <table class="menu-table" id="menuTable">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody id="menuTableBody">
+                            <!-- Menu items will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Side - Order Cart -->
+            <div class="cart-section">
+                <div class="cart-header">
+                    <h2>Current Order</h2>
+                    <button class="btn btn-danger btn-small" id="clearCartBtn">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                </div>                <div class="order-info">
+                    <div class="form-group custom-select-container">
+                        <label for="customerType">Customer Type</label>
+                        <div class="select-wrapper">
+                            <select id="customerType" class="styled-select">
+                                <option value="regular">Regular Customer</option>
+                                <option value="pwd">PWD (Person with Disability)</option>
+                                <option value="senior">Senior Citizen</option>
+                            </select>
+                            <div class="select-arrow"><i class="fas fa-chevron-down"></i></div>
+                        </div>
+                    </div>
+                </div><div class="cart-items" id="cartItems">
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>No items in cart</p>
+                    </div>                </div>
+                  <!-- Total Section -->
+                <div class="total-section">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">₱0.00</span>
+                    </div>
+                    <div class="summary-row discount-row" id="discountRow" style="display: none;">
+                        <span id="discountType">Discount:</span>
+                        <span id="discount">-₱0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax (12%):</span>
+                        <span id="tax">₱0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="total">₱0.00</span>
+                    </div>
+                
+                
+                <!-- Proceed to Payment Button -->
+                <div class="payment-button-container">
+                    <button class="btn btn-primary btn-large" id="proceedToPaymentBtn" disabled>
+                        <i class="fas fa-credit-card"></i> Proceed to Payment
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Confirmation Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Confirmation</h2>
+                <button class="close-btn" id="closeOrderModal">&times;</button>
+            </div>
+            <div class="order-receipt" id="orderReceipt">
+                <!-- Receipt content will be generated here -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="printReceiptBtn">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+                <button class="btn btn-primary" id="newOrderBtn">
+                    <i class="fas fa-plus"></i> New Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/transaction.js"></script>
+</body>
+</html>

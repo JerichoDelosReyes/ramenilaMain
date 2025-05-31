@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramenila - Authentic Japanese Ramen Experience</title>
+    <link rel="stylesheet" href="client/assets/css/landing.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="assets/img/ramenlogo.png" type="image/png">
+</head>
+<body>   
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo-link">
+                    <img src="client/assets/img/ramenlogo.png" alt="Ramenila Logo" class="logo-img">
+                    <span class="logo-text">Ramenila</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#menu" class="nav-link">Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#locations" class="nav-link">Locations</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#team" class="nav-link">Team</a>
+                </li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="kiosk-btn">
+                    <i class="fas fa-utensils"></i>
+                    Order at Kiosk
+                </button>
+                <div class="nav-account">
+                    <a href="admin/dashboard.html" class="account-link">
+                        <img src="client/assets/img/accounts.png" alt="Account" class="account-icon">
+                    </a>
+                    
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->    <section class="hero" id="home">
+        <div class="hero-background">
+            <div class="floating-elements">
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+            </div>
+        </div>
+          <div class="hero-container">
+            <!-- Main Content Area -->
+            <div class="hero-content">
+                <!-- Left Content -->
+                <div class="hero-left">
+                    <div class="ramen-info">
+                        <span class="subtitle">Authentic Japanese</span>
+                        <h1 class="ramen-title">ラーメン</h1>
+                        <p class="ramen-subtitle">
+                            Experience the perfect harmony of rich broths, handmade noodles, and carefully selected toppings. Our master chefs bring you authentic Japanese ramen with a modern twist.
+                        </p>
+                        <div class="hero-stats">
+                            <div class="stat">
+                                <span class="stat-number">10+</span>
+                                <span class="stat-label">Ramen Varieties</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">24/7</span>
+                                <span class="stat-label">Fresh Made</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center - Main Ramen Image -->
+                <div class="hero-center">
+                    <div class="ramen-bowl">
+                        <div class="bowl-glow"></div>
+                        <img src="client/assets/img/middleramen.png" alt="Delicious Ramen Bowl" class="ramen-img">
+                        <div class="steam-animation">
+                            <div class="steam"></div>
+                            <div class="steam"></div>
+                            <div class="steam"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content -->
+                <div class="hero-right">
+                    <div class="ramen-info-right">
+                        <span class="subtitle-right">Slurp & Enjoy</span>
+                        <h1 class="ramen-title-right">rāmen</h1>
+                        <div class="order-options">
+                            <button class="order-btn primary">
+                                <i class="fas fa-utensils"></i>
+                                Order at Kiosk
+                            </button>
+
+                        </div>
+                        <p class="order-note">Quick ordering</p>
+                    </div>
+                </div>
+            </div>            <!-- Bottom Features -->
+            <div class="features-section">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>Master Chefs</h3>
+                    <p>Handcrafted by skilled chefs with a passion for ramen perfection.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Quality Food</h3>
+                    <p>Only the finest, fresh ingredients in every savory bowl.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Quick Order</h3>
+                    <p>Skip the wait, order your favorites with a few clicks.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Preview Section -->
+    <section class="menu-preview" id="menu">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Signature Ramen</h2>
+                <p>Discover our carefully crafted ramen varieties, each with its unique flavor profile</p>
+            </div>
+            
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="menu-image">
+                        <img src="client/assets/img/SHOYURAMEN.png" alt="Shoyu Ramen">
+                        <div class="menu-badge">Popular</div>
+                    </div>
+                    <div class="menu-content">
+                        <h3>Shoyu Ramen</h3>
+                        <p>Rich pork bone broth with chashu, green onions, and bamboo shoots</p>
+                        <span class="price">₱280</span>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-image">
+                        <img src="client/assets/img/MISORAMEN.png" alt="Miso Ramen">
+                        <div class="menu-badge">Chef's Choice</div>
+                    </div>
+                    <div class="menu-content">
+                        <h3>Miso Ramen</h3>
+                        <p>Fermented soybean paste broth with corn, bean sprouts, and nori</p>
+                        <span class="price">₱250</span>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-image">
+                        <img src="client/assets/img/TOKUSHIMA.png" alt="Tokushima Ramen">
+                    </div>
+                    <div class="menu-content">
+                        <h3>Tokushima Ramen</h3>
+                        <p>Clear soy sauce based broth with traditional Japanese flavors</p>
+                        <span class="price">₱240</span>
+                    </div>
+                </div>
+            </div>
+              <div class="menu-cta">
+                <a href="client/menu.html" class="view-full-menu-btn">
+                    <i class="fas fa-list"></i>
+                    View Full Menu
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>The Art of Authentic Ramen</h2>
+                    <p>At Ramenila, we believe ramen is more than just a meal, it's a cultural experience. Our master chefs have spent years perfecting the art of ramen-making, from the 12-hour slow-cooked broths to the hand-pulled noodles made fresh daily.</p>
+                    
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-fire"></i>
+                            <div>
+                                <h4>12-Hour Broth</h4>
+                                <p>Slow-cooked to perfection for maximum flavor</p>
+                            </div>
+                        </div>                        <div class="about-feature">
+                            <i class="fas fa-seedling"></i>
+                            <div>
+                                <h4>Fresh Noodles</h4>
+                                <p>Made in-house daily using traditional techniques</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fa-solid fa-bowl-food"></i>
+                            <div>
+                                <h4>Premium Ingredients</h4>
+                                <p>Sourced directly from trusted Japanese suppliers</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <img src="client/assets/img/SHOYURAMEN.png" alt="Ramen Making Process">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Order Section -->
+    <section class="how-to-order">
+        <div class="container">
+            <div class="section-header">
+                <h2>How to Enjoy Ramenila</h2>
+                <p>Two convenient ways to satisfy your ramen cravings</p>
+            </div>
+            
+            <div class="order-methods">
+                <div class="order-method">
+                    <div class="method-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Kiosk Ordering</h3>
+                    <div class="method-steps">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <p>Visit our restaurant and use our digital kiosk</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <p>Browse menu and customize your ramen</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <p>Pay at the counter and enjoy fresh ramen</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-method">
+                    <div class="method-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Delivery Service</h3>
+                    <div class="method-steps">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <p>Schedule your delivery time online via Grab </p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <p>Select your ramen and add-ons</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <p>Pay upon delivery and enjoy at home</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Locations Section -->
+    <section class="locations" id="locations">
+        <div class="container">
+            <div class="section-header">
+                <h2>Visit Our Locations</h2>
+                <p>Find the nearest Ramenila restaurant to you</p>
+            </div>
+            
+            <div class="locations-grid">
+                <div class="location-card">
+                    <div class="location-info">
+                        <h3>Pasay Branch</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> SM Mal of Asia, Pasay City</p>
+                        <p><i class="fas fa-clock"></i> 11:00 AM - 10:00 PM Daily</p>
+                        <p><i class="fas fa-phone"></i> (02) 8123-4567</p>
+                    </div>
+                </div>
+                
+                <div class="location-card">
+                    <div class="location-info">
+                        <h3>BGC Branch</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> High Street Central, BGC</p>
+                        <p><i class="fas fa-clock"></i> 11:00 AM - 11:00 PM Daily</p>
+                        <p><i class="fas fa-phone"></i> (02) 8765-4321</p>
+                    </div>
+                </div>
+                
+                <div class="location-card">
+                    <div class="location-info">
+                        <h3>Ortigas Branch</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Emerald Avenue, Ortigas</p>
+                        <p><i class="fas fa-clock"></i> 10:00 AM - 9:00 PM Daily</p>
+                        <p><i class="fas fa-phone"></i> (02) 8456-7890</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="container">
+            <div class="section-header">
+                <h2>Meet Our Team</h2>
+                <p>We're a group of three Computer Science students from Cavite State University – Imus Campus, passionate about building practical and creative digital solutions.</p>
+            </div>
+            
+            <div class="team-grid">
+                <a href="https://www.facebook.com/jerZer0" target="_blank" class="team-member">
+                    <div class="member-image">
+                        <img src="client/assets/img/jerichoPic.jpg" alt="Jericho">
+                    </div>
+                    <h3>Jericho</h3>
+                    <span class="role">Team Lead, Full Stack Dev</span>
+                    <div class="tech-stack">
+                        <span>C++</span>
+                        <span>Python</span>
+                        <span>Java</span>
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>Tailwind</span>
+                        <span>MySQL</span>
+                        <span>Firebase</span>
+                    </div>
+                    <p class="member-desc">The <strong>code romantic</strong>, deeply in love with both his girlfriend and the precision of C++. Whether he's debugging or declearing, his path always says hi all.</p>
+                    <div class="member-hobby">
+                        <i class="fas fa-bicycle"></i>
+                        <span>Hobby: Biking</span>
+                    </div>
+                </a>
+
+                <a href="https://www.facebook.com/znn666" target="_blank" class="team-member">
+                    <div class="member-image">
+                        <img src="client/assets/img/justinePic.jpg" alt="Justine Lawrence">
+                    </div>
+                    <h3>Justine Lawrence</h3>
+                    <span class="role">Co-Lead, Frontend Developer</span>
+                    <div class="tech-stack">
+                        <span>C++</span>
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>Tailwind</span>
+                        <span>MySQL</span>
+                    </div>
+                    <p class="member-desc">The <strong>mitochondria</strong> of the group, the powerhouse that energizes every project with quick strategies, sharp focus, and steady support behind the scenes.</p>
+                    <div class="member-hobby">
+                        <i class="fas fa-bicycle"></i>
+                        <span>Hobby: Biking</span>
+                    </div>
+                </a>
+
+                <a href="https://www.facebook.com/Turonskiiee" target="_blank" class="team-member">
+                    <div class="member-image">
+                        <img src="client/assets/img/adrianPic.jpg" alt="Lee Adrian">
+                    </div>
+                    <h3>Lee Adrian</h3>
+                    <span class="role">Backend Developer</span>
+                    <div class="tech-stack">
+                        <span>C++</span>
+                        <span>Python</span>
+                        <span>MySQL</span>
+                        <span>Firebase</span>
+                    </div>
+                    <p class="member-desc">The <strong>tireless rider</strong>, always pedaling forward, both on his bike and in life. Reliable to the core, when deadlines fit the teammate we can count on through every challenge.</p>
+                    <div class="member-hobby">
+                        <i class="fas fa-bicycle"></i>
+                        <span>Hobby: Biking</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="university-info">
+                <div class="uni-content">
+                    <h3>OUR UNIVERSITY</h3>
+                    <p>We are proud students of <strong>Cavite State University - Imus Campus</strong>, where innovation meets tradition. Guided by passionate mentors and a strong academic foundation in computer science, we strive to bring meaningful digital solutions to life.</p>
+                    <a href="https://www.google.com/maps/place/Cavite+State+University+-+Imus+Campus/@14.4055503,120.9259451,13z/data=!4m6!3m5!1s0x3397d25e0e88d16b:0xc2f8607cd4512597!8m2!3d14.4284629!4d120.9471325!16s%2Fg%2F1tgx43yw?entry=ttu&g_ep=EgoyMDI1MDUyOC4wIKXMDSoASAFQAw%3D%3D" class="location-link">
+                        <i class="fas fa-map-marker-alt"></i>
+                        locate here
+                    </a>
+                </div>
+                <div class="uni-map">
+                    <img src="client/assets/img/location.png" alt="University Location">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="client/assets/img/ramenlogo.png" alt="Ramenila Logo">
+                        <span>Ramenila</span>
+                    </div>
+                    <p>Bringing authentic Japanese ramen experience to your table. Crafted with passion, served with love.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/jerZer0"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/jewicho124/"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#locations">Locations</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Kiosk Ordering</a></li>
+                        <li><a href="#">Delivery Service</a></li>
+                        <li><a href="#">Catering</a></li>
+                        <li><a href="#">Private Events</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> jericho.delosreyes@cvsu.edu.ph</p>
+                        <p><i class="fas fa-phone"></i> 09218196410</p>
+                        <p><i class="fas fa-map-marker-alt"></i> Multiple locations in Metro Manila</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Ramenila</p>
+            </div>
+        </div>    </footer>
+
+    <!-- JavaScript -->
+    <script src="client/assets/js/landing.js"></script>
+</body>
+</html>

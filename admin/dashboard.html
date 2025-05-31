@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="icon" href="assets/img/logo.png" type="image/png">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>    <!-- Sidebar -->    <div class="sidebar collapsed" id="sidebar">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <img src="assets/img/logowhite.png" alt="Logo" class="logo">
+        </div>
+
+        <!-- Menu Items -->
+        <nav class="nav-menu">
+            <ul>
+                <li class="nav-item active">
+                    <a href="#" class="nav-link" data-tooltip="Dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>                <li class="nav-item">
+                    <a href="inventory.html" class="nav-link" data-tooltip="Inventory">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="transaction.html" class="nav-link" data-tooltip="Transaction">
+                        <i class="fas fa-credit-card"></i>
+                        <span class="nav-text">Transaction</span>
+                    </a>
+                </li>                <li class="nav-item">
+                    <a href="transaction-history.html" class="nav-link" data-tooltip="Transaction History">
+                        <i class="fas fa-history"></i>
+                        <span class="nav-text">Transaction History</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="settings.html" class="nav-link" data-tooltip="Settings">
+                        <i class="fas fa-cog"></i>
+                        <span class="nav-text">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>        <!-- Logout Section -->
+        <div class="logout-section">
+            <a href="../index.html" class="logout-link" data-tooltip="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="logout-text">Logout</span>
+            </a>
+        </div>
+
+        <!-- Toggle Button -->
+        <button class="toggle-btn" id="toggleBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    </div>    <!-- Main Content Area -->
+    <div class="main-content expanded" id="mainContent">
+        <div class="dashboard-header">
+            <h1>Ramenila Admin Dashboard</h1>
+            <p class="date-time" id="currentDateTime"></p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>₱12,450</h3>
+                    <p>Today's Sales</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>47</h3>
+                    <p>Orders Today</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>23</h3>
+                    <p>Total Products</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>5</h3>
+                    <p>Low Stock Items</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>Recent Orders</h2>
+                <a href="transaction-history.html" class="view-all-btn">View All</a>
+            </div>
+            <div class="recent-orders">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#001</td>
+                            <td>John Doe</td>
+                            <td>Tonkotsu Ramen x2</td>
+                            <td>₱560</td>
+                            <td><span class="status completed">Completed</span></td>
+                            <td>2:45 PM</td>
+                        </tr>
+                        <tr>
+                            <td>#002</td>
+                            <td>Jane Smith</td>
+                            <td>Miso Ramen, Gyoza</td>
+                            <td>₱420</td>
+                            <td><span class="status completed">Completed</span></td>
+                            <td>2:30 PM</td>
+                        </tr>
+                        <tr>
+                            <td>#003</td>
+                            <td>Mike Johnson</td>
+                            <td>Shoyu Ramen</td>
+                            <td>₱280</td>
+                            <td><span class="status pending">Preparing</span></td>
+                            <td>2:20 PM</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Low Stock Alert -->
+        <div class="dashboard-section">            <div class="section-header">
+                <h2>Low Stock Alert</h2>
+                <a href="inventory.html" class="view-all-btn">Manage Inventory</a>
+            </div>
+            <div class="low-stock-items">
+                <div class="stock-item">
+                    <div class="item-info">
+                        <h4>Chashu Pork</h4>
+                        <p>Only 3 portions left</p>
+                    </div>
+                    <div class="stock-level critical">Critical</div>
+                </div>
+                <div class="stock-item">
+                    <div class="item-info">
+                        <h4>Nori Sheets</h4>
+                        <p>Only 8 sheets left</p>
+                    </div>
+                    <div class="stock-level low">Low</div>
+                </div>
+                <div class="stock-item">
+                    <div class="item-info">
+                        <h4>Soft Boiled Eggs</h4>
+                        <p>Only 12 eggs left</p>
+                    </div>
+                    <div class="stock-level low">Low</div>
+                </div>
+            </div>
+        </div>
+    </div>    <!-- JavaScript -->
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
