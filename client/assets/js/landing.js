@@ -438,3 +438,12 @@ window.RamenilaApp = {
     showNotification,
     updateActiveSection
 };
+
+// Show Kiosk modal for mobile button
+function showKioskModal() {
+    // Trigger same action as desktop kiosk button
+    const mainKioskBtn = document.querySelector('.kiosk-btn');
+    if (mainKioskBtn) {
+        mainKioskBtn.click();
+    }
+}

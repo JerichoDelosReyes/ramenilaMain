@@ -36,15 +36,12 @@
                     <a href="../index.html#contact" class="nav-link">Contact</a>
                 </li>
             </ul>
-            
-            <div class="nav-actions">
+
+            <!-- Desktop Navigation Actions -->
+            <div class="nav-actions desktop-only">
                 <button class="kiosk-btn" onclick="showOrderModal('kiosk')">
                     <i class="fas fa-utensils"></i>
                     Order at Kiosk
-                </button>
-                <button class="cart-toggle" onclick="toggleCart()">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count" id="cart-count">0</span>
                 </button>
                 <div class="nav-account">
                     <a href="../admin/dashboard.html" class="account-link">
@@ -53,9 +50,17 @@
                 </div>
             </div>
 
-            <!-- Mobile Menu Toggle -->
-            <div class="mobile-menu-toggle">
-                <i class="fas fa-bars"></i>
+            <!-- Mobile Navigation -->
+            <div class="mobile-nav">
+                <button class="mobile-kiosk" onclick="showOrderModal('kiosk')">
+                    <i class="fas fa-utensils"></i>
+                </button>
+                <a href="../admin/dashboard.html" class="mobile-account">
+                    <img src="assets/img/accounts.png" alt="Account" class="account-icon">
+                </a>
+                <div class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
             </div>
         </div>
     </nav>

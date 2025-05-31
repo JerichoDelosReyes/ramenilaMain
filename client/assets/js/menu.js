@@ -13,6 +13,49 @@ class MenuManager {
         this.setupCategoryFilters();
         this.loadCartFromStorage();
         this.updateCartUI();
+        this.initMobileMenu();
+    }
+
+    initMobileMenu() {
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        const icon = mobileMenuToggle.querySelector('i');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuToggle.classList.toggle('active');
+            
+            // Change hamburger icon
+            if (navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu .nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-menu') && 
+                !e.target.closest('.mobile-menu-toggle') && 
+                navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
     }
 
     setupEventListeners() {
@@ -120,17 +163,22 @@ class MenuManager {
 
     updateCartUI() {
         const cartCount = document.getElementById('cart-count');
+        const mobileCartCount = document.getElementById('mobile-cart-count');
         const cartItems = document.getElementById('cart-items');
         const cartFooter = document.getElementById('cart-footer');
         const cartSubtotal = document.getElementById('cart-subtotal');
         const cartTax = document.getElementById('cart-tax');
         const cartTotal = document.getElementById('cart-total');
 
-        // Update cart count
+        // Update cart count for both desktop and mobile
         const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
         if (cartCount) {
             cartCount.textContent = totalItems;
             cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+        if (mobileCartCount) {
+            mobileCartCount.textContent = totalItems;
+            mobileCartCount.style.display = totalItems > 0 ? 'flex' : 'none';
         }
 
         // Update cart items
