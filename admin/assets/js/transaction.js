@@ -370,7 +370,6 @@ class POSSystem {    constructor() {
             this.cart.push({...item, quantity: 1});
         }
         this.updateCartDisplay();
-        this.showNotification(`${item.name} added to cart`, 'success');
     }
 
     removeFromCart(itemId) {
