@@ -1646,4 +1646,66 @@ section {
     .mobile-account:hover .account-icon {
         transform: scale(1.1);
     }
+
+    /* Login Modal Styles */
+    .login-modal {
+        padding: 15px;
+    }
+    
+    .login-content {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+    }
+
+    .login-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-image {
+        display: none;
+    }
+
+    .login-form {
+        padding: 25px 20px;
+    }
+
+    .login-header h2 {
+        font-size: 24px;
+    }
+
+    .login-header p {
+        font-size: 13px;
+    }
+
+    .login-prototype {
+        font-size: 11px !important;
+    }
+
+    .form-group label {
+        font-size: 13px;
+    }
+
+    .form-group input {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .login-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .forgot-password {
+        font-size: 13px;
+        margin-top: 12px;
+    }
+
+    .close-modal {
+        top: 15px;
+        right: 15px;
+        font-size: 20px;
+        width: 25px;
+        height: 25px;
+    }
 }
