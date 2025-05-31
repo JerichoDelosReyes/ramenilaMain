@@ -932,10 +932,34 @@ class POSSystem {    constructor() {
         if (spinner) {
             spinner.style.display = 'none';
         }
-    }
-
-    printReceipt() {
-        window.print();
+    }    printReceipt() {
+        // Ensure the order modal is visible and properly styled for printing
+        const modal = document.getElementById('orderModal');
+        if (modal) {
+            // Temporarily hide any notifications
+            const notifications = document.querySelectorAll('.notification, .notyf, .notyf__toast');
+            notifications.forEach(notif => {
+                notif.style.display = 'none';
+            });
+            
+            // Ensure modal is visible
+            modal.style.display = 'block';
+            modal.style.visibility = 'visible';
+            
+            // Add a small delay to ensure everything is rendered
+            setTimeout(() => {
+                window.print();
+                
+                // Restore notifications after printing
+                setTimeout(() => {
+                    notifications.forEach(notif => {
+                        notif.style.display = '';
+                    });
+                }, 1000);
+            }, 100);
+        } else {
+            this.showNotification('No receipt to print', 'error');
+        }
     }
 
     showNotification(message, type = 'info') {
