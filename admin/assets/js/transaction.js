@@ -392,13 +392,26 @@ class POSSystem {    constructor() {
             printReceiptBtn.addEventListener('click', () => {
                 this.printReceipt();
             });
-        }        // Click outside modal to close
+        }        // Click outside modal - prevent closing to ensure user interaction
         window.addEventListener('click', (e) => {
+            // Only allow closing via close buttons, not by clicking outside
+            // This prevents accidental closure and ensures user completes the action
             if (e.target.classList.contains('modal')) {
-                if (e.target.id === 'paymentModal') {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+
+        // Prevent scrolling when modal is open
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const paymentModal = document.getElementById('paymentModal');
+                const orderModal = document.getElementById('orderModal');
+                
+                if (paymentModal && paymentModal.classList.contains('show')) {
                     this.closePaymentModal();
-                } else {
-                    e.target.style.display = 'none';
+                } else if (orderModal && orderModal.classList.contains('show')) {
+                    this.closeOrderModal();
                 }
             }
         });
@@ -802,15 +815,12 @@ class POSSystem {    constructor() {
         
         // Clear payment fields
         const amountReceivedField = document.getElementById('amountReceived');
-        if (amountReceivedField) amountReceivedField.value = '';
-          // Reset customer type to regular for next order
+        if (amountReceivedField) amountReceivedField.value = '';        // Reset customer type to regular for next order
         const customerTypeSelect = document.getElementById('customerType');
         if (customerTypeSelect) {
             customerTypeSelect.value = 'regular';
             this.customerType = 'regular';
         }
-        
-        this.showNotification('Order completed successfully!', 'success');
     }
 
     saveTransaction(transaction) {
