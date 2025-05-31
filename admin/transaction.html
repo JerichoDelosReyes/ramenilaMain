@@ -157,6 +157,102 @@
                 </div>
             </div>
         </div>
+    </div>    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content payment-modal-content">
+            <div class="modal-header">
+                <div class="modal-header-content">
+                    <img src="assets/img/logo.png" alt="Ramenila Logo" class="modal-logo">
+                    <div class="modal-title-section">
+                        <h2>Payment Details</h2>
+                        <p class="modal-subtitle">Complete your order</p>
+                    </div>
+                </div>
+                <button class="close-btn" id="closePaymentModal">&times;</button>
+            </div>
+            <div class="payment-modal-body">                <!-- Order Summary -->
+                <div class="payment-section">
+                    <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+                    <div class="payment-summary" id="paymentOrderSummary">
+                        <!-- Order items will be populated here -->
+                    </div>
+                    <div class="payment-totals">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="paymentSubtotal">₱0.00</span>
+                        </div>
+                        <div class="total-row discount-row" id="paymentDiscountRow" style="display: none;">
+                            <span id="paymentDiscountType">Discount:</span>
+                            <span id="paymentDiscount">-₱0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Tax (12%):</span>
+                            <span id="paymentTax">₱0.00</span>
+                        </div>
+                        <div class="total-row final-total">
+                            <span>Total Amount:</span>
+                            <span id="paymentTotal">₱0.00</span>
+                        </div>
+                    </div>
+                </div>                <!-- Customer Information -->
+                <div class="payment-section">
+                    <h3><i class="fas fa-user"></i> Customer Information</h3>
+                    <div class="form-group">
+                        <label for="customerName">Customer Name (Optional)</label>
+                        <input type="text" id="customerName" class="form-input" placeholder="Enter customer name">
+                    </div>
+                    <div class="form-group">
+                        <label for="orderType">Order Type</label>
+                        <select id="orderType" class="form-select">
+                            <option value="dine-in">Dine In</option>
+                            <option value="take-out">Take Out</option>
+                            <option value="delivery">Delivery</option>
+                        </select>
+                    </div>
+                </div>                <!-- Payment Information -->
+                <div class="payment-section">
+                    <h3><i class="fas fa-credit-card"></i> Payment Information</h3>
+                    <div class="form-group">
+                        <label for="paymentType">Payment Method</label>
+                        <select id="paymentType" class="form-select">
+                            <option value="cash">💵 Cash</option>
+                            <option value="gcash">💳 GCash</option>
+                            <option value="maya">📱 Maya</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Cash Payment Fields -->
+                    <div class="cash-payment-fields" id="cashPaymentFields">
+                        <div class="form-group">
+                            <label for="amountReceived">Amount Received</label>
+                            <input type="number" id="amountReceived" class="form-input" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="change-display">
+                            <span>Change: </span>
+                            <span id="changeAmount">₱0.00</span>
+                        </div>
+                    </div>                    <!-- Digital Payment Fields -->
+                    <div class="digital-payment-fields" id="digitalPaymentFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="referenceNumber">Reference Number</label>
+                            <input type="text" id="referenceNumber" class="form-input" placeholder="Enter reference number">
+                        </div>
+                        <div class="payment-note">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Please ensure payment has been received before processing the order.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelPaymentBtn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn btn-primary" id="confirmPaymentBtn">
+                    <i class="fas fa-check"></i> Confirm Payment
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Order Confirmation Modal -->
