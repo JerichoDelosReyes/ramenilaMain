@@ -995,6 +995,7 @@ a.filter-btn {
 }
 
 @media (max-width: 768px) {
+    /* Navigation styles */
     .nav-menu {
         display: none;
         position: absolute;
@@ -1021,6 +1022,7 @@ a.filter-btn {
         gap: 10px;
     }
 
+    /* Button styles */
     .kiosk-btn span,
     .delivery-btn span {
         display: none;
@@ -1032,6 +1034,30 @@ a.filter-btn {
         min-width: auto;
     }
 
+    /* Login modal styles */
+    .login-content {
+        width: 95%;
+        max-width: none;
+        margin: 15px;
+    }
+
+    .login-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-image {
+        display: none;
+    }
+
+    .login-form {
+        padding: 25px;
+    }
+
+    .login-header h2 {
+        font-size: 24px;
+    }
+
+    /* Other menu styles */
     .menu-hero {
         padding: 140px 0 60px;
     }
