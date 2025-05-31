@@ -8,6 +8,13 @@ const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
 const navMenu = document.querySelector('.nav-menu');
 const orderButtons = document.querySelectorAll('.order-btn, .kiosk-btn, .delivery-btn');
 
+// Login Modal Elements
+const loginModal = document.getElementById('loginModal');
+const accountBtn = document.getElementById('accountBtn');
+const mobileAccountBtn = document.getElementById('mobileAccountBtn');
+const closeModal = document.getElementById('closeModal');
+const loginForm = document.getElementById('loginForm');
+
 // Smooth scrolling for navigation links
 function initSmoothScrolling() {
     navLinks.forEach(link => {
@@ -354,8 +361,7 @@ function initContactForm() {
     contactForms.forEach(form => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            // Handle form submission
-            showNotification('Thank you for your message! We\'ll get back to you soon.');
+            // Form submission will be handled in a future update
         });
     });
 }
@@ -367,24 +373,81 @@ function showNotification(message, type = 'success') {
     notification.textContent = message;
     
     // Add notification styles
+    const styles = {
+        success: {
+            background: '#4CAF50',
+            icon: '<i class="fas fa-check-circle"></i>'
+        },
+        error: {
+            background: '#f44336',
+            icon: '<i class="fas fa-times-circle"></i>'
+        }
+    };
+    
+    const style = styles[type];
+    
+    notification.innerHTML = `${style.icon} ${message}`;
     notification.style.cssText = `
         position: fixed;
         top: 100px;
-        right: 20px;
-        background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+        left: 50%;
+        transform: translateX(-50%) translateY(-100%);
+        background: ${style.background};
         color: white;
         padding: 15px 25px;
-        border-radius: 5px;
+        border-radius: 8px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         z-index: 10001;
-        animation: slideInRight 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 300px;
+        justify-content: center;
+        font-weight: 500;
+        animation: slideInTop 0.3s ease forwards;
     `;
+    
+    // Add animation keyframes if not already added
+    if (!document.querySelector('#notification-styles')) {
+        const keyframes = document.createElement('style');
+        keyframes.id = 'notification-styles';
+        keyframes.textContent = `
+            @keyframes slideInTop {
+                from {
+                    transform: translateX(-50%) translateY(-100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOutTop {
+                from {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(-50%) translateY(-100%);
+                    opacity: 0;
+                }
+            }
+            @media (max-width: 768px) {
+                .notification {
+                    width: 90%;
+                    min-width: unset;
+                    font-size: 14px;
+                }
+            }
+        `;
+        document.head.appendChild(keyframes);
+    }
     
     document.body.appendChild(notification);
     
     // Remove notification after 4 seconds
     setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
+        notification.style.animation = 'slideOutTop 0.3s ease forwards';
         setTimeout(() => {
             if (document.body.contains(notification)) {
                 document.body.removeChild(notification);
@@ -416,6 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initOrderButtons();
     initScrollAnimations();
     initContactForm();
+    initLoginModal();
     
     // Preload images
     preloadImages();
@@ -445,5 +509,58 @@ function showKioskModal() {
     const mainKioskBtn = document.querySelector('.kiosk-btn');
     if (mainKioskBtn) {
         mainKioskBtn.click();
+    }
+}
+
+// Login Modal Functionality
+function initLoginModal() {
+    if (loginModal && closeModal) {
+        // Show modal when account button is clicked (desktop)
+        if (accountBtn) {
+            accountBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.style.display = 'flex';
+            });
+        }
+
+        // Show modal when mobile account button is clicked
+        if (mobileAccountBtn) {
+            mobileAccountBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.style.display = 'flex';
+            });
+        }
+
+        // Close modal when close button is clicked
+        closeModal.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+        });
+
+        // Handle login form submission
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                // Check credentials
+                if (email === 'user@gmail.com' && password === 'user') {
+                    showNotification('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'admin/dashboard.html';
+                    }, 1000);
+                } else {
+                    showNotification('Invalid credentials. Please try again.', 'error');
+                }
+            });
+        }
     }
 }

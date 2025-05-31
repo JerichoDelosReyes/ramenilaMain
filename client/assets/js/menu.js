@@ -141,10 +141,18 @@ class MenuManager {
         this.showAddToCartNotification(item.name);
     }
 
+    showAddToCartNotification(itemName) {
+        showNotification(`${itemName} added to cart`, 'success');
+    }
+
     removeFromCart(itemId) {
-        this.cart = this.cart.filter(item => item.id !== itemId);
-        this.updateCartUI();
-        this.saveCartToStorage();
+        const item = this.cart.find(item => item.id === itemId);
+        if (item) {
+            this.cart = this.cart.filter(i => i.id !== itemId);
+            this.updateCartUI();
+            this.saveCartToStorage();
+            showNotification(`${item.name} removed from cart`, 'success');
+        }
     }
 
     updateQuantity(itemId, newQuantity) {
@@ -245,27 +253,6 @@ class MenuManager {
         
         // Prevent body scroll when cart is open
         document.body.style.overflow = this.isCartOpen ? 'hidden' : '';
-    }
-
-    showAddToCartNotification(itemName) {
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = 'cart-notification';
-        notification.innerHTML = `
-            <i class="fas fa-check-circle"></i>
-            <span>${itemName} added to cart!</span>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Show notification
-        setTimeout(() => notification.classList.add('show'), 100);
-        
-        // Hide and remove notification
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => document.body.removeChild(notification), 300);
-        }, 2000);
     }
 
     saveCartToStorage() {
@@ -671,57 +658,164 @@ function showOrderModal(orderType) {
     });
 }
 
-// Global toggle function for cart
-function toggleCart() {
-    menuManager.toggleCart();
+// Show notification
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    
+    const styles = {
+        success: {
+            background: '#4CAF50',
+            icon: '<i class="fas fa-check-circle"></i>'
+        },
+        error: {
+            background: '#f44336',
+            icon: '<i class="fas fa-times-circle"></i>'
+        }
+    };
+    
+    const style = styles[type];
+    
+    notification.innerHTML = `${style.icon} ${message}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-100%);
+        background: ${style.background};
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 10001;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 300px;
+        justify-content: center;
+        font-weight: 500;
+        animation: slideInTop 0.3s ease forwards;
+    `;
+    
+    if (!document.querySelector('#notification-styles')) {
+        const keyframes = document.createElement('style');
+        keyframes.id = 'notification-styles';
+        keyframes.textContent = `
+            @keyframes slideInTop {
+                from {
+                    transform: translateX(-50%) translateY(-100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOutTop {
+                from {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(-50%) translateY(-100%);
+                    opacity: 0;
+                }
+            }
+            @media (max-width: 768px) {
+                .notification {
+                    width: 90%;
+                    min-width: unset;
+                    font-size: 14px;
+                }
+            }
+        `;
+        document.head.appendChild(keyframes);
+    }
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOutTop 0.3s ease forwards';
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 4000);
 }
 
-// Initialize the menu manager when the page loads
-let menuManager;
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    menuManager = new MenuManager();
+    initializeLoginModal();
+    // Initialize other menu functionality
+    window.menuManager = new MenuManager();
 });
 
-// Add CSS for cart notification (injected via JavaScript)
-const notificationCSS = `
-.cart-notification {
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    background: linear-gradient(135deg, #2c5530, #3a6b3f);
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    z-index: 10000;
-    transform: translateX(100%);
-    opacity: 0;
-    transition: all 0.3s ease;
-}
+function initializeLoginModal() {
+    const loginModal = document.getElementById('loginModal');
+    const accountBtn = document.getElementById('accountBtn');
+    const mobileAccountBtn = document.getElementById('mobileAccountBtn');
+    const closeModal = document.getElementById('closeModal');
+    const loginForm = document.getElementById('loginForm');
 
-.cart-notification.show {
-    transform: translateX(0);
-    opacity: 1;
-}
+    // Desktop account button
+    if (accountBtn) {
+        accountBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'flex';
+            setTimeout(() => loginModal.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+        });
+    }
 
-.cart-notification i {
-    color: #4CAF50;
-    font-size: 1.2rem;
-}
+    // Mobile account button
+    if (mobileAccountBtn) {
+        mobileAccountBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'flex';
+            setTimeout(() => loginModal.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+        });
+    }
 
-@media (max-width: 768px) {
-    .cart-notification {
-        right: 10px;
-        left: 10px;
-        top: 80px;
+    // Close button
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            loginModal.classList.remove('active');
+            setTimeout(() => {
+                loginModal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
+        });
+    }
+
+    // Click outside to close
+    window.addEventListener('click', (e) => {
+        if (e.target === loginModal) {
+            loginModal.classList.remove('active');
+            setTimeout(() => {
+                loginModal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
+        }
+    });
+
+    // Handle login form submission
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email === 'user@gmail.com' && password === 'user') {
+                showNotification('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = '../admin/dashboard.html';
+                }, 1000);
+            } else {
+                showNotification('Invalid credentials. Please try again.', 'error');
+            }
+        });
     }
 }
-`;
-
-// Inject notification CSS
-const style = document.createElement('style');
-style.textContent = notificationCSS;
-document.head.appendChild(style);

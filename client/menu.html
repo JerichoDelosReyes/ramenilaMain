@@ -44,9 +44,9 @@
                     Order at Kiosk
                 </button>
                 <div class="nav-account">
-                    <a href="../admin/dashboard.html" class="account-link">
-                        <img src="assets/img/accounts.png" alt="Account" class="account-icon" id="account-icon">
-                    </a>
+                    <button class="account-link" id="accountBtn">
+                        <img src="assets/img/accounts.png" alt="Account" class="account-icon">
+                    </button>
                 </div>
             </div>
 
@@ -55,15 +55,46 @@
                 <button class="mobile-kiosk" onclick="showOrderModal('kiosk')">
                     <i class="fas fa-utensils"></i>
                 </button>
-                <a href="../admin/dashboard.html" class="mobile-account">
+                <button class="mobile-account" id="mobileAccountBtn">
                     <img src="assets/img/accounts.png" alt="Account" class="account-icon">
-                </a>
+                </button>
                 <div class="mobile-menu-toggle">
                     <i class="fas fa-bars"></i>
                 </div>
             </div>
         </div>
     </nav>
+
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-content">
+            <button class="close-modal" id="closeModal">X</button>
+            <div class="login-grid">
+                <div class="login-image">
+                    <img src="assets/img/sideLoginPicture.png" alt="Login">
+                </div>
+                <div class="login-form">
+                    <div class="login-header">
+                        <h2>Welcome to Ramenila!</h2>
+                        <p>This login page is for accessing Ramenila's manager dashboard.</p>
+                        <p class="login-prototype">This is a prototype version of the system, intended for demonstration and testing purposes only.</p>
+                    </div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="login-btn">Sign In</button>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Menu Hero Section -->
     <section class="menu-hero">
