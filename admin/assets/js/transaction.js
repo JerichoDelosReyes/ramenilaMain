@@ -925,19 +925,19 @@ class POSSystem {    constructor() {
         if (spinner) {
             spinner.style.display = 'flex';
         }
-    }
-
-    hideProcessingSpinner() {
+    }    hideProcessingSpinner() {
         const spinner = document.getElementById('processingSpinner');
         if (spinner) {
             spinner.style.display = 'none';
         }
-    }    printReceipt() {
+    }
+
+    printReceipt() {
         // Ensure the order modal is visible and properly styled for printing
         const modal = document.getElementById('orderModal');
         if (modal) {
             // Temporarily hide any notifications
-            const notifications = document.querySelectorAll('.notification, .notyf, .notyf__toast');
+            const notifications = document.querySelectorAll('.notification, .notyf, .notyf__toast, .notyf-container');
             notifications.forEach(notif => {
                 notif.style.display = 'none';
             });
@@ -946,12 +946,126 @@ class POSSystem {    constructor() {
             modal.style.display = 'block';
             modal.style.visibility = 'visible';
             
+            // Force A5 print settings by injecting print styles
+            const printStyles = document.createElement('style');
+            printStyles.id = 'temp-print-styles';
+            printStyles.innerHTML = `
+                @media print {
+                    @page { 
+                        size: A5 portrait !important; 
+                        margin: 8mm !important; 
+                    }
+                    body { 
+                        font-size: 10pt !important; 
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                }
+            `;
+            document.head.appendChild(printStyles);
+            
             // Add a small delay to ensure everything is rendered
             setTimeout(() => {
-                window.print();
+                // Try to create a dedicated print window for better A5 control
+                if (window.chrome || window.navigator.userAgent.includes('Chrome')) {
+                    // For Chrome, create a new window with A5 formatting
+                    const printWindow = window.open('', '_blank', 'width=595,height=842');
+                    const receiptContent = modal.querySelector('#orderReceipt').innerHTML;
+                    
+                    printWindow.document.write(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Receipt - ${this.orderNumber}</title>
+                            <style>
+                                @page { 
+                                    size: A5 portrait; 
+                                    margin: 8mm; 
+                                }
+                                body { 
+                                    font-family: 'Courier New', monospace; 
+                                    font-size: 10pt; 
+                                    margin: 0; 
+                                    padding: 0; 
+                                    color: black;
+                                    background: white;
+                                }
+                                .receipt-header { 
+                                    text-align: center; 
+                                    margin-bottom: 8pt; 
+                                    border-bottom: 1px solid #000; 
+                                    padding-bottom: 6pt; 
+                                }
+                                .receipt-header h3 { 
+                                    font-size: 14pt; 
+                                    font-weight: bold; 
+                                    margin: 0 0 3pt 0; 
+                                }
+                                .receipt-header p { 
+                                    font-size: 8pt; 
+                                    margin: 1pt 0; 
+                                }
+                                .receipt-details, .receipt-items, .receipt-summary, .receipt-payment-info { 
+                                    margin-bottom: 6pt; 
+                                }
+                                .receipt-details p { 
+                                    font-size: 8pt; 
+                                    margin: 1pt 0; 
+                                }
+                                .receipt-items h4 { 
+                                    font-size: 10pt; 
+                                    font-weight: bold; 
+                                    margin: 0 0 3pt 0; 
+                                    border-bottom: 1px solid #000; 
+                                    padding-bottom: 1pt; 
+                                }
+                                .receipt-item { 
+                                    display: flex; 
+                                    justify-content: space-between; 
+                                    font-size: 8pt; 
+                                    margin: 1pt 0; 
+                                    line-height: 1.2; 
+                                }
+                                .receipt-item.total { 
+                                    font-size: 10pt; 
+                                    font-weight: bold; 
+                                    border-top: 1px solid #000; 
+                                    padding-top: 3pt; 
+                                    margin-top: 3pt; 
+                                }
+                                .receipt-summary { 
+                                    border-top: 1px solid #000; 
+                                    padding-top: 3pt; 
+                                }
+                                .receipt-payment-info { 
+                                    border-top: 1px dashed #000; 
+                                    padding-top: 3pt; 
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            ${receiptContent}
+                        </body>
+                        </html>
+                    `);
+                    printWindow.document.close();
+                    printWindow.focus();
+                    
+                    setTimeout(() => {
+                        printWindow.print();
+                        printWindow.close();
+                    }, 500);
+                } else {
+                    // For other browsers, use regular print
+                    window.print();
+                }
                 
-                // Restore notifications after printing
+                // Clean up and restore notifications after printing
                 setTimeout(() => {
+                    const tempStyles = document.getElementById('temp-print-styles');
+                    if (tempStyles) {
+                        document.head.removeChild(tempStyles);
+                    }
                     notifications.forEach(notif => {
                         notif.style.display = '';
                     });

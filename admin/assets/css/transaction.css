@@ -1088,160 +1088,212 @@
     font-weight: 500;
 }
 
-/* Print Styles - A5 Format */
+/* Enhanced Print Styles - Force A5 Format */
 @media print {
-    /* Page setup for A5 */
+    /* Force A5 page setup */
     @page {
-        size: A5;
-        margin: 10mm;
+        size: A5 portrait !important;
+        margin: 8mm !important;
     }
     
     /* Hide everything except the receipt */
-    body,
-    html {
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: visible !important;
+    body * {
+        visibility: hidden !important;
     }
     
-    /* Hide all page elements */
+    /* Only show the order modal and its contents */
+    #orderModal,
+    #orderModal * {
+        visibility: visible !important;
+    }
+    
+    /* Hide all other elements completely */
     .sidebar,
     .main-content,
-    .pos-container,
+    .header,
     .menu-section,
     .cart-section,
+    .payment-modal,
+    .processing-spinner,
     .notification,
     .notyf,
     .notyf__toast,
-    .processing-spinner,
-    .modal-header,
-    .modal-actions {
+    .notyf-container {
         display: none !important;
+        visibility: hidden !important;
     }
     
-    /* Only show the order modal */
-    #orderModal {
-        display: block !important;
-        position: static !important;
-        background: white !important;
-        backdrop-filter: none !important;
-        padding: 0 !important;
+    /* Force A5 dimensions and positioning */
+    html, body {
+        width: 148mm !important;
+        height: 210mm !important;
         margin: 0 !important;
-        width: 100% !important;
+        padding: 0 !important;
+        font-size: 10pt !important;
+        background: white !important;
+    }
+    
+    /* Position the receipt modal for A5 printing */
+    #orderModal {
+        position: static !important;
+        display: block !important;
+        background: white !important;
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 132mm !important; /* A5 width minus margins */
         height: auto !important;
-        z-index: auto !important;
+        max-width: 132mm !important;
+        max-height: none !important;
+        transform: none !important;
+        overflow: visible !important;
     }
     
     .modal-content {
         position: static !important;
-        transform: none !important;
         background: white !important;
         box-shadow: none !important;
         border: none !important;
-        border-radius: 0 !important;
-        width: 100% !important;
-        max-width: none !important;
         margin: 0 !important;
         padding: 0 !important;
+        width: 100% !important;
         height: auto !important;
+        max-width: none !important;
+        transform: none !important;
+        overflow: visible !important;
     }
     
-    /* Receipt styling for print */
+    /* Hide modal controls */
+    .modal-header .close,
+    .modal-actions,
+    #closeOrderModal,
+    .btn,
+    button {
+        display: none !important;
+    }
+    
+    /* Receipt styling optimized for A5 */
     #orderReceipt {
-        font-size: 11pt;
-        line-height: 1.3;
+        font-family: 'Courier New', monospace !important;
+        font-size: 9pt !important;
+        line-height: 1.3 !important;
         color: black !important;
         background: white !important;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        font-family: 'Courier New', monospace;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        page-break-inside: avoid !important;
     }
     
     .receipt-header {
-        text-align: center;
-        margin-bottom: 12pt;
-        border-bottom: 1px solid #000;
-        padding-bottom: 8pt;
+        text-align: center !important;
+        margin-bottom: 8pt !important;
+        border-bottom: 1px solid #000 !important;
+        padding-bottom: 6pt !important;
     }
     
     .receipt-header h3 {
-        font-size: 16pt;
-        font-weight: bold;
-        margin: 0 0 4pt 0;
+        font-size: 14pt !important;
+        font-weight: bold !important;
+        margin: 0 0 3pt 0 !important;
         color: black !important;
     }
     
     .receipt-header p {
-        font-size: 9pt;
-        margin: 1pt 0;
+        font-size: 8pt !important;
+        margin: 1pt 0 !important;
         color: black !important;
     }
     
-    .receipt-details {
-        margin-bottom: 10pt;
+    .receipt-details,
+    .receipt-items,
+    .receipt-summary,
+    .receipt-payment-info {
+        margin-bottom: 6pt !important;
+        page-break-inside: avoid !important;
+    }
+    
+    .receipt-details h4,
+    .receipt-items h4 {
+        font-size: 10pt !important;
+        font-weight: bold !important;
+        margin: 0 0 3pt 0 !important;
+        border-bottom: 1px solid #000 !important;
+        padding-bottom: 1pt !important;
+        color: black !important;
     }
     
     .receipt-details p {
-        font-size: 9pt;
-        margin: 1pt 0;
-        color: black !important;
-    }
-    
-    .receipt-items {
-        margin-bottom: 10pt;
-    }
-    
-    .receipt-items h4 {
-        font-size: 11pt;
-        font-weight: bold;
-        margin: 0 0 4pt 0;
-        border-bottom: 1px solid #000;
-        padding-bottom: 2pt;
+        font-size: 8pt !important;
+        margin: 1pt 0 !important;
         color: black !important;
     }
     
     .receipt-item {
-        display: flex;
-        justify-content: space-between;
-        font-size: 9pt;
-        margin: 1pt 0;
+        display: flex !important;
+        justify-content: space-between !important;
+        font-size: 8pt !important;
+        margin: 1pt 0 !important;
         color: black !important;
+        line-height: 1.2 !important;
     }
     
     .receipt-item.total {
-        font-size: 11pt;
-        font-weight: bold;
-        border-top: 1px solid #000;
-        padding-top: 4pt;
-        margin-top: 6pt;
+        font-size: 10pt !important;
+        font-weight: bold !important;
+        border-top: 1px solid #000 !important;
+        padding-top: 3pt !important;
+        margin-top: 3pt !important;
     }
     
     .receipt-summary {
-        border-top: 1px solid #000;
-        padding-top: 6pt;
-        margin-bottom: 8pt;
+        border-top: 1px solid #000 !important;
+        padding-top: 3pt !important;
+        page-break-inside: avoid !important;
     }
     
     .receipt-payment-info {
-        border-top: 1px dashed #000;
-        padding-top: 6pt;
+        border-top: 1px dashed #000 !important;
+        padding-top: 3pt !important;
+        page-break-inside: avoid !important;
     }
     
-    /* Ensure no page breaks within receipt */
+    /* Force all colors to black for printing */
+    * {
+        color: black !important;
+        background: white !important;
+        text-shadow: none !important;
+        box-shadow: none !important;
+        border-color: black !important;
+    }
+    
+    /* Ensure no page breaks */
+    #orderReceipt,
     .receipt-header,
     .receipt-details,
     .receipt-items,
     .receipt-summary,
     .receipt-payment-info {
-        page-break-inside: avoid;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
-    
-    /* Remove any remaining styling that might interfere */
-    * {
-        box-shadow: none !important;
-        text-shadow: none !important;
-    }
+}
+
+/* Additional print styles for different browsers */
+@page :first {
+    size: A5 portrait !important;
+    margin: 8mm !important;
+}
+
+@page :left {
+    size: A5 portrait !important;
+    margin: 8mm !important;
+}
+
+@page :right {
+    size: A5 portrait !important;
+    margin: 8mm !important;
 }
 
 /* Responsive Design */
