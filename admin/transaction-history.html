@@ -12,7 +12,7 @@
 </head>
 <body>
     <!-- Sidebar -->
-    <div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar" id="sidebar">
         <!-- Logo Section -->
         <div class="logo-section">
             <img src="assets/img/logowhite.png" alt="Logo" class="logo">
@@ -50,7 +50,11 @@
                         <span class="nav-text">Settings</span>
                     </a>
                 </li>            </ul>
-        </nav>
+        </nav>        <!-- Theme Toggle Button -->
+        <button class="theme-toggle" id="themeToggle" data-tooltip="Toggle Theme">
+            <i class="fas fa-moon" id="themeIcon"></i>
+            <span class="theme-text" id="themeText">Dark Mode</span>
+        </button>
 
         <!-- Logout Section -->
         <div class="logout-section">
@@ -58,10 +62,8 @@
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="logout-text">Logout</span>
             </a>
-        </div>
-
-        <!-- Toggle Button -->
-        <button class="toggle-btn" id="toggleSidebar">
+        </div>        <!-- Toggle Button -->
+        <button class="toggle-btn" id="toggleBtn">
             <i class="fas fa-chevron-right"></i>
         </button>
     </div>
@@ -250,9 +252,7 @@
                 </button>
             </div>
         </div>
-    </div>
-
-    <!-- JavaScript -->
+    </div>    <!-- JavaScript -->
     <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/transaction-history.js"></script>
 </body>

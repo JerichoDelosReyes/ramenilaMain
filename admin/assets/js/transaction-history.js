@@ -7,9 +7,7 @@ class TransactionHistory {
         this.itemsPerPage = 10;
         this.currentTransaction = null;
         this.initializeSystem();
-    }
-
-    initializeSystem() {
+    }    initializeSystem() {
         this.loadTransactions();
         this.setupEventListeners();
         this.updateSummaryCards();
@@ -140,9 +138,7 @@ class TransactionHistory {
 
         document.getElementById('confirm-refund').addEventListener('click', () => {
             this.processRefund();
-        });
-
-        // Print receipt from modal
+        });        // Print receipt from modal
         document.getElementById('print-receipt-modal').addEventListener('click', () => {
             this.printReceipt();
         });
@@ -569,8 +565,7 @@ class TransactionHistory {
             setTimeout(() => {
                 document.body.removeChild(notification);
             }, 300);
-        }, 3000);
-    }
+        }, 3000);    }
 }
 
 // Initialize Transaction History system when page loads

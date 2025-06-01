@@ -1,3 +1,66 @@
+/* CSS Variables for Theme Support */
+:root {
+    /* Light Theme Colors */
+    --primary-color: #873E23;
+    --secondary-color: #A64D2A;
+    --background-color: #E1B46D;
+    --surface-color: #ffffff;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-light: #999999;
+    --border-color: #eeeee;
+    --border-light: #f0f0f0;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --hover-bg: #f8f9fa;
+    
+    /* Status Colors */
+    --success-bg: #d4edda;
+    --success-text: #155724;
+    --warning-bg: #fff3cd;
+    --warning-text: #856404;
+    --danger-bg: #f8d7da;
+    --danger-text: #721c24;
+    --info-bg: #d1ecf1;
+    --info-text: #0c5460;
+    
+    /* Notification Colors */
+    --notification-success: #28a745;
+    --notification-error: #dc3545;
+    --notification-info: #17a2b8;
+}
+
+body.dark-mode {
+    /* Dark Theme Colors */
+    --primary-color: #ff8c42;
+    --secondary-color: #ffb366;
+    --background-color: #1a1a1a;
+    --surface-color: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-light: #999999;
+    --border-color: #404040;
+    --border-light: #353535;
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --hover-bg: #3a3a3a;
+    
+    /* Status Colors - Dark Mode */
+    --success-bg: #1e4a2e;
+    --success-text: #4caf50;
+    --warning-bg: #4a3c1e;
+    --warning-text: #ffc107;
+    --danger-bg: #4a1e1e;
+    --danger-text: #f44336;
+    --info-bg: #1e3a4a;
+    --info-text: #2196f3;
+    
+    /* Notification Colors - Dark Mode */
+    --notification-success: #4caf50;
+    --notification-error: #f44336;
+    --notification-info: #2196f3;
+}
+
 /* Dashboard Specific Styles */
 .dashboard-header {
     margin-bottom: 30px;
@@ -5,14 +68,14 @@
 }
 
 .dashboard-header h1 {
-    color: #873E23;
+    color: var(--primary-color);
     font-size: 2.5rem;
     margin-bottom: 10px;
     font-weight: 700;
 }
 
 .date-time {
-    color: #666;
+    color: var(--text-secondary);
     font-size: 1.1rem;
     font-weight: 500;
 }
@@ -26,10 +89,10 @@
 }
 
 .stat-card {
-    background: white;
+    background: var(--surface-color);
     padding: 25px;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px var(--shadow-light);
     display: flex;
     align-items: center;
     gap: 20px;
@@ -38,13 +101,13 @@
 
 .stat-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 25px var(--shadow-medium);
 }
 
 .stat-icon {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, #873E23, #A64D2A);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -56,23 +119,23 @@
 .stat-content h3 {
     font-size: 2rem;
     font-weight: 700;
-    color: #873E23;
+    color: var(--primary-color);
     margin-bottom: 5px;
 }
 
 .stat-content p {
-    color: #666;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     font-weight: 500;
 }
 
 /* Dashboard Sections */
 .dashboard-section {
-    background: white;
+    background: var(--surface-color);
     border-radius: 15px;
     padding: 25px;
     margin-bottom: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px var(--shadow-light);
 }
 
 .section-header {
@@ -81,17 +144,17 @@
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #f0f0f0;
+    border-bottom: 2px solid var(--border-light);
 }
 
 .section-header h2 {
-    color: #873E23;
+    color: var(--primary-color);
     font-size: 1.5rem;
     font-weight: 600;
 }
 
 .view-all-btn {
-    background: #873E23;
+    background: var(--primary-color);
     color: white;
     padding: 8px 16px;
     border-radius: 8px;
@@ -102,7 +165,7 @@
 }
 
 .view-all-btn:hover {
-    background: #A64D2A;
+    background: var(--secondary-color);
     transform: translateY(-2px);
 }
 
@@ -117,23 +180,23 @@
 .orders-table td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .orders-table th {
-    background: #f8f9fa;
-    color: #873E23;
+    background: var(--hover-bg);
+    color: var(--primary-color);
     font-weight: 600;
     font-size: 0.9rem;
 }
 
 .orders-table td {
-    color: #333;
+    color: var(--text-primary);
     font-size: 0.9rem;
 }
 
 .orders-table tr:hover {
-    background: #f8f9fa;
+    background: var(--hover-bg);
 }
 
 /* Status Badges */
@@ -146,18 +209,18 @@
 }
 
 .status.completed {
-    background: #d4edda;
-    color: #155724;
+    background: var(--success-bg);
+    color: var(--success-text);
 }
 
 .status.pending {
-    background: #fff3cd;
-    color: #856404;
+    background: var(--warning-bg);
+    color: var(--warning-text);
 }
 
 .status.cancelled {
-    background: #f8d7da;
-    color: #721c24;
+    background: var(--danger-bg);
+    color: var(--danger-text);
 }
 
 /* Low Stock Items */
@@ -172,23 +235,23 @@
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    background: #f8f9fa;
+    background: var(--hover-bg);
     border-radius: 10px;
-    border-left: 4px solid #ffc107;
+    border-left: 4px solid var(--warning-text);
 }
 
 .stock-item.critical {
-    border-left-color: #dc3545;
+    border-left-color: var(--danger-text);
 }
 
 .item-info h4 {
-    color: #873E23;
+    color: var(--primary-color);
     margin-bottom: 5px;
     font-size: 1rem;
 }
 
 .item-info p {
-    color: #666;
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
@@ -201,13 +264,13 @@
 }
 
 .stock-level.critical {
-    background: #f8d7da;
-    color: #721c24;
+    background: var(--danger-bg);
+    color: var(--danger-text);
 }
 
 .stock-level.low {
-    background: #fff3cd;
-    color: #856404;
+    background: var(--warning-bg);
+    color: var(--warning-text);
 }
 
 /* Notification Styles */
@@ -225,15 +288,15 @@
 }
 
 .notification.success {
-    background-color: #28a745;
+    background-color: var(--notification-success);
 }
 
 .notification.error {
-    background-color: #dc3545;
+    background-color: var(--notification-error);
 }
 
 .notification.info {
-    background-color: #17a2b8;
+    background-color: var(--notification-info);
 }
 
 .notification.show {

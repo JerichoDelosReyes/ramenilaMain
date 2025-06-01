@@ -6,14 +6,13 @@ class MenuManager {
         this.currentCategory = 'all';
         this.init();
         this.initSmoothScroll();
-    }
-
-    init() {
+    }    init() {
         this.setupEventListeners();
         this.setupCategoryFilters();
         this.loadCartFromStorage();
         this.updateCartUI();
         this.initMobileMenu();
+        this.initThemeToggle();
     }
 
     initMobileMenu() {
@@ -290,9 +289,46 @@ class MenuManager {
                         top: offsetPosition,
                         behavior: 'smooth'
                     });
-                }
-            });
+                }            });
         });
+    }
+
+    initThemeToggle() {
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        if (!themeToggle) return;
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        this.setTheme(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            this.setTheme(newTheme);
+        });
+    }
+
+    setTheme(theme) {
+        const body = document.body;
+        const themeIcon = document.getElementById('themeIcon');
+        
+        if (theme === 'dark') {
+            body.classList.add('dark-mode');
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        } else {
+            body.classList.remove('dark-mode');
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+        
+        localStorage.setItem('theme', theme);
     }
 }
 

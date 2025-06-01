@@ -1,5 +1,48 @@
 /* Menu Page Styles */
 
+/* CSS Variables for Light and Dark Themes */
+:root {
+    /* Light theme colors */
+    --bg-primary: linear-gradient(135deg, #F8F6F3 0%, #F2EDE7 50%, #EDE4D9 100%);
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: rgba(255, 255, 255, 0.9);
+    --text-primary: #333;
+    --text-secondary: #6B4423;
+    --accent-primary: #8B4513;
+    --accent-secondary: #A0522D;
+    --accent-gold: #D4AF37;
+    --accent-gold-light: #DAA520;
+    --nav-bg: rgba(255, 255, 255, 0.98);
+    --border-color: rgba(139, 69, 19, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-hover: rgba(139, 69, 19, 0.15);
+    --card-bg: white;    --input-bg: #F8F6F3;
+    --input-border: #E0D5C7;
+    --button-danger: #FF6B6B;
+    --text-muted: #999;
+}
+
+/* Dark theme colors */
+body.dark-mode {
+    --bg-primary: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #3d3d3d 100%);
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: rgba(45, 45, 45, 0.9);
+    --text-primary: #e8e8e8;
+    --text-secondary: #b8b8b8;
+    --accent-primary: #ff8c42;
+    --accent-secondary: #ffb366;
+    --accent-gold: #ffd700;
+    --accent-gold-light: #ffed4e;
+    --nav-bg: rgba(45, 45, 45, 0.95);
+    --border-color: rgba(255, 140, 66, 0.2);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --shadow-hover: rgba(255, 140, 66, 0.3);
+    --card-bg: #3d3d3d;    --input-bg: #4d4d4d;
+    --input-border: #666;
+    --button-danger: #ff5252;
+    --text-muted: #888;
+}
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -10,8 +53,9 @@
 body {
     font-family: 'Noto Sans JP', sans-serif;
     line-height: 1.6;
-    color: #333;
-    background: #FFFFFF;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 html {
@@ -30,11 +74,11 @@ html {
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.98);
+    background: var(--nav-bg);
     backdrop-filter: blur(20px);
     z-index: 1000;
     padding: 15px 0;
-    box-shadow: 0 2px 30px rgba(139, 69, 19, 0.1);
+    box-shadow: 0 2px 30px var(--border-color);
     transition: all 0.3s ease;
 }
 
@@ -74,7 +118,7 @@ html {
     font-family: 'Noto Sans JP', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #8B4513;
+    color: var(--accent-primary);
     letter-spacing: -0.5px;
 }
 
@@ -86,7 +130,7 @@ html {
 
 .nav-link {
     text-decoration: none;
-    color: #6B4423;
+    color: var(--text-secondary);
     font-weight: 500;
     font-size: 16px;
     text-transform: lowercase;
@@ -97,19 +141,18 @@ html {
 
 .nav-link.active,
 .nav-link:hover {
-    color: #8B4513;
+    color: var(--accent-primary);
     transform: translateY(-1px);
 }
 
 .nav-link.active::after,
 .nav-link:hover::after {
-    content: '';
-    position: absolute;
+    content: '';    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, #8B4513, #A0522D);
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
     border-radius: 1px;
     animation: slideIn 0.3s ease;
 }
@@ -127,7 +170,7 @@ html {
 
 .kiosk-btn, 
 .delivery-btn {
-    background: linear-gradient(135deg, #8B4513, #A0522D);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     color: white;
     border: none;
     padding: 12px 20px;
@@ -139,22 +182,22 @@ html {
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+    box-shadow: 0 4px 15px var(--shadow-hover);
 }
 
 .kiosk-btn:hover, 
 .delivery-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+    box-shadow: 0 6px 20px var(--shadow-hover);
 }
 
 .delivery-btn {
-    background: linear-gradient(135deg, #D4AF37, #DAA520);
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
 }
 
 .cart-toggle {
-    background: #F8F6F3;
-    border: 2px solid #E0D5C7;
+    background: var(--input-bg);
+    border: 2px solid var(--input-border);
     padding: 10px 15px;
     border-radius: 25px;
     cursor: pointer;
@@ -163,17 +206,17 @@ html {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #8B4513;
+    color: var(--accent-primary);
 }
 
 .cart-toggle:hover {
-    background: #8B4513;
+    background: var(--accent-primary);
     color: white;
-    border-color: #8B4513;
+    border-color: var(--accent-primary);
 }
 
 .cart-count {
-    background: #FF6B6B;
+    background: var(--button-danger);
     color: white;
     border-radius: 50%;
     width: 20px;
@@ -213,27 +256,27 @@ html {
 .mobile-menu-toggle {
     display: none;
     font-size: 1.5rem;
-    color: #8B4513;
+    color: var(--accent-primary);
     cursor: pointer;
 }
 
 /* Menu Hero Section */
 .menu-hero {
     padding: 120px 0 80px;
-    background: linear-gradient(135deg, #F8F6F3 0%, #F2EDE7 100%);
+    background: var(--bg-primary);
     text-align: center;
 }
 
 .menu-hero-content h1 {
     font-size: 3rem;
     font-weight: 700;
-    color: #8B4513;
+    color: var(--accent-primary);
     margin-bottom: 20px;
 }
 
 .menu-hero-content p {
     font-size: 1.2rem;
-    color: #6B4423;
+    color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto;
 }
@@ -248,12 +291,12 @@ html {
 }
 
 .filter-btn {
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid #E0D5C7;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--input-border);
     padding: 12px 25px;
     border-radius: 25px;
     font-weight: 600;
-    color: #6B4423;
+    color: var(--text-secondary);
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
@@ -262,9 +305,9 @@ html {
 
 .filter-btn.active,
 .filter-btn:hover {
-    background: linear-gradient(135deg, #8B4513, #A0522D);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     color: white;
-    border-color: #8B4513;
+    border-color: var(--accent-primary);
     transform: translateY(-2px);
 }
 
@@ -277,7 +320,7 @@ a.filter-btn {
 /* Menu Section */
 .menu-section {
     padding: 80px 0;
-    background: #FFFFFF;
+    background: var(--bg-secondary);
 }
 
 .menu-category {
@@ -287,7 +330,7 @@ a.filter-btn {
 .menu-category h2 {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #8B4513;
+    color: var(--accent-primary);
     margin-bottom: 40px;
     text-align: center;
     position: relative;
@@ -301,7 +344,7 @@ a.filter-btn {
     transform: translateX(-50%);
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, #8B4513, #A0522D);
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
     border-radius: 2px;
 }
 
@@ -313,17 +356,17 @@ a.filter-btn {
 }
 
 .menu-item {
-    background: white;
+    background: var(--card-bg);
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 30px var(--shadow-color);
     transition: all 0.4s ease;
-    border: 1px solid rgba(224, 213, 199, 0.3);
+    border: 1px solid var(--border-color);
 }
 
 .menu-item:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 15px 40px var(--shadow-hover);
 }
 
 .menu-image {
@@ -355,15 +398,15 @@ a.filter-btn {
 }
 
 .menu-badge.popular {
-    background: linear-gradient(135deg, #D4AF37, #DAA520);
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
 }
 
 .menu-badge.chef {
-    background: linear-gradient(135deg, #8B4513, #A0522D);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
 }
 
 .menu-badge.spicy {
-    background: linear-gradient(135deg, #FF6B6B, #EE5A52);
+    background: linear-gradient(135deg, var(--button-danger), #EE5A52);
 }
 
 .menu-badge.veg {
@@ -377,12 +420,12 @@ a.filter-btn {
 .menu-content h3 {
     font-size: 1.4rem;
     font-weight: 700;
-    color: #8B4513;
+    color: var(--accent-primary);
     margin-bottom: 10px;
 }
 
 .menu-content p {
-    color: #6B4423;
+    color: var(--text-secondary);
     margin-bottom: 20px;
     line-height: 1.6;
     font-size: 14px;
@@ -391,13 +434,13 @@ a.filter-btn {
 .menu-price {
     font-size: 1.4rem;
     font-weight: 700;
-    color: #D4AF37;
+    color: var(--accent-gold);
     margin-bottom: 15px;
 }
 
 .add-to-cart-btn {
     width: 100%;
-    background: linear-gradient(135deg, #8B4513, #A0522D);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     color: white;
     border: none;
     padding: 12px 20px;
@@ -413,7 +456,7 @@ a.filter-btn {
 
 .add-to-cart-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+    box-shadow: 0 6px 20px var(--shadow-hover);
 }
 
 /* Cart Button in Navigation */
@@ -468,14 +511,14 @@ a.filter-btn {
 
 .cart-header {
     padding: 20px;
-    border-bottom: 1px solid #E0D5C7;
+    border-bottom: 1px solid var(--input-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .cart-header h3 {
-    color: #8B4513;
+    color: var(--accent-primary);
     font-size: 1.3rem;
     font-weight: 700;
 }
@@ -484,7 +527,7 @@ a.filter-btn {
     background: none;
     border: none;
     font-size: 1.5rem;
-    color: #999;
+    color: var(--text-muted);
     cursor: pointer;
     padding: 5px;
 }
@@ -497,7 +540,7 @@ a.filter-btn {
 
 .empty-cart {
     text-align: center;
-    color: #999;
+    color: var(--text-muted);
     font-style: italic;
     margin-top: 50px;
 }
@@ -507,17 +550,17 @@ a.filter-btn {
     justify-content: space-between;
     align-items: center;
     padding: 15px 0;
-    border-bottom: 1px solid #F0F0F0;
+    border-bottom: 1px solid var(--input-border);
 }
 
 .cart-item-info h4 {
-    color: #8B4513;
+    color: var(--accent-primary);
     font-size: 1rem;
     margin-bottom: 5px;
 }
 
 .cart-item-price {
-    color: #D4AF37;
+    color: var(--accent-gold);
     font-weight: 600;
 }
 
@@ -544,21 +587,20 @@ a.filter-btn {
     background: #E0D5C7;
 }
 
-.cart-footer {
-    padding: 20px;
-    border-top: 1px solid #E0D5C7;
+.cart-footer {    padding: 20px;
+    border-top: 1px solid var(--input-border);
 }
 
 .cart-total {
     margin-bottom: 15px;
     text-align: center;
     font-size: 1.2rem;
-    color: #8B4513;
+    color: var(--accent-primary);
 }
 
 .checkout-btn {
     width: 100%;
-    background: linear-gradient(135deg, #8B4513, #A0522D);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     color: white;
     border: none;
     padding: 15px;
@@ -1256,4 +1298,35 @@ a.filter-btn {
     .mobile-menu-toggle.active i {
         transform: rotate(90deg);
     }
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--accent-primary);
+    font-size: 1.1rem;
+}
+
+.theme-toggle:hover {
+    background: var(--accent-primary);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px var(--shadow-hover);
+}
+
+.theme-toggle i {
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover i {
+    transform: rotate(15deg);
 }

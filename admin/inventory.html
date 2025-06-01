@@ -13,7 +13,7 @@
 </head>
 <body>
     <!-- Sidebar -->
-    <div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar" id="sidebar">
         <!-- Logo Section -->
         <div class="logo-section">
             <img src="assets/img/logowhite.png" alt="Logo" class="logo">
@@ -51,8 +51,13 @@
                         <span class="nav-text">Settings</span>
                     </a>
                 </li>
-            </ul>
-        </nav>
+            </ul>        </nav>
+
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="themeToggle" data-tooltip="Toggle Theme">
+            <i class="fas fa-moon" id="themeIcon"></i>
+            <span class="theme-text" id="themeText">Dark Mode</span>
+        </button>
 
         <!-- Logout Section -->
         <div class="logout-section">
@@ -69,7 +74,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <div class="main-content expanded" id="mainContent">
+    <div class="main-content" id="mainContent">
         <div class="page-header">
             <h1>Inventory</h1>
             <button class="btn btn-primary" id="addProductBtn">
@@ -225,9 +230,7 @@
                 </button>
             </div>
         </div>
-    </div>
-
-    <!-- JavaScript -->
+    </div>    <!-- JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/inventory.js"></script>

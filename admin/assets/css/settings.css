@@ -1,10 +1,57 @@
+/* CSS Variables for Theme Support */
+:root {
+    /* Light Theme Colors */
+    --primary-color: #873E23;
+    --secondary-color: #A64D2A;
+    --background-color: #E1B46D;
+    --surface-color: #ffffff;
+    --content-bg: #f8f9fa;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-light: #999999;
+    --border-color: #eeeee;
+    --border-light: #f0f0f0;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --hover-bg: #f8f9fa;
+    
+    /* Status Colors */
+    --status-success: #28a745;
+    --status-warning: #ffc107;
+    --status-danger: #dc3545;
+    --status-info: #17a2b8;
+}
+
+body.dark-mode {
+    /* Dark Theme Colors */
+    --primary-color: #ff8c42;
+    --secondary-color: #ffb366;
+    --background-color: #1a1a1a;
+    --surface-color: #2d2d2d;
+    --content-bg: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-light: #999999;
+    --border-color: #404040;
+    --border-light: #353535;
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --hover-bg: #3a3a3a;
+    
+    /* Status Colors - Dark Mode */
+    --status-success: #4caf50;
+    --status-warning: #ffc107;
+    --status-danger: #f44336;
+    --status-info: #2196f3;
+}
+
 /* Settings Page Styles */
 .main-content {
     margin-left: 80px;
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: var(--content-bg);
     min-height: 100vh;
-    transition: margin-left 0.3s ease;
+    transition: margin-left 0.3s ease, background-color 0.3s ease;
 }
 
 .sidebar.expanded + .main-content {
@@ -18,12 +65,12 @@
 
 /* Page Header */
 .page-header {
-    background: linear-gradient(135deg, #873E23, #E1B46D);
+    background: linear-gradient(135deg, var(--primary-color), var(--background-color));
     color: white;
     padding: 30px;
     border-radius: 15px;
     margin-bottom: 30px;
-    box-shadow: 0 4px 15px rgba(135, 62, 35, 0.2);
+    box-shadow: 0 4px 15px rgba(255, 140, 66, 0.2);
 }
 
 .page-header h1 {
@@ -41,17 +88,17 @@
 /* Settings Tabs */
 .settings-tabs {
     display: flex;
-    background: white;
+    background: var(--surface-color);
     border-radius: 15px 15px 0 0;
     overflow-x: auto;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--shadow-light);
 }
 
 .tab-btn {
     padding: 20px 25px;
     border: none;
     background: transparent;
-    color: #666;
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -64,21 +111,21 @@
 }
 
 .tab-btn:hover {
-    background: #f8f9fa;
-    color: #873E23;
+    background: var(--hover-bg);
+    color: var(--primary-color);
 }
 
 .tab-btn.active {
-    color: #873E23;
-    border-bottom-color: #873E23;
-    background: #fff;
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background: var(--surface-color);
 }
 
 /* Tab Content */
 .tab-content {
-    background: white;
+    background: var(--surface-color);
     border-radius: 0 0 15px 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--shadow-light);
     min-height: 500px;
 }
 
@@ -94,7 +141,7 @@
 /* Settings Sections */
 .settings-section h2 {
     margin: 0 0 30px 0;
-    color: #333;
+    color: var(--text-primary);
     font-size: 1.8rem;
     font-weight: 700;
 }
@@ -108,21 +155,21 @@
 
 /* Setting Cards */
 .setting-card {
-    background: #f8f9fa;
+    background: var(--hover-bg);
     padding: 25px;
     border-radius: 15px;
-    border: 2px solid #e1e5e9;
+    border: 2px solid var(--border-color);
     transition: all 0.3s ease;
 }
 
 .setting-card:hover {
-    border-color: #873E23;
+    border-color: var(--primary-color);
     transform: translateY(-2px);
 }
 
 .setting-card h3 {
     margin: 0 0 20px 0;
-    color: #333;
+    color: var(--text-primary);
     font-size: 1.3rem;
     font-weight: 600;
     display: flex;
@@ -131,7 +178,7 @@
 }
 
 .setting-card h3 i {
-    color: #873E23;
+    color: var(--primary-color);
 }
 
 /* Form Elements */
@@ -143,7 +190,7 @@
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
     font-size: 14px;
 }
 
@@ -152,9 +199,11 @@
 .form-group textarea {
     width: 100%;
     padding: 12px 15px;
-    border: 2px solid #e1e5e9;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 14px;
+    background: var(--surface-color);
+    color: var(--text-primary);
     transition: border-color 0.3s ease;
     font-family: inherit;
 }
@@ -162,9 +211,9 @@
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    border-color: #873E23;
+    border-color: var(--primary-color);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(135, 62, 35, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.1);
 }
 
 .form-group textarea {
@@ -189,7 +238,7 @@
 }
 
 .checkbox-label i {
-    color: #873E23;
+    color: var(--primary-color);
     width: 20px;
 }
 
@@ -205,14 +254,14 @@
     gap: 10px;
     align-items: center;
     padding: 10px;
-    background: white;
+    background: var(--surface-color);
     border-radius: 8px;
-    border: 1px solid #e1e5e9;
+    border: 1px solid var(--border-color);
 }
 
 .day-hours label:first-child {
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
     margin: 0;
 }
 
@@ -245,12 +294,12 @@
 }
 
 .btn-primary {
-    background: #873E23;
+    background: var(--primary-color);
     color: white;
 }
 
 .btn-primary:hover {
-    background: #6d2f1a;
+    background: var(--secondary-color);
     transform: translateY(-2px);
 }
 
@@ -312,10 +361,10 @@
 }
 
 .users-table-container {
-    background: white;
+    background: var(--surface-color);
     border-radius: 10px;
     overflow: hidden;
-    border: 1px solid #e1e5e9;
+    border: 1px solid var(--border-color);
 }
 
 .users-table {
@@ -327,13 +376,13 @@
 .users-table td {
     padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #e1e5e9;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .users-table th {
-    background: #f8f9fa;
+    background: var(--hover-bg);
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -341,11 +390,11 @@
 
 .users-table td {
     font-size: 14px;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 .users-table tbody tr:hover {
-    background: #f8f9fa;
+    background: var(--hover-bg);
 }
 
 /* Badges */
@@ -375,13 +424,13 @@
 }
 
 .status-badge.active {
-    background: #d4edda;
-    color: #155724;
+    background: rgba(76, 175, 80, 0.2);
+    color: var(--status-success);
 }
 
 .status-badge.inactive {
-    background: #f8d7da;
-    color: #721c24;
+    background: rgba(244, 67, 54, 0.2);
+    color: var(--status-danger);
 }
 
 /* Action Buttons */
@@ -446,7 +495,7 @@
 }
 
 .modal-content {
-    background-color: white;
+    background-color: var(--surface-color);
     margin: 5% auto;
     padding: 0;
     border-radius: 15px;
@@ -462,7 +511,7 @@
 
 .modal-header {
     padding: 20px 25px;
-    border-bottom: 1px solid #e1e5e9;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -470,11 +519,11 @@
 
 .modal-header h2 {
     margin: 0;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .close {
-    color: #aaa;
+    color: var(--text-light);
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
@@ -482,7 +531,7 @@
 }
 
 .close:hover {
-    color: #333;
+    color: var(--text-primary);
 }
 
 .modal-body {
@@ -491,7 +540,7 @@
 
 .modal-footer {
     padding: 20px 25px;
-    border-top: 1px solid #e1e5e9;
+    border-top: 1px solid var(--border-color);
     display: flex;
     gap: 10px;
     justify-content: flex-end;
@@ -522,10 +571,9 @@
         border-bottom: none;
         border-right: 3px solid transparent;
     }
-    
-    .tab-btn.active {
+      .tab-btn.active {
         border-bottom: none;
-        border-right-color: #873E23;
+        border-right-color: var(--primary-color);
     }
     
     .settings-grid {

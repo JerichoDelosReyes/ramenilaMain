@@ -1,10 +1,75 @@
 /* Transaction History Page Styles */
+/* CSS Variables for Theme Support */
+:root {
+    /* Light Theme Colors */
+    --primary-color: #873E23;
+    --secondary-color: #A64D2A;
+    --background-color: #E1B46D;
+    --surface-color: #ffffff;
+    --main-bg: #f8f9fa;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-light: #999999;
+    --border-color: #e9ecef;
+    --border-light: #f0f0f0;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --hover-bg: #f8f9fa;
+    
+    /* Status Colors */
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    
+    /* Button Colors */
+    --btn-secondary: #6c757d;
+    --btn-secondary-hover: #5a6268;
+}
+
+body.dark-mode {
+    /* Dark Theme Colors - Enhanced for better contrast */
+    --primary-color: #ff8c42;
+    --secondary-color: #ffb366;
+    --background-color: #0f1117;
+    --surface-color: #1c1f26;
+    --main-bg: #0f1117;
+    --text-primary: #ffffff;
+    --text-secondary: #e2e8f0;
+    --text-light: #a0aec0;
+    --border-color: #2d3748;
+    --border-light: #374151;
+    --shadow-light: rgba(0, 0, 0, 0.5);
+    --shadow-medium: rgba(0, 0, 0, 0.6);
+    --hover-bg: #2d3748;
+    
+    /* Enhanced status colors for dark mode */
+    --success-color: #48bb78;
+    --error-color: #f56565;
+    --warning-color: #ed8936;
+    --info-color: #4299e1;
+    
+    /* Button Colors - Dark Mode */
+    --btn-secondary: #4a5568;
+    --btn-secondary-hover: #2d3748;
+}
+
+/* Base Body Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .main-content {
     margin-left: 80px;
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: var(--background-color);
     min-height: 100vh;
-    transition: margin-left 0.3s ease;
+    transition: margin-left 0.3s ease, background-color 0.3s ease;
 }
 
 .sidebar.expanded + .main-content {
@@ -18,7 +83,7 @@
 
 /* Page Header */
 .page-header {
-    background: linear-gradient(135deg, #873E23, #E1B46D);
+    background: linear-gradient(135deg, var(--primary-color), var(--background-color));
     color: white;
     padding: 30px;
     border-radius: 15px;
@@ -40,7 +105,7 @@
 
 /* Filters Section */
 .filters-section {
-    background: white;
+    background: var(--surface-color);
     padding: 25px;
     border-radius: 15px;
     margin-bottom: 30px;
@@ -65,20 +130,20 @@
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: #666;
+    color: var(--text-secondary);
 }
 
 .search-box input {
     width: 100%;
     padding: 12px 15px 12px 45px;
-    border: 2px solid #e1e5e9;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 14px;
     transition: border-color 0.3s ease;
 }
 
 .search-box input:focus {
-    border-color: #873E23;
+    border-color: var(--primary-color);
     outline: none;
 }
 
@@ -91,16 +156,16 @@
 .filter-group select,
 .filter-group input[type="date"] {
     padding: 12px 15px;
-    border: 2px solid #e1e5e9;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 14px;
-    background: white;
+    background: var(--surface-color);
     transition: border-color 0.3s ease;
 }
 
 .filter-group select:focus,
 .filter-group input[type="date"]:focus {
-    border-color: #873E23;
+    border-color: var(--primary-color);
     outline: none;
 }
 
@@ -125,7 +190,7 @@
 }
 
 .btn-primary {
-    background: #873E23;
+    background: var(--primary-color);
     color: white;
 }
 
@@ -135,12 +200,12 @@
 }
 
 .btn-secondary {
-    background: #6c757d;
+    background: var(--btn-secondary);
     color: white;
 }
 
 .btn-secondary:hover {
-    background: #545b62;
+    background: var(--btn-secondary-hover);
 }
 
 .btn-success {
@@ -185,7 +250,7 @@
 }
 
 .card {
-    background: white;
+    background: var(--surface-color);
     padding: 25px;
     border-radius: 15px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -208,25 +273,25 @@
     justify-content: center;
     font-size: 24px;
     color: white;
-    background: linear-gradient(135deg, #873E23, #E1B46D);
+    background: linear-gradient(135deg, var(--primary-color), #E1B46D);
 }
 
 .card-content h3 {
     margin: 0 0 5px 0;
     font-size: 2rem;
     font-weight: 700;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .card-content p {
     margin: 0;
-    color: #666;
+    color: var(--text-secondary);
     font-size: 14px;
 }
 
 /* Transactions Section */
 .transactions-section {
-    background: white;
+    background: var(--surface-color);
     border-radius: 15px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -234,7 +299,7 @@
 
 .section-header {
     padding: 25px;
-    border-bottom: 1px solid #e1e5e9;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -242,12 +307,12 @@
 
 .section-header h2 {
     margin: 0;
-    color: #333;
+    color: var(--text-primary);
     font-size: 1.5rem;
 }
 
 .pagination-info {
-    color: #666;
+    color: var(--text-secondary);
     font-size: 14px;
 }
 
@@ -265,25 +330,32 @@
 .transactions-table td {
     padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #e1e5e9;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .transactions-table th {
     background: #f8f9fa;
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
+/* Dark mode table header styling */
+body.dark-mode .transactions-table th {
+    background: #1a202c;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
 .transactions-table td {
     font-size: 14px;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 .transactions-table tbody tr:hover {
-    background: #f8f9fa;
+    background: var(--hover-bg);
 }
 
 /* Status Badges */
@@ -297,18 +369,18 @@
 }
 
 .status-completed {
-    background: #d4edda;
-    color: #155724;
+    background: rgba(40, 167, 69, 0.2);
+    color: var(--success-color);
 }
 
 .status-cancelled {
-    background: #f8d7da;
-    color: #721c24;
+    background: rgba(220, 53, 69, 0.2);
+    color: var(--error-color);
 }
 
 .status-refunded {
-    background: #fff3cd;
-    color: #856404;
+    background: rgba(255, 193, 7, 0.2);
+    color: var(--warning-color);
 }
 
 /* Payment Method Badges */
@@ -321,13 +393,13 @@
 }
 
 .payment-cash {
-    background: #e2f0d9;
-    color: #4f7942;
+    background: rgba(40, 167, 69, 0.15);
+    color: var(--success-color);
 }
 
 .payment-card {
-    background: #dae8fc;
-    color: #2c5282;
+    background: rgba(23, 162, 184, 0.15);
+    color: var(--info-color);
 }
 
 /* Action Buttons */
@@ -346,7 +418,7 @@
 }
 
 .view-btn {
-    background: #17a2b8;
+    background: var(--info-color);
     color: white;
 }
 
@@ -355,7 +427,7 @@
 }
 
 .refund-btn {
-    background: #dc3545;
+    background: var(--error-color);
     color: white;
 }
 
@@ -385,7 +457,7 @@
 }
 
 .modal-content {
-    background-color: white;
+    background-color: var(--surface-color);
     margin: 5% auto;
     padding: 0;
     border-radius: 15px;
@@ -403,7 +475,7 @@
 
 .modal-header {
     padding: 20px 25px;
-    border-bottom: 1px solid #e1e5e9;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -411,7 +483,7 @@
 
 .modal-header h2 {
     margin: 0;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .close {
@@ -423,7 +495,7 @@
 }
 
 .close:hover {
-    color: #333;
+    color: var(--text-primary);
 }
 
 .modal-body {
@@ -445,7 +517,7 @@
 
 .transaction-detail h3 {
     margin: 0 0 10px 0;
-    color: #333;
+    color: var(--text-primary);
     font-size: 1.2rem;
 }
 
@@ -466,7 +538,7 @@
 }
 
 .detail-value {
-    color: #333;
+    color: var(--text-primary);
 }
 
 .items-list {
@@ -487,17 +559,17 @@
 
 .item-name {
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .item-details {
     font-size: 12px;
-    color: #666;
+    color: var(--text-secondary);
 }
 
 .item-total {
     font-weight: 600;
-    color: #873E23;
+    color: var(--primary-color);
 }
 
 /* Form Groups */
@@ -509,14 +581,14 @@
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .form-group select,
 .form-group textarea {
     width: 100%;
     padding: 12px 15px;
-    border: 2px solid #e1e5e9;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 14px;
     transition: border-color 0.3s ease;
@@ -524,7 +596,7 @@
 
 .form-group select:focus,
 .form-group textarea:focus {
-    border-color: #873E23;
+    border-color: var(--primary-color);
     outline: none;
 }
 
@@ -633,4 +705,212 @@
     .transactions-table {
         font-size: 12px;
     }
+}
+
+/* Dark Mode Enhancements for Better Contrast */
+body.dark-mode {
+    background-color: var(--background-color) !important;
+}
+
+/* Enhanced input and form elements in dark mode */
+body.dark-mode .search-box input,
+body.dark-mode .filter-group select,
+body.dark-mode .filter-group input[type="date"],
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+}
+
+body.dark-mode .search-box input::placeholder,
+body.dark-mode .form-group textarea::placeholder {
+    color: var(--text-light);
+    opacity: 0.8;
+}
+
+body.dark-mode .search-box input:focus,
+body.dark-mode .filter-group select:focus,
+body.dark-mode .filter-group input[type="date"]:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.1);
+}
+
+/* Enhanced table styling in dark mode */
+body.dark-mode .transactions-table {
+    background-color: var(--surface-color);
+}
+
+body.dark-mode .transactions-table td {
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+body.dark-mode .transactions-table tbody tr:hover {
+    background-color: var(--hover-bg);
+}
+
+/* Enhanced section header in dark mode */
+body.dark-mode .section-header {
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+body.dark-mode .section-header h2 {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+body.dark-mode .pagination-info {
+    color: var(--text-secondary);
+}
+
+/* Enhanced pagination in dark mode */
+body.dark-mode .pagination {
+    background-color: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Enhanced modal styling in dark mode */
+body.dark-mode .modal-content {
+    background-color: var(--surface-color);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+}
+
+body.dark-mode .modal-header {
+    border-bottom: 1px solid var(--border-color);
+}
+
+body.dark-mode .modal-header h2 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .modal-footer {
+    border-top: 1px solid var(--border-color);
+}
+
+body.dark-mode .close {
+    color: var(--text-light);
+}
+
+body.dark-mode .close:hover {
+    color: var(--text-primary);
+}
+
+/* Enhanced transaction details in dark mode */
+body.dark-mode .detail-row {
+    border-bottom: 1px solid var(--border-light);
+}
+
+body.dark-mode .detail-label {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .detail-value {
+    color: var(--text-primary);
+}
+
+body.dark-mode .item-row {
+    border-bottom: 1px solid var(--border-light);
+}
+
+body.dark-mode .item-name {
+    color: var(--text-primary);
+}
+
+body.dark-mode .item-details {
+    color: var(--text-light);
+}
+
+body.dark-mode .item-total {
+    color: var(--primary-color);
+}
+
+/* Enhanced refund amount display in dark mode */
+body.dark-mode .refund-amount {
+    background-color: var(--hover-bg);
+    color: var(--error-color);
+    border: 1px solid var(--border-color);
+}
+
+/* Enhanced form labels in dark mode */
+body.dark-mode .form-group label {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Enhanced status and payment badges contrast in dark mode */
+body.dark-mode .status-completed {
+    background: rgba(72, 187, 120, 0.2);
+    color: var(--success-color);
+    border: 1px solid rgba(72, 187, 120, 0.3);
+}
+
+body.dark-mode .status-cancelled {
+    background: rgba(245, 101, 101, 0.2);
+    color: var(--error-color);
+    border: 1px solid rgba(245, 101, 101, 0.3);
+}
+
+body.dark-mode .status-refunded {
+    background: rgba(237, 137, 54, 0.2);
+    color: var(--warning-color);
+    border: 1px solid rgba(237, 137, 54, 0.3);
+}
+
+body.dark-mode .payment-cash {
+    background: rgba(72, 187, 120, 0.15);
+    color: var(--success-color);
+    border: 1px solid rgba(72, 187, 120, 0.2);
+}
+
+body.dark-mode .payment-card {
+    background: rgba(66, 153, 225, 0.15);
+    color: var(--info-color);
+    border: 1px solid rgba(66, 153, 225, 0.2);
+}
+
+/* Enhanced card styling in dark mode */
+body.dark-mode .card {
+    background: var(--surface-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+}
+
+body.dark-mode .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .card-content h3 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .card-content p {
+    color: var(--text-secondary);
+}
+
+/* Enhanced filters section in dark mode */
+body.dark-mode .filters-section {
+    background: var(--surface-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+}
+
+/* Enhanced search icon in dark mode */
+body.dark-mode .search-box i {
+    color: var(--text-light);
+}
+
+/* Enhanced button hover states in dark mode */
+body.dark-mode .btn-primary:hover {
+    background: #e67632;
+    box-shadow: 0 4px 15px rgba(255, 140, 66, 0.3);
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: var(--btn-secondary-hover);
+    box-shadow: 0 4px 15px rgba(74, 85, 104, 0.3);
 }

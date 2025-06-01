@@ -1,4 +1,5 @@
 /* filepath: c:\VSC Projects\Ramenila\client\assets\js\landing.js */
+/* eslint-disable no-unused-vars */
 // Modern Ramenila Landing Page JavaScript
 
 // DOM Elements
@@ -7,6 +8,10 @@ const navLinks = document.querySelectorAll('.nav-link');
 const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
 const navMenu = document.querySelector('.nav-menu');
 const orderButtons = document.querySelectorAll('.order-btn, .kiosk-btn, .delivery-btn');
+
+// Theme Toggle Elements
+const themeToggle = document.getElementById('themeToggle');
+const mobileThemeToggle = document.getElementById('mobileThemeToggle');
 
 // Login Modal Elements
 const loginModal = document.getElementById('loginModal');
@@ -49,14 +54,25 @@ function initNavbarScrollEffect() {
     
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
+        const isDarkMode = document.body.classList.contains('dark-mode');
         
-        // Change navbar appearance on scroll
+        // Change navbar appearance on scroll based on theme
         if (currentScrollY > 100) {
-            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-            navbar.style.boxShadow = '0 2px 30px rgba(139, 69, 19, 0.15)';
+            if (isDarkMode) {
+                navbar.style.background = 'rgba(45, 45, 45, 0.98)';
+                navbar.style.boxShadow = '0 2px 30px rgba(255, 140, 66, 0.25)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 2px 30px rgba(139, 69, 19, 0.15)';
+            }
         } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-            navbar.style.boxShadow = '0 2px 30px rgba(139, 69, 19, 0.1)';
+            if (isDarkMode) {
+                navbar.style.background = 'rgba(45, 45, 45, 0.95)';
+                navbar.style.boxShadow = '0 2px 30px rgba(255, 140, 66, 0.15)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = '0 2px 30px rgba(139, 69, 19, 0.1)';
+            }
         }
         
         // Update active section based on scroll position
@@ -480,6 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     initContactForm();
     initLoginModal();
+    initThemeToggle();
     
     // Preload images
     preloadImages();
@@ -564,3 +581,85 @@ function initLoginModal() {
         }
     }
 }
+
+// Theme/Dark Mode Functionality
+function initThemeToggle() {
+    if (!themeToggle && !mobileThemeToggle) return;
+    
+    // Check for saved theme preference or default to light mode
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+    
+    // Add event listeners for both desktop and mobile theme toggles
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+    
+    if (mobileThemeToggle) {
+        mobileThemeToggle.addEventListener('click', toggleTheme);
+    }
+}
+
+function toggleTheme() {
+    const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+}
+
+function setTheme(theme) {
+    if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+        updateThemeIcons('dark');
+        updateNavbarForDarkMode();
+    } else {
+        document.body.classList.remove('dark-mode');
+        updateThemeIcons('light');
+        updateNavbarForLightMode();
+    }
+    
+    // Save theme preference
+    localStorage.setItem('theme', theme);
+}
+
+function updateThemeIcons(theme) {
+    const icons = document.querySelectorAll('.theme-toggle i, .mobile-theme-toggle i');
+    icons.forEach(icon => {
+        if (theme === 'dark') {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+    });
+}
+
+function updateNavbarForDarkMode() {
+    if (navbar) {
+        // Update navbar background for dark mode scroll effect
+        const currentScrollY = window.scrollY;
+        if (currentScrollY > 100) {
+            navbar.style.background = 'rgba(45, 45, 45, 0.98)';
+            navbar.style.boxShadow = '0 2px 30px rgba(255, 140, 66, 0.25)';
+        } else {
+            navbar.style.background = 'rgba(45, 45, 45, 0.95)';
+            navbar.style.boxShadow = '0 2px 30px rgba(255, 140, 66, 0.15)';
+        }
+    }
+}
+
+function updateNavbarForLightMode() {
+    if (navbar) {
+        // Update navbar background for light mode scroll effect
+        const currentScrollY = window.scrollY;
+        if (currentScrollY > 100) {
+            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            navbar.style.boxShadow = '0 2px 30px rgba(139, 69, 19, 0.15)';
+        } else {
+            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            navbar.style.boxShadow = '0 2px 30px rgba(139, 69, 19, 0.1)';
+        }
+    }
+}
+
+// ...existing smooth scrolling code...

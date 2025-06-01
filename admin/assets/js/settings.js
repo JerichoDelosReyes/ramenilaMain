@@ -11,10 +11,8 @@ class SettingsManager {
         this.loadCurrentSettings();
     }
 
-    loadSettings() {
-        const defaultSettings = {
+    loadSettings() {        const defaultSettings = {
             general: {
-                theme: 'light',
                 language: 'en',
                 currency: 'USD',
                 timezone: 'America/New_York',
@@ -147,23 +145,13 @@ class SettingsManager {
 
         // Real-time settings update
         this.setupRealTimeUpdates();
-    }
-
-    setupRealTimeUpdates() {
-        // Theme changes
-        document.getElementById('theme-select').addEventListener('change', (e) => {
-            this.applyTheme(e.target.value);
-        });
-
+    }    setupRealTimeUpdates() {
         // Currency changes
         document.getElementById('currency-select').addEventListener('change', (e) => {
             this.updateCurrencyDisplay(e.target.value);
         });
-    }
-
-    loadCurrentSettings() {
-        // General settings
-        document.getElementById('theme-select').value = this.settings.general.theme;
+    }    loadCurrentSettings() {
+        // General settings - Theme is managed by sidebar.js
         document.getElementById('language-select').value = this.settings.general.language;
         document.getElementById('currency-select').value = this.settings.general.currency;
         document.getElementById('timezone-select').value = this.settings.general.timezone;
@@ -211,11 +199,9 @@ class SettingsManager {
         document.getElementById('daily-goal').value = this.settings.notifications.dailyGoal;
     }
 
-    saveAllSettings() {
-        // Collect all settings from form elements
+    saveAllSettings() {        // Collect all settings from form elements
         const newSettings = {
             general: {
-                theme: document.getElementById('theme-select').value,
                 language: document.getElementById('language-select').value,
                 currency: document.getElementById('currency-select').value,
                 timezone: document.getElementById('timezone-select').value,
@@ -252,12 +238,10 @@ class SettingsManager {
         };
 
         // Save to localStorage
-        localStorage.setItem('ramenila_settings', JSON.stringify(newSettings));
-        this.settings = newSettings;
+        localStorage.setItem('ramenila_settings', JSON.stringify(newSettings));        this.settings = newSettings;
 
-        // Apply theme if changed
-        this.applyTheme(newSettings.general.theme);
-
+        // Theme management is handled by sidebar.js
+        
         this.showNotification('Settings saved successfully!', 'success');
     }
 
@@ -277,24 +261,7 @@ class SettingsManager {
                     isOpen: checkbox ? checkbox.checked : true
                 };
             }
-        });
-
-        return hours;
-    }
-
-    applyTheme(theme) {
-        const body = document.body;
-        body.classList.remove('light-theme', 'dark-theme');
-        
-        if (theme === 'dark') {
-            body.classList.add('dark-theme');
-        } else if (theme === 'light') {
-            body.classList.add('light-theme');
-        } else {
-            // Auto theme - detect system preference
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            body.classList.add(prefersDark ? 'dark-theme' : 'light-theme');
-        }
+        });        return hours;
     }
 
     updateCurrencyDisplay(currency) {

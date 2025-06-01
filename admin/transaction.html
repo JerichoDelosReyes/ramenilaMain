@@ -12,7 +12,7 @@
 </head>
 <body>
     <!-- Sidebar -->
-    <div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar" id="sidebar">
         <!-- Logo Section -->
         <div class="logo-section">
             <img src="assets/img/logowhite.png" alt="Logo" class="logo">
@@ -49,9 +49,14 @@
                         <i class="fas fa-cog"></i>
                         <span class="nav-text">Settings</span>
                     </a>
-                </li>
-            </ul>
+                </li>            </ul>
         </nav>
+
+        <!-- Theme Toggle Button -->
+        <button class="theme-toggle" id="themeToggle" data-tooltip="Toggle Theme">
+            <i class="fas fa-moon" id="themeIcon"></i>
+            <span class="theme-text" id="themeText">Dark Mode</span>
+        </button>
 
         <!-- Logout Section -->
         <div class="logout-section">
@@ -68,7 +73,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <div class="main-content expanded" id="mainContent">
+    <div class="main-content" id="mainContent">
         <div class="pos-container">
             <!-- Left Side - Menu -->
             <div class="menu-section">
@@ -282,9 +287,7 @@
             <div class="spinner"></div>
             <div class="spinner-text">Processing order...</div>
         </div>
-    </div>
-
-    <!-- JavaScript -->
+    </div>    <!-- JavaScript -->
     <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/transaction.js"></script>
 </body>
