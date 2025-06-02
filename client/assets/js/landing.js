@@ -166,19 +166,20 @@ function showOrderModal(orderType) {
     
     // Add modal styles
     const modalStyles = `
-        <style>
-            .modal-overlay {
+        <style>            .modal-overlay {
                 position: fixed;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0, 0, 0, 0.7);
+                background: rgba(0, 0, 0, 0.2);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 z-index: 10000;
                 animation: fadeIn 0.3s ease;
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
             }
             
             .order-modal {

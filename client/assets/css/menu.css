@@ -225,7 +225,7 @@ html {
 }
 
 .menu-hero-content h1 {
-    font-size: 3rem;
+    font-size: 4.5rem;
     font-weight: 700;
     color: #8B4513;
     margin-bottom: 20px;
@@ -582,15 +582,189 @@ a.filter-btn {
     box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
 }
 
-/* Modal Styles */
-.modal-overlay,
-.login-modal {    position: fixed;
+/* Login Modal Styles */
+.login-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: modalBackdropFadeIn 0.3s ease forwards;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+.login-content {
+    background: white;
+    width: 90%;
+    max-width: 900px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 30px rgba(139, 69, 19, 0.15);
+    opacity: 0;
+    transform: scale(0.95);
+    animation: modalFadeIn 0.4s ease 0.1s forwards;
+}
+
+.login-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.login-image {
+    height: 540px;
+    overflow: hidden;
+}
+
+.login-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.login-form {
+    padding: 40px;
+    position: relative;
+}
+
+.login-header {
+    margin-bottom: 30px;
+}
+
+.login-header h2 {
+    font-size: 32px;
+    color: #8B4513;
+    margin-bottom: 10px;
+}
+
+.login-header p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}
+
+.login-prototype {
+    color: #8B4513 !important;
+    font-style: italic;
+    margin-top: 10px;
+    font-size: 13px !important;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #8B4513;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #8B4513;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background: #8B4513;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    background: #A0522D;
+    transform: translateY(-2px);
+}
+
+.forgot-password {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    color: #8B4513;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #8B4513;
+    cursor: pointer;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    background-color: rgba(139, 69, 19, 0.1);
+}
+
+/* Add the modal animations */
+@keyframes modalBackdropFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Modal overlay for other modals */
+.modal-overlay {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.2);
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     z-index: 10001;
@@ -599,8 +773,7 @@ a.filter-btn {
     -webkit-backdrop-filter: blur(15px);
 }
 
-.modal-overlay.active,
-.login-modal.active {
+.modal-overlay.active {
     display: flex;
 }
 
@@ -840,160 +1013,6 @@ a.filter-btn {
     box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
 }
 
-/* Login Modal Content Styles */
-.login-content {
-    background: white;
-    width: 90%;
-    max-width: 900px;
-    border-radius: 12px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 4px 30px rgba(139, 69, 19, 0.15);
-    opacity: 0;
-    transform: scale(0.95);
-    animation: modalFadeIn 0.4s ease 0.1s forwards;
-}
-
-.login-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-.login-image {
-    height: 540px;
-    overflow: hidden;
-}
-
-.login-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.login-form {
-    padding: 40px;
-    position: relative;
-}
-
-.login-header {
-    margin-bottom: 30px;
-}
-
-.login-header h2 {
-    font-size: 32px;
-    color: #8B4513;
-    margin-bottom: 10px;
-}
-
-.login-header p {
-    color: #666;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 5px;
-}
-
-.login-prototype {
-    color: #8B4513 !important;
-    font-size: 12px;
-    font-style: italic;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #6B4423;
-    font-weight: 500;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #E0D5C7;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: #8B4513;
-    box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
-}
-
-.login-btn {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #8B4513, #A0522D);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.login-btn:hover {
-    background: #A0522D;
-    transform: translateY(-2px);
-}
-
-.forgot-password {
-    display: block;
-    text-align: center;
-    margin-top: 16px;
-    color: #8B4513;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.close-modal {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #8B4513;
-    cursor: pointer;
-    z-index: 2;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.close-modal:hover {
-    background-color: rgba(139, 69, 19, 0.1);
-}
-
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-@keyframes modalBackdropFadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
 @media (max-width: 768px) {
     /* Navigation styles */
     .nav-menu {
@@ -1063,7 +1082,7 @@ a.filter-btn {
     }
     
     .menu-hero-content h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
     
     .menu-filter {
@@ -1124,7 +1143,7 @@ a.filter-btn {
     }
 
     .menu-hero-content h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
 
     .menu-hero-content p {
@@ -1226,8 +1245,8 @@ a.filter-btn {
     transform: scale(1.1);
 }
 
-/* Mobile responsive styles */
-@media (max-width: 768px) {
+/* Medium screens and tablets */
+@media (max-width: 1024px) {
     .desktop-only {
         display: none !important;
     }
@@ -1235,7 +1254,14 @@ a.filter-btn {
     .mobile-nav {
         display: flex;
     }
+    
+    .menu-hero-content h1 {
+        font-size: 3.5rem;
+    }
+}
 
+/* Mobile responsive styles */
+@media (max-width: 768px) {
     .mobile-menu-toggle {
         display: block;
         font-size: 1.5rem;
@@ -1255,5 +1281,127 @@ a.filter-btn {
 
     .mobile-menu-toggle.active i {
         transform: rotate(90deg);
+    }
+
+    /* Login Modal Tablet Styles */
+    .login-content {
+        width: 92%;
+        max-width: 600px;
+        margin: 20px;
+    }
+
+    .login-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-image {
+        height: 250px;
+        order: -1;
+    }
+
+    .login-form {
+        padding: 35px 30px;
+    }
+
+    .login-header h2 {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+
+    .login-header p {
+        font-size: 13px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group input {
+        padding: 11px 15px;
+        font-size: 13px;
+    }
+
+    .login-btn {
+        padding: 11px;
+        font-size: 15px;
+    }
+
+    .close-modal {
+        top: 18px;
+        right: 18px;
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Login Modal Mobile Styles */
+    .login-content {
+        width: 95%;
+        max-width: none;
+        margin: 10px;
+        border-radius: 16px;
+    }
+
+    .login-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-image {
+        height: 200px;
+        order: -1;
+    }
+
+    .login-form {
+        padding: 25px 20px;
+    }
+
+    .login-header h2 {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .login-header p {
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
+
+    .login-prototype {
+        font-size: 12px !important;
+        margin-top: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    .form-group input {
+        padding: 10px 14px;
+        font-size: 13px;
+        border-radius: 6px;
+    }
+
+    .login-btn {
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 6px;
+        margin-top: 8px;
+    }
+
+    .forgot-password {
+        font-size: 13px;
+        margin-top: 12px;
+    }
+
+    .close-modal {
+        top: 15px;
+        right: 15px;
+        font-size: 20px;
+        width: 28px;
+        height: 28px;
     }
 }
