@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Test</title>
+    <style>
+        :root {
+            --primary-color: #873E23;
+            --background-color: #E1B46D;
+            --surface-color: #ffffff;
+            --text-primary: #333333;
+        }
+
+        body.dark-mode {
+            --primary-color: #ff8c42;
+            --background-color: #1a1a1a;
+            --surface-color: #2d2d2d;
+            --text-primary: #ffffff;
+        }
+
+        body {
+            background: var(--background-color);
+            color: var(--text-primary);
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card {
+            background: var(--surface-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid var(--primary-color);
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dark Mode Test</h1>
+    
+    <div class="card">
+        <h2>Test Card</h2>
+        <p>This card should change colors when dark mode is toggled.</p>
+        <p>Current theme: <span id="currentTheme">light</span></p>
+        <p>Body classes: <span id="bodyClasses">none</span></p>
+        <p>Primary color: <span id="primaryColor">Loading...</span></p>
+    </div>
+
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <button onclick="forceDark()">Force Dark</button>
+    <button onclick="forceLight()">Force Light</button>
+    <button onclick="clearStorage()">Clear Storage</button>
+
+    <script>
+        function updateDisplay() {
+            const isDark = document.body.classList.contains('dark-mode');
+            document.getElementById('currentTheme').textContent = isDark ? 'dark' : 'light';
+            document.getElementById('bodyClasses').textContent = document.body.className || 'none';
+            document.getElementById('primaryColor').textContent = getComputedStyle(document.body).getPropertyValue('--primary-color').trim();
+        }
+
+        function toggleDarkMode() {
+            console.log('Toggle dark mode clicked');
+            const isDark = document.body.classList.contains('dark-mode');
+            
+            if (isDark) {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('adminTheme', 'light');
+                console.log('Switched to light mode');
+            } else {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('adminTheme', 'dark');
+                console.log('Switched to dark mode');
+            }
+            
+            updateDisplay();
+        }
+
+        function forceDark() {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('adminTheme', 'dark');
+            updateDisplay();
+            console.log('Forced dark mode');
+        }
+
+        function forceLight() {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('adminTheme', 'light');
+            updateDisplay();
+            console.log('Forced light mode');
+        }
+
+        function clearStorage() {
+            localStorage.removeItem('adminTheme');
+            document.body.classList.remove('dark-mode');
+            updateDisplay();
+            console.log('Cleared storage');
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('adminTheme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        updateDisplay();
+        setInterval(updateDisplay, 1000);
+    </script>
+</body>
+</html>

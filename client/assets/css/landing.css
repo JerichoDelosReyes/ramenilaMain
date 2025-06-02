@@ -136,6 +136,19 @@ body.dark-mode .navbar {
     transition: transform 0.3s ease;
 }
 
+/* Logo image specific styling - exclude from account icon effects */
+.nav-logo .logo-img {
+    filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+body.dark-mode .nav-logo .logo-img {
+    filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
 .nav-logo .logo-img:hover {
     transform: scale(1.05);
 }
@@ -242,46 +255,34 @@ body.dark-mode .navbar {
 }
 
 /* Theme Toggle Button */
-.theme-toggle, .mobile-theme-toggle {
-    background: transparent;
-    border: 2px solid var(--accent-primary);
+.theme-toggle {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent-primary);
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-right: 15px;
+    color: var(--accent-primary);
+    font-size: 1.1rem;
 }
 
-.theme-toggle:hover, .mobile-theme-toggle:hover {
+.theme-toggle:hover {
     background: var(--accent-primary);
-    color: var(--bg-primary);
+    color: white;
     transform: scale(1.05);
+    box-shadow: 0 4px 15px var(--shadow-hover);
 }
 
-.theme-toggle i, .mobile-theme-toggle i {
-    font-size: 16px;
+.theme-toggle i {
+    transition: transform 0.3s ease;
 }
 
-/* Mobile theme toggle specific positioning */
-.mobile-theme-toggle {
-    margin-right: 10px;
-    width: 35px;
-    height: 35px;
-}
-
-.mobile-theme-toggle i {
-    font-size: 14px;
-}
-
-/* Dark mode toggle icon transitions */
-body.dark-mode .theme-toggle i::before,
-body.dark-mode .mobile-theme-toggle i::before {
-    content: "\f185"; /* fa-sun */
+.theme-toggle:hover i {
+    transform: rotate(15deg);
 }
 
 /* Hero Section */
@@ -631,6 +632,19 @@ body.dark-mode .mobile-account .account-icon:hover {
         0 0 12px rgba(255, 140, 66, 0.4),
         0 0 20px rgba(255, 140, 66, 0.3);
     border-color: rgba(255, 140, 66, 0.6);
+}
+
+/* Logo image specific styling - exclude from account icon effects */
+.nav-logo .logo-img {
+    filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+body.dark-mode .nav-logo .logo-img {
+    filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
 }
 
 .bowl-glow {
@@ -1687,18 +1701,17 @@ body.dark-mode .price {
     }
 }
 
-@media (max-width: 768px) {
-    /* Keep existing nav menu styles */
+@media (max-width: 768px) {    /* Keep existing nav menu styles */
     .nav-menu {
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
-        background: rgba(255, 255, 255, 0.98);
+        background: var(--card-bg);
         backdrop-filter: blur(20px);
         flex-direction: column;
         padding: 20px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 20px var(--shadow-color);
         transform: translateY(-10px);
         opacity: 0;
         visibility: hidden;
@@ -1714,7 +1727,7 @@ body.dark-mode .price {
     .nav-link {
         font-size: 16px;
         padding: 10px 0;
-        border-bottom: 1px solid rgba(139, 69, 19, 0.1);
+        border-bottom: 1px solid var(--border-color);
     }
     
     .nav-link:last-child {
@@ -1903,8 +1916,11 @@ body.dark-mode .price {
     }
 
     .nav-actions {
-        display: none !important;
-    }
+        display: none !important;    }
+}
+
+.desktop-only {
+    display: flex;
 }
 
 .mobile-nav {
@@ -1943,19 +1959,38 @@ body.dark-mode .price {
 }
 
 .mobile-menu-toggle {
-    font-size: 1.2rem;
-    color: #8B4513;
+    display: none;
+    font-size: 1.5rem;
+    color: var(--accent-primary);
     cursor: pointer;
-    padding: 5px;
 }
 
 @media (max-width: 768px) {
-    .nav-actions {
-        display: none;
+    .desktop-only {
+        display: none !important;
+    }    .mobile-nav {
+        display: flex;
     }
 
-    .mobile-nav {
-        display: flex;
+    .mobile-menu-toggle {
+        display: block;
+        font-size: 1.5rem;
+        color: var(--accent-primary);
+        cursor: pointer;
+        padding: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-menu-toggle:hover {
+        transform: scale(1.1);
+    }
+
+    .mobile-menu-toggle i {
+        transition: all 0.3s ease;
+    }
+
+    .mobile-menu-toggle.active i {
+        transform: rotate(90deg);
     }
 
     .mobile-kiosk:hover {

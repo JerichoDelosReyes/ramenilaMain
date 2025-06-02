@@ -13,9 +13,8 @@
 </head>
 <body>   
     <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="index.html" class="logo-link">
+        <div class="nav-container">            <div class="nav-logo">
+                <a href="index.html">
                     <img src="client/assets/img/ramenlogo.png" alt="Ramenila Logo" class="logo-img">
                     <span class="logo-text">Ramenila</span>
                 </a>
@@ -36,14 +35,13 @@
                 </li>
                 <li class="nav-item">
                     <a href="#team" class="nav-link">Team</a>
-                </li>
-
-            </ul>
-              <div class="nav-actions">
+                </li>            </ul>
+            
+            <!-- Desktop Navigation Actions -->
+            <div class="nav-actions desktop-only">
                 <button class="theme-toggle" id="themeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="kiosk-btn">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>                <button class="kiosk-btn" onclick="showOrderModal('kiosk')">
                     <i class="fas fa-utensils"></i>
                     Order at Kiosk
                 </button>
@@ -52,12 +50,10 @@
                         <img src="client/assets/img/accounts.png" alt="Account" class="account-icon">
                     </button>
                 </div>
-            </div>            <!-- Mobile Navigation -->
-            <div class="mobile-nav">
-                <button class="mobile-theme-toggle" id="mobileThemeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="mobile-kiosk" onclick="showKioskModal()">
+            </div>
+
+            <!-- Mobile Navigation -->
+            <div class="mobile-nav">                <button class="mobile-kiosk" onclick="showOrderModal('kiosk')">
                     <i class="fas fa-utensils"></i>
                 </button>
                 <button class="mobile-account" id="mobileAccountBtn">

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Test</title>
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .test-area {
+            background: var(--surface-color);
+            color: var(--text-primary);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .debug-info {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        body.dark-mode .debug-info {
+            background: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Theme Toggle Test</h1>
+    
+    <div class="test-area">
+        <h2>Theme Toggle Control</h2>
+        <div class="theme-toggle-container">
+            <span class="theme-label" id="themeLabel">Dark Mode</span>
+            <div class="toggle-switch" id="themeToggle">
+                <input type="checkbox" id="themeCheckbox">
+                <span class="slider"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-area">
+        <h2>Theme Information</h2>
+        <div class="debug-info" id="debugInfo">
+            Loading debug info...
+        </div>
+        <button onclick="window.debugTheme()">Debug Theme</button>
+        <button onclick="window.resetTheme()">Reset Theme</button>
+        <button onclick="window.forceLightMode()">Force Light</button>
+        <button onclick="window.forceDarkMode()">Force Dark</button>
+    </div>
+
+    <script src="assets/js/sidebar.js"></script>
+    <script>
+        function updateDebugInfo() {
+            const debugInfo = document.getElementById('debugInfo');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const storedTheme = localStorage.getItem('adminTheme');
+            const checkbox = document.getElementById('themeCheckbox');
+            
+            debugInfo.innerHTML = `
+                <strong>Current State:</strong><br>
+                • Body has dark-mode class: ${isDarkMode}<br>
+                • Stored theme: ${storedTheme}<br>
+                • Checkbox checked: ${checkbox?.checked}<br>
+                • Theme label text: ${document.getElementById('themeLabel')?.textContent}<br>
+                • Body classes: ${document.body.className || 'none'}<br>
+                • CSS --primary-color: ${getComputedStyle(document.body).getPropertyValue('--primary-color')}<br>
+                • Background color: ${getComputedStyle(document.body).backgroundColor}
+            `;
+        }
+
+        // Update debug info every second
+        setInterval(updateDebugInfo, 1000);
+        updateDebugInfo();
+
+        // Listen for theme changes
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    updateDebugInfo();
+                    console.log('Body class changed:', document.body.className);
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    </script>
+</body>
+</html>

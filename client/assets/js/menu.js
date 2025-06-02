@@ -13,6 +13,7 @@ class MenuManager {
         this.updateCartUI();
         this.initMobileMenu();
         this.initThemeToggle();
+        this.initNavbarScrollEffect();
     }
 
     initMobileMenu() {
@@ -308,11 +309,10 @@ class MenuManager {
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             this.setTheme(newTheme);
         });
-    }
-
-    setTheme(theme) {
+    }    setTheme(theme) {
         const body = document.body;
         const themeIcon = document.getElementById('themeIcon');
+        const navbar = document.querySelector('.navbar');
         
         if (theme === 'dark') {
             body.classList.add('dark-mode');
@@ -320,15 +320,75 @@ class MenuManager {
                 themeIcon.classList.remove('fa-moon');
                 themeIcon.classList.add('fa-sun');
             }
+            // Update navbar for dark mode
+            this.updateNavbarForDarkMode(navbar);
         } else {
             body.classList.remove('dark-mode');
             if (themeIcon) {
                 themeIcon.classList.remove('fa-sun');
                 themeIcon.classList.add('fa-moon');
             }
+            // Update navbar for light mode
+            this.updateNavbarForLightMode(navbar);
         }
         
         localStorage.setItem('theme', theme);
+    }
+
+    updateNavbarForDarkMode(navbar) {
+        if (navbar) {
+            // Update navbar background for dark mode
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > 100) {
+                navbar.style.background = 'rgba(28, 31, 38, 0.98)';
+                navbar.style.boxShadow = '0 2px 30px rgba(255, 140, 66, 0.25)';
+            } else {
+                navbar.style.background = 'rgba(28, 31, 38, 0.95)';
+                navbar.style.boxShadow = '0 2px 30px rgba(255, 140, 66, 0.15)';
+            }
+        }
+    }
+
+    updateNavbarForLightMode(navbar) {
+        if (navbar) {
+            // Update navbar background for light mode
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > 100) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 2px 30px rgba(139, 69, 19, 0.15)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = '0 2px 30px rgba(139, 69, 19, 0.1)';
+            }
+        }
+    }
+
+    initNavbarScrollEffect() {
+        const navbar = document.querySelector('.navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            // Change navbar appearance on scroll based on theme
+            if (currentScrollY > 100) {
+                if (isDarkMode) {
+                    navbar.style.background = 'rgba(28, 31, 38, 0.98)';
+                    navbar.style.boxShadow = '0 2px 30px rgba(255, 140, 66, 0.25)';
+                } else {
+                    navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                    navbar.style.boxShadow = '0 2px 30px rgba(139, 69, 19, 0.15)';
+                }
+            } else {
+                if (isDarkMode) {
+                    navbar.style.background = 'rgba(28, 31, 38, 0.95)';
+                    navbar.style.boxShadow = '0 2px 30px rgba(255, 140, 66, 0.15)';
+                } else {
+                    navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                    navbar.style.boxShadow = '0 2px 30px rgba(139, 69, 19, 0.1)';
+                }
+            }
+        });
     }
 }
 

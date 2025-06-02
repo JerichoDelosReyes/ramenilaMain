@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Theme Test</title>
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <style>
+        body {
+            padding: 40px;
+            font-family: Arial, sans-serif;
+            background: var(--background-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--surface-color);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+        }
+        
+        .status {
+            background: var(--hover-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        
+        .theme-test {
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            background: var(--surface-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minimal Theme Toggle Test</h1>
+        
+        <div class="theme-toggle-container">
+            <span class="theme-label" id="themeLabel">Dark Mode</span>
+            <div class="toggle-switch" id="themeToggle">
+                <input type="checkbox" id="themeCheckbox">
+                <span class="slider"></span>
+            </div>
+        </div>
+        
+        <div class="theme-test">
+            <h2>Theme Test Area</h2>
+            <p>This area should change colors when you toggle between light and dark mode.</p>
+            <p>Primary color: <span id="primaryColor">Loading...</span></p>
+            <p>Background color: <span id="bgColor">Loading...</span></p>
+        </div>
+        
+        <div class="status" id="status">
+            Status: Initializing...
+        </div>
+        
+        <div>
+            <button onclick="window.debugThemeSimple()">Debug</button>
+            <button onclick="toggleThemeManual()">Manual Toggle</button>
+            <button onclick="clearTheme()">Clear Theme</button>
+        </div>
+    </div>
+
+    <script src="assets/js/theme-debug.js"></script>
+    <script>
+        function updateStatus() {
+            const status = document.getElementById('status');
+            const primaryColor = document.getElementById('primaryColor');
+            const bgColor = document.getElementById('bgColor');
+            
+            const isDark = document.body.classList.contains('dark-mode');
+            const storedTheme = localStorage.getItem('adminTheme');
+            const checkbox = document.getElementById('themeCheckbox');
+            
+            status.innerHTML = `
+                <strong>Current Status:</strong><br>
+                • Dark mode active: ${isDark}<br>
+                • Stored theme: ${storedTheme}<br>
+                • Checkbox checked: ${checkbox?.checked}<br>
+                • Label text: ${document.getElementById('themeLabel')?.textContent}
+            `;
+            
+            primaryColor.textContent = getComputedStyle(document.body).getPropertyValue('--primary-color').trim();
+            bgColor.textContent = getComputedStyle(document.body).backgroundColor;
+        }
+        
+        function toggleThemeManual() {
+            const isDark = document.body.classList.contains('dark-mode');
+            const checkbox = document.getElementById('themeCheckbox');
+            const label = document.getElementById('themeLabel');
+            
+            if (isDark) {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('adminTheme', 'light');
+                if (checkbox) checkbox.checked = false;
+                if (label) label.textContent = 'Dark Mode';
+                console.log('Switched to light mode');
+            } else {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('adminTheme', 'dark');
+                if (checkbox) checkbox.checked = true;
+                if (label) label.textContent = 'Light Mode';
+                console.log('Switched to dark mode');
+            }
+            updateStatus();
+        }
+        
+        function clearTheme() {
+            localStorage.removeItem('adminTheme');
+            document.body.classList.remove('dark-mode');
+            const checkbox = document.getElementById('themeCheckbox');
+            const label = document.getElementById('themeLabel');
+            if (checkbox) checkbox.checked = false;
+            if (label) label.textContent = 'Dark Mode';
+            updateStatus();
+            console.log('Theme cleared');
+        }
+        
+        // Update status every 2 seconds
+        setInterval(updateStatus, 2000);
+        
+        // Initial update
+        setTimeout(updateStatus, 100);
+        
+        // Watch for class changes
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    console.log('Body class changed to:', document.body.className);
+                    updateStatus();
+                }
+            });
+        });
+        
+        observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+        
+        console.log('Simple theme test page loaded');
+    </script>
+</body>
+</html>

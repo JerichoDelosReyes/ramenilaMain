@@ -46,13 +46,14 @@
                         <span class="nav-text">Settings</span>
                     </a>
                 </li>
-            </ul>        </nav>
-
-        <!-- Theme Toggle -->
-        <button class="theme-toggle" id="themeToggle" data-tooltip="Toggle Theme">
-            <i class="fas fa-moon" id="themeIcon"></i>
-            <span class="theme-text" id="themeText">Dark Mode</span>
-        </button>
+            </ul>        </nav>        <!-- Theme Toggle -->
+        <div class="theme-toggle-container">
+            <span class="theme-label" id="themeLabel">Dark Mode</span>
+            <div class="toggle-switch" id="themeToggle">
+                <input type="checkbox" id="themeCheckbox">
+                <span class="slider"></span>
+            </div>
+        </div>
 
         <!-- Logout Section -->
         <div class="logout-section">
@@ -64,7 +65,7 @@
 
         <!-- Toggle Button -->
         <button class="toggle-btn" id="toggleBtn">
-            <i class="fas fa-chevron-left"></i>
+            <i class="fas fa-chevron-right"></i>
         </button>
     </div>    <!-- Main Content Area -->
     <div class="main-content" id="mainContent">

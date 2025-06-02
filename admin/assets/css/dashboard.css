@@ -6,9 +6,8 @@
     --background-color: #E1B46D;
     --surface-color: #ffffff;
     --text-primary: #333333;
-    --text-secondary: #666666;
-    --text-light: #999999;
-    --border-color: #eeeee;
+    --text-secondary: #666666;    --text-light: #999999;
+    --border-color: #eeeeee;
     --border-light: #f0f0f0;
     --shadow-light: rgba(0, 0, 0, 0.1);
     --shadow-medium: rgba(0, 0, 0, 0.15);

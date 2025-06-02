@@ -11,7 +11,6 @@ const orderButtons = document.querySelectorAll('.order-btn, .kiosk-btn, .deliver
 
 // Theme Toggle Elements
 const themeToggle = document.getElementById('themeToggle');
-const mobileThemeToggle = document.getElementById('mobileThemeToggle');
 
 // Login Modal Elements
 const loginModal = document.getElementById('loginModal');
@@ -584,20 +583,14 @@ function initLoginModal() {
 
 // Theme/Dark Mode Functionality
 function initThemeToggle() {
-    if (!themeToggle && !mobileThemeToggle) return;
+    if (!themeToggle) return;
     
     // Check for saved theme preference or default to light mode
     const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
     
-    // Add event listeners for both desktop and mobile theme toggles
-    if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
-    }
-    
-    if (mobileThemeToggle) {
-        mobileThemeToggle.addEventListener('click', toggleTheme);
-    }
+    // Add event listener for theme toggle
+    themeToggle.addEventListener('click', toggleTheme);
 }
 
 function toggleTheme() {
@@ -622,16 +615,16 @@ function setTheme(theme) {
 }
 
 function updateThemeIcons(theme) {
-    const icons = document.querySelectorAll('.theme-toggle i, .mobile-theme-toggle i');
-    icons.forEach(icon => {
+    const themeIcon = document.getElementById('themeIcon');
+    if (themeIcon) {
         if (theme === 'dark') {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
         } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
         }
-    });
+    }
 }
 
 function updateNavbarForDarkMode() {
@@ -639,10 +632,10 @@ function updateNavbarForDarkMode() {
         // Update navbar background for dark mode scroll effect
         const currentScrollY = window.scrollY;
         if (currentScrollY > 100) {
-            navbar.style.background = 'rgba(45, 45, 45, 0.98)';
+            navbar.style.background = 'rgba(28, 31, 38, 0.98)';
             navbar.style.boxShadow = '0 2px 30px rgba(255, 140, 66, 0.25)';
         } else {
-            navbar.style.background = 'rgba(45, 45, 45, 0.95)';
+            navbar.style.background = 'rgba(28, 31, 38, 0.95)';
             navbar.style.boxShadow = '0 2px 30px rgba(255, 140, 66, 0.15)';
         }
     }

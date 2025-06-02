@@ -7,9 +7,8 @@
     --surface-color: #ffffff;
     --content-bg: #f8f9fa;
     --text-primary: #333333;
-    --text-secondary: #666666;
-    --text-light: #999999;
-    --border-color: #eeeee;
+    --text-secondary: #666666;    --text-light: #999999;
+    --border-color: #eeeeee;
     --border-light: #f0f0f0;
     --shadow-light: rgba(0, 0, 0, 0.1);
     --shadow-medium: rgba(0, 0, 0, 0.15);
@@ -47,15 +46,15 @@ body.dark-mode {
 
 /* Settings Page Styles */
 .main-content {
-    margin-left: 80px;
+    margin-left: 250px;
     padding: 20px;
     background-color: var(--content-bg);
     min-height: 100vh;
     transition: margin-left 0.3s ease, background-color 0.3s ease;
 }
 
-.sidebar.expanded + .main-content {
-    margin-left: 250px;
+.main-content.expanded {
+    margin-left: 80px;
 }
 
 .content-wrapper {

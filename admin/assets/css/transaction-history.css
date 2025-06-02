@@ -65,15 +65,15 @@ body {
 }
 
 .main-content {
-    margin-left: 80px;
+    margin-left: 250px;
     padding: 20px;
     background-color: var(--background-color);
     min-height: 100vh;
     transition: margin-left 0.3s ease, background-color 0.3s ease;
 }
 
-.sidebar.expanded + .main-content {
-    margin-left: 250px;
+.main-content.expanded {
+    margin-left: 80px;
 }
 
 .content-wrapper {

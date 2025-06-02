@@ -6,7 +6,7 @@
     --bg-primary: linear-gradient(135deg, #F8F6F3 0%, #F2EDE7 50%, #EDE4D9 100%);
     --bg-secondary: #FFFFFF;
     --bg-tertiary: rgba(255, 255, 255, 0.9);
-    --text-primary: #333;
+    --text-primary: #2C1810;
     --text-secondary: #6B4423;
     --accent-primary: #8B4513;
     --accent-secondary: #A0522D;
@@ -16,7 +16,21 @@
     --border-color: rgba(139, 69, 19, 0.1);
     --shadow-color: rgba(0, 0, 0, 0.1);
     --shadow-hover: rgba(139, 69, 19, 0.15);
-    --card-bg: white;    --input-bg: #F8F6F3;
+    --card-bg: white;
+    
+    /* Modal colors */
+    --modal-bg: white;
+    --modal-text: #2C1810;
+    --modal-text-secondary: #6B4423;
+    --modal-border: #E0D5C7;
+    --modal-overlay: rgba(0, 0, 0, 0.2);
+    --modal-input-bg: white;
+    --modal-button-bg: linear-gradient(135deg, #8B4513, #A0522D);
+    --modal-button-hover: #A0522D;
+    --modal-close-color: #8B4513;
+    --modal-close-hover-bg: rgba(139, 69, 19, 0.1);
+    
+    --input-bg: #F8F6F3;
     --input-border: #E0D5C7;
     --button-danger: #FF6B6B;
     --text-muted: #999;
@@ -24,20 +38,34 @@
 
 /* Dark theme colors */
 body.dark-mode {
-    --bg-primary: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #3d3d3d 100%);
-    --bg-secondary: #2d2d2d;
-    --bg-tertiary: rgba(45, 45, 45, 0.9);
-    --text-primary: #e8e8e8;
-    --text-secondary: #b8b8b8;
+    --bg-primary: linear-gradient(135deg, #0f1117 0%, #1c1f26 50%, #2d3748 100%);
+    --bg-secondary: #1c1f26;
+    --bg-tertiary: rgba(28, 31, 38, 0.95);
+    --text-primary: #f7fafc;
+    --text-secondary: #e2e8f0;
     --accent-primary: #ff8c42;
     --accent-secondary: #ffb366;
     --accent-gold: #ffd700;
     --accent-gold-light: #ffed4e;
-    --nav-bg: rgba(45, 45, 45, 0.95);
-    --border-color: rgba(255, 140, 66, 0.2);
-    --shadow-color: rgba(0, 0, 0, 0.3);
-    --shadow-hover: rgba(255, 140, 66, 0.3);
-    --card-bg: #3d3d3d;    --input-bg: #4d4d4d;
+    --nav-bg: rgba(28, 31, 38, 0.98);
+    --border-color: rgba(255, 140, 66, 0.3);
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --shadow-hover: rgba(255, 140, 66, 0.4);
+    --card-bg: #2d3748;
+    
+    /* Modal colors */
+    --modal-bg: #2d3748;
+    --modal-text: #f7fafc;
+    --modal-text-secondary: #e2e8f0;
+    --modal-border: rgba(255, 140, 66, 0.3);
+    --modal-overlay: rgba(0, 0, 0, 0.4);
+    --modal-input-bg: #1c1f26;
+    --modal-button-bg: linear-gradient(135deg, #ff8c42, #ffb366);
+    --modal-button-hover: #ffb366;
+    --modal-close-color: #ff8c42;
+    --modal-close-hover-bg: rgba(255, 140, 66, 0.1);
+    
+    --input-bg: #4d4d4d;
     --input-border: #666;
     --button-danger: #ff5252;
     --text-muted: #888;
@@ -54,8 +82,8 @@ body {
     font-family: 'Noto Sans JP', sans-serif;
     line-height: 1.6;
     color: var(--text-primary);
-    background: var(--bg-secondary);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    background: var(--bg-primary);
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 html {
@@ -78,8 +106,15 @@ html {
     backdrop-filter: blur(20px);
     z-index: 1000;
     padding: 15px 0;
-    box-shadow: 0 2px 30px var(--border-color);
+    box-shadow: 0 2px 30px var(--border-color), 0 0 20px rgba(255, 140, 66, 0.10);
     transition: all 0.3s ease;
+}
+
+/* Dark mode navbar enhancements */
+body.dark-mode .navbar {
+    background: var(--nav-bg);
+    box-shadow: 0 2px 30px var(--border-color), 0 0 20px rgba(255, 140, 66, 0.15);
+    border-bottom: 1px solid rgba(255, 140, 66, 0.1);
 }
 
 .nav-container {
@@ -122,6 +157,14 @@ html {
     letter-spacing: -0.5px;
 }
 
+/* Dark mode logo text glow effect */
+body.dark-mode .logo-text {
+    color: var(--accent-primary);
+    text-shadow: 
+        0 0 8px rgba(255, 140, 66, 0.4),
+        0 0 15px rgba(255, 140, 66, 0.2);
+}
+
 .nav-menu {
     display: flex;
     list-style: none;
@@ -143,11 +186,13 @@ html {
 .nav-link:hover {
     color: var(--accent-primary);
     transform: translateY(-1px);
+    text-shadow: 0 0 5px rgba(255, 140, 66, 0.3), 0 0 10px rgba(255, 140, 66, 0.1);
 }
 
 .nav-link.active::after,
 .nav-link:hover::after {
-    content: '';    position: absolute;
+    content: '';
+    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
@@ -216,7 +261,7 @@ html {
 }
 
 .cart-count {
-    background: var(--button-danger);
+    background: #FF6B6B;
     color: white;
     border-radius: 50%;
     width: 20px;
@@ -229,7 +274,6 @@ html {
     position: absolute;
     top: -5px;
     right: -5px;
-    min-width: 20px;
 }
 
 .nav-account .account-link {
@@ -240,17 +284,77 @@ html {
     cursor: pointer;
 }
 
-.nav-account .account-icon {
+.nav-account .account-icon,
+.mobile-account .account-icon {
     height: 40px;
     width: 40px;
     cursor: pointer;
+    margin-bottom: 5px;
     transition: transform 0.3s ease;
     border-radius: 50%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--shadow-color);
 }
 
-.nav-account .account-icon:hover {
+.nav-account .account-icon:hover,
+.mobile-account .account-icon:hover {
     transform: scale(1.1);
+}
+
+/* Dark mode account icon enhancements */
+body.dark-mode .nav-account .account-icon,
+body.dark-mode .mobile-account .account-icon {
+    filter: 
+        invert(1) 
+        brightness(0.9) 
+        contrast(1.1);
+    box-shadow: 
+        0 2px 10px var(--shadow-color),
+        0 0 8px rgba(255, 140, 66, 0.3),
+        0 0 15px rgba(255, 140, 66, 0.2);
+    border: 1px solid rgba(255, 140, 66, 0.4);
+}
+
+body.dark-mode .nav-account .account-icon:hover,
+body.dark-mode .mobile-account .account-icon:hover {
+    filter: 
+        invert(1) 
+        brightness(1.0) 
+        contrast(1.2);
+    box-shadow: 
+        0 4px 15px var(--shadow-color),
+        0 0 12px rgba(255, 140, 66, 0.4),
+        0 0 20px rgba(255, 140, 66, 0.3);
+    border-color: rgba(255, 140, 66, 0.6);
+}
+
+/* Dark mode logo text glow effect */
+body.dark-mode .logo-text {
+    color: var(--accent-primary);
+    text-shadow: 
+        0 0 8px rgba(255, 140, 66, 0.4),
+        0 0 15px rgba(255, 140, 66, 0.2);
+}
+
+/* Dark mode logo image glow effect */
+body.dark-mode .nav-logo .logo-img {
+    filter: 
+        brightness(1.1) 
+        contrast(1.1);
+    box-shadow: 
+        0 0 10px rgba(255, 140, 66, 0.3),
+        0 0 20px rgba(255, 140, 66, 0.1);
+    border: none;
+}
+
+body.dark-mode .nav-logo .logo-img:hover {
+    filter: 
+        brightness(1.2) 
+        contrast(1.2);
+    box-shadow: 
+        0 0 15px rgba(255, 140, 66, 0.4),
+        0 0 25px rgba(255, 140, 66, 0.2);
+    transform: scale(1.05);
+    border: none;
 }
 
 .mobile-menu-toggle {
@@ -626,12 +730,13 @@ a.filter-btn {
 
 /* Modal Styles */
 .modal-overlay,
-.login-modal {    position: fixed;
+.login-modal {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--modal-overlay);
     display: none;
     align-items: center;
     justify-content: center;
@@ -648,13 +753,13 @@ a.filter-btn {
 
 /* Auth Modal */
 .auth-modal {
-    background: white;
+    background: var(--modal-bg);
     border-radius: 20px;
     overflow: hidden;
     max-width: 900px;
     width: 90%;
     max-height: 90vh;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px var(--shadow-color);
     position: relative;
     animation: slideUp 0.3s ease;
 }
@@ -666,7 +771,7 @@ a.filter-btn {
     background: none;
     border: none;
     font-size: 1.8rem;
-    color: #999;
+    color: var(--modal-text-secondary);
     cursor: pointer;
     z-index: 10;
     padding: 5px;
@@ -705,13 +810,13 @@ a.filter-btn {
 .auth-form h2 {
     font-size: 2rem;
     font-weight: 700;
-    color: #8B4513;
+    color: var(--accent-primary);
     margin-bottom: 10px;
     text-align: center;
 }
 
 .auth-form p {
-    color: #6B4423;
+    color: var(--modal-text-secondary);
     text-align: center;
     margin-bottom: 30px;
 }
@@ -726,25 +831,32 @@ a.filter-btn {
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: #999;
+    color: var(--modal-text-secondary);
 }
 
 .input-group input {
     width: 100%;
     padding: 15px 15px 15px 45px;
-    border: 2px solid #E0D5C7;
+    border: 2px solid var(--modal-border);
     border-radius: 10px;
     font-size: 16px;
+    background: var(--modal-input-bg);
+    color: var(--modal-text);
     transition: border-color 0.3s ease;
 }
 
 .input-group input:focus {
     outline: none;
-    border-color: #8B4513;
+    border-color: var(--accent-primary);
+}
+
+.input-group input::placeholder {
+    color: var(--modal-text-secondary);
+    opacity: 0.7;
 }
 
 .auth-btn {
-    background: linear-gradient(135deg, #8B4513, #A0522D);
+    background: var(--modal-button-bg);
     color: white;
     border: none;
     padding: 15px;
@@ -758,7 +870,7 @@ a.filter-btn {
 
 .auth-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+    box-shadow: 0 6px 20px var(--shadow-hover);
 }
 
 .auth-divider {
@@ -774,18 +886,18 @@ a.filter-btn {
     left: 0;
     right: 0;
     height: 1px;
-    background: #E0D5C7;
+    background: var(--modal-border);
 }
 
 .auth-divider span {
-    background: white;
+    background: var(--modal-bg);
     padding: 0 15px;
-    color: #999;
+    color: var(--modal-text-secondary);
 }
 
 .google-btn {
-    background: white;
-    border: 2px solid #E0D5C7;
+    background: var(--modal-bg);
+    border: 2px solid var(--modal-border);
     padding: 15px;
     border-radius: 10px;
     font-size: 16px;
@@ -797,11 +909,12 @@ a.filter-btn {
     justify-content: center;
     gap: 10px;
     margin-bottom: 20px;
+    color: var(--modal-text);
 }
 
 .google-btn:hover {
-    background: #F8F6F3;
-    border-color: #8B4513;
+    background: var(--bg-tertiary);
+    border-color: var(--accent-primary);
 }
 
 .google-btn i {
@@ -810,12 +923,12 @@ a.filter-btn {
 
 .auth-switch {
     text-align: center;
-    color: #6B4423;
+    color: var(--modal-text-secondary);
     font-size: 14px;
 }
 
 .auth-switch a {
-    color: #8B4513;
+    color: var(--accent-primary);
     text-decoration: none;
     font-weight: 600;
 }
@@ -826,13 +939,13 @@ a.filter-btn {
 
 /* Order Confirmation Modal */
 .order-confirmation-modal {
-    background: white;
+    background: var(--modal-bg);
     border-radius: 20px;
     padding: 50px;
     text-align: center;
     max-width: 500px;
     width: 90%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px var(--shadow-color);
     animation: slideUp 0.3s ease;
 }
 
@@ -844,12 +957,12 @@ a.filter-btn {
 
 .order-success h2 {
     font-size: 1.8rem;
-    color: #8B4513;
+    color: var(--accent-primary);
     margin-bottom: 20px;
 }
 
 .order-code {
-    background: linear-gradient(135deg, #8B4513, #A0522D);
+    background: var(--modal-button-bg);
     color: white;
     padding: 20px;
     border-radius: 10px;
@@ -861,13 +974,13 @@ a.filter-btn {
 }
 
 .order-instruction {
-    color: #6B4423;
+    color: var(--modal-text-secondary);
     margin-bottom: 30px;
     line-height: 1.6;
 }
 
 .modal-btn {
-    background: linear-gradient(135deg, #8B4513, #A0522D);
+    background: var(--modal-button-bg);
     color: white;
     border: none;
     padding: 15px 30px;
@@ -879,18 +992,18 @@ a.filter-btn {
 
 .modal-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+    box-shadow: 0 6px 20px var(--shadow-hover);
 }
 
 /* Login Modal Content Styles */
 .login-content {
-    background: white;
+    background: var(--modal-bg);
     width: 90%;
     max-width: 900px;
     border-radius: 12px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 4px 30px rgba(139, 69, 19, 0.15);
+    box-shadow: 0 4px 30px var(--shadow-color);
     opacity: 0;
     transform: scale(0.95);
     animation: modalFadeIn 0.4s ease 0.1s forwards;
@@ -923,19 +1036,19 @@ a.filter-btn {
 
 .login-header h2 {
     font-size: 32px;
-    color: #8B4513;
+    color: var(--accent-primary);
     margin-bottom: 10px;
 }
 
 .login-header p {
-    color: #666;
+    color: var(--modal-text-secondary);
     font-size: 14px;
     line-height: 1.5;
     margin-bottom: 5px;
 }
 
 .login-prototype {
-    color: #8B4513 !important;
+    color: var(--accent-primary) !important;
     font-size: 12px;
     font-style: italic;
 }
@@ -947,29 +1060,36 @@ a.filter-btn {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #6B4423;
+    color: var(--modal-text-secondary);
     font-weight: 500;
 }
 
 .form-group input {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid #E0D5C7;
+    border: 1px solid var(--modal-border);
     border-radius: 8px;
     font-size: 14px;
+    background: var(--modal-input-bg);
+    color: var(--modal-text);
     transition: all 0.3s ease;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #8B4513;
-    box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.1);
+}
+
+.form-group input::placeholder {
+    color: var(--modal-text-secondary);
+    opacity: 0.7;
 }
 
 .login-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #8B4513, #A0522D);
+    background: var(--modal-button-bg);
     color: white;
     border: none;
     border-radius: 8px;
@@ -980,7 +1100,7 @@ a.filter-btn {
 }
 
 .login-btn:hover {
-    background: #A0522D;
+    background: var(--modal-button-hover);
     transform: translateY(-2px);
 }
 
@@ -988,7 +1108,7 @@ a.filter-btn {
     display: block;
     text-align: center;
     margin-top: 16px;
-    color: #8B4513;
+    color: var(--accent-primary);
     text-decoration: none;
     font-size: 14px;
 }
@@ -1000,7 +1120,7 @@ a.filter-btn {
     background: none;
     border: none;
     font-size: 24px;
-    color: #8B4513;
+    color: var(--modal-close-color);
     cursor: pointer;
     z-index: 2;
     width: 30px;
@@ -1013,7 +1133,7 @@ a.filter-btn {
 }
 
 .close-modal:hover {
-    background-color: rgba(139, 69, 19, 0.1);
+    background-color: var(--modal-close-hover-bg);
 }
 
 @keyframes modalFadeIn {
@@ -1036,24 +1156,39 @@ a.filter-btn {
     }
 }
 
-@media (max-width: 768px) {
-    /* Navigation styles */
+@media (max-width: 768px) {    /* Navigation styles */
     .nav-menu {
-        display: none;
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
-        background: white;
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
         flex-direction: column;
         padding: 20px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 20px var(--shadow-color);
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
         gap: 15px;
         list-style: none;
     }
 
     .nav-menu.active {
-        display: flex;
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .nav-link {
+        font-size: 16px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .nav-link:last-child {
+        border-bottom: none;
     }
 
     .mobile-menu-toggle {
@@ -1143,12 +1278,6 @@ a.filter-btn {
     .order-confirmation-modal {
         padding: 30px 20px;
         margin: 20px;
-    }
-
-    .order-code {
-        font-size: 1.5rem;
-        letter-spacing: 2px;
-        padding: 15px;
     }
 }
 
@@ -1329,4 +1458,136 @@ a.filter-btn {
 
 .theme-toggle:hover i {
     transform: rotate(15deg);
+}
+
+/* Order Modal - Always Light Theme (Unaffected by Dark Mode) */
+.order-modal {
+    background: white !important;
+    color: #2C1810 !important;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+    animation: slideUp 0.3s ease;
+    position: relative;
+}
+
+.order-modal .modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none !important;
+    border: none;
+    font-size: 24px;
+    color: #8B4513 !important;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.order-modal .modal-close:hover {
+    background-color: rgba(139, 69, 19, 0.1) !important;
+}
+
+.order-modal .modal-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #8B4513, #A0522D) !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.order-modal .modal-icon i {
+    font-size: 2rem;
+    color: white !important;
+}
+
+.order-modal h3 {
+    font-size: 1.8rem;
+    color: #8B4513 !important;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.order-modal p {
+    color: #6B4423 !important;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+.order-modal .modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.order-modal .modal-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.order-modal .modal-btn.primary {
+    background: linear-gradient(135deg, #8B4513, #A0522D) !important;
+    color: white !important;
+}
+
+.order-modal .modal-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3) !important;
+}
+
+.order-modal .modal-btn.secondary {
+    background: white !important;
+    color: #8B4513 !important;
+    border: 2px solid #E0D5C7 !important;
+}
+
+.order-modal .modal-btn.secondary:hover {
+    background: #F8F6F3 !important;
+    border-color: #8B4513 !important;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Mobile Order Modal */
+@media (max-width: 768px) {
+    .order-modal {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+    
+    .order-modal .modal-actions {
+        flex-direction: column;
+    }
+    
+    .order-modal .modal-btn {
+        width: 100%;
+    }
 }
