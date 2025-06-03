@@ -242,6 +242,14 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .dashboard-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .date-time {
+        font-size: 0.9rem;
+    }
+    
     .stats-grid {
         grid-template-columns: 1fr;
     }
@@ -252,18 +260,58 @@
         align-items: flex-start;
     }
     
+    .dashboard-section {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
     .orders-table {
         font-size: 0.8rem;
+        overflow-x: auto;
+        display: block;
+        width: 100%;
     }
     
     .orders-table th,
     .orders-table td {
         padding: 8px;
+        white-space: nowrap;
     }
     
     .stock-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+    }
+    
+    /* Adjust padding for mobile view */
+    .stat-card {
+        padding: 15px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .stat-card {
+        padding: 12px;
+    }
+    
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .stat-content h3 {
+        font-size: 1.5rem;
+    }
+    
+    /* Make tables more mobile-friendly */
+    .recent-orders {
+        overflow-x: auto;
     }
 }
