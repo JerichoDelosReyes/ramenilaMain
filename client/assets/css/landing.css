@@ -1398,8 +1398,9 @@ section {
 }
 
 @media (max-width: 768px) {
-    /* Keep existing nav menu styles */
+    /* Mobile nav menu styles - fixed */
     .nav-menu {
+        display: none;
         position: absolute;
         top: 100%;
         left: 0;
@@ -1409,8 +1410,7 @@ section {
         flex-direction: column;
         padding: 20px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        transform: translateY(-10px);
-        opacity: 0;
+        z-index: 1000;
     }
     
     /* Login Modal Tablet Styles */
@@ -1463,22 +1463,26 @@ section {
         font-size: 22px;
     }
     
+    /* Main mobile menu style - consolidated */
     .nav-menu {
         display: none;
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
+        width: 100%;
         background: white;
         flex-direction: column;
         padding: 20px;
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         gap: 15px;
         list-style: none;
+        z-index: 1000;
+        transition: all 0.3s ease;
     }
     
     .nav-menu.active {
-        display: flex;
+        display: flex !important;
     }
     
     .nav-link {
@@ -1808,6 +1812,8 @@ section {
     cursor: pointer;
     padding: 5px;
     transition: all 0.3s ease;
+    z-index: 1001;
+    display: none;
 }
 
 .mobile-menu-toggle:hover {
@@ -1823,12 +1829,30 @@ section {
 }
 
 @media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block !important;
+        background: none;
+        border: none;
+        padding: 10px;
+        margin: 0;
+        cursor: pointer;
+        outline: none;
+    }
+    
+    /* Make sure the mobile menu button is very visible */
+    .mobile-menu-toggle i {
+        font-size: 24px;
+        color: #8B4513;
+    }
+}
+
+@media (max-width: 768px) {
     .nav-actions {
         display: none;
     }
 
     .mobile-nav {
-        display: flex;
+        display: flex !important;
     }
 
     .mobile-kiosk:hover {

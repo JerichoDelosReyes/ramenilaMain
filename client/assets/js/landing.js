@@ -88,18 +88,36 @@ function updateActiveSection() {
 
 // Mobile menu toggle
 function initMobileMenu() {
-    if (mobileMenuToggle && navMenu) {        mobileMenuToggle.addEventListener('click', () => {
+    console.log('Initializing mobile menu...');
+    console.log('mobileMenuToggle:', mobileMenuToggle);
+    console.log('navMenu:', navMenu);
+    
+    // Clear any existing listeners to prevent duplication
+    const newMobileMenuToggle = mobileMenuToggle ? mobileMenuToggle.cloneNode(true) : null;
+    if (mobileMenuToggle && mobileMenuToggle.parentNode) {
+        mobileMenuToggle.parentNode.replaceChild(newMobileMenuToggle, mobileMenuToggle);
+    }
+    
+    if (newMobileMenuToggle && navMenu) {
+        newMobileMenuToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Mobile menu toggle clicked');
+            
+            // Toggle menu visibility
             navMenu.classList.toggle('active');
-            mobileMenuToggle.classList.toggle('active');
+            newMobileMenuToggle.classList.toggle('active');
             
             // Change hamburger icon
-            const icon = mobileMenuToggle.querySelector('i');
+            const icon = newMobileMenuToggle.querySelector('i');
             if (navMenu.classList.contains('active')) {
                 icon.classList.remove('fa-bars');
                 icon.classList.add('fa-times');
+                console.log('Menu opened, active state:', navMenu.classList.contains('active'));
             } else {
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-bars');
+                console.log('Menu closed, active state:', navMenu.classList.contains('active'));
             }
         });
           // Close mobile menu when clicking on a link
