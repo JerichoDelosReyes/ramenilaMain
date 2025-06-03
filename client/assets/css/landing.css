@@ -1180,7 +1180,10 @@ section {
     animation: modalBackdropFadeIn 0.3s ease forwards;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
+}
 
+.login-modal.active {
+    opacity: 1;
 }
 
 .login-content {
@@ -1204,12 +1207,14 @@ section {
 .login-image {
     height: 540px;
     overflow: hidden;
+    display: block;
 }
 
 .login-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .login-form {
@@ -1318,6 +1323,44 @@ section {
     background-color: rgba(139, 69, 19, 0.1);
 }
 
+/* Add the modal animations */
+@keyframes modalBackdropFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #8B4513;
+    cursor: pointer;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    background-color: rgba(139, 69, 19, 0.1);
+}
+
 @media (max-width: 1024px) {
     .hero-content {
         grid-template-columns: 1fr 1.5fr 1fr;
@@ -1381,14 +1424,74 @@ section {
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         transform: translateY(-10px);
         opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
+    }
+    
+    /* Login Modal Tablet Styles */
+    .login-content {
+        width: 92%;
+        max-width: 600px;
+        margin: 20px;
+    }
+
+    .login-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-image {
+        height: 250px;
+        order: -1; /* Make image appear at the top */
+        display: block !important;
+    }
+
+    .login-form {
+        padding: 35px 30px;
+    }
+
+    .login-header h2 {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+
+    .login-header p {
+        font-size: 13px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group input {
+        padding: 11px 15px;
+        font-size: 13px;
+    }
+
+    .login-btn {
+        padding: 11px;
+        font-size: 15px;
+    }
+
+    .close-modal {
+        top: 18px;
+        right: 18px;
+        font-size: 22px;
+    }
+    
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        gap: 15px;
+        list-style: none;
     }
     
     .nav-menu.active {
-        transform: translateY(0);
-        opacity: 1;
-        visibility: visible;
+        display: flex;
     }
     
     .nav-link {
@@ -1444,6 +1547,90 @@ section {
 
     .order-options {
         align-items: center;
+    }
+    
+    /* Header Mobile Styles */
+    .nav-container {
+        padding: 10px 15px;
+    }
+
+    .logo-text {
+        font-size: 1.2rem;
+    }
+
+    .nav-logo .logo-img {
+        height: 35px;
+    }
+    
+    /* Login Modal Mobile Styles */
+    .login-content {
+        width: 95%;
+        max-width: none;
+        margin: 10px;
+        border-radius: 16px;
+    }
+
+    .login-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-image {
+        height: 200px;
+        order: -1; /* Make image appear at the top */
+    }
+
+    .login-form {
+        padding: 25px 20px;
+    }
+
+    .login-header h2 {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+
+    .login-header p {
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
+
+    .login-prototype {
+        font-size: 12px !important;
+        margin-top: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    .form-group input {
+        padding: 10px 14px;
+        font-size: 13px;
+        border-radius: 6px;
+    }
+
+    .login-btn {
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 6px;
+        margin-top: 8px;
+    }
+
+    .forgot-password {
+        font-size: 13px;
+        margin-top: 12px;
+    }
+
+    .close-modal {
+        top: 15px;
+        right: 15px;
+        font-size: 20px;
+        width: 28px;
+        height: 28px;
     }
     
     .curved-svg {
@@ -1601,8 +1788,8 @@ section {
     font-size: 16px;
     border-radius: 50%;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1613,6 +1800,11 @@ section {
 .mobile-account {
     display: flex;
     align-items: center;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
 }
 
 .mobile-account .account-icon {
@@ -1620,13 +1812,27 @@ section {
     height: 30px;
     border-radius: 50%;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
 .mobile-menu-toggle {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     color: #8B4513;
     cursor: pointer;
     padding: 5px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+    transform: scale(1.1);
+}
+
+.mobile-menu-toggle i {
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle.active i {
+    transform: rotate(90deg);
 }
 
 @media (max-width: 768px) {
@@ -1640,7 +1846,7 @@ section {
 
     .mobile-kiosk:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+        box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
     }
 
     .mobile-account:hover .account-icon {

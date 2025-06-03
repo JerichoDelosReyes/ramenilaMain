@@ -88,9 +88,9 @@ function updateActiveSection() {
 
 // Mobile menu toggle
 function initMobileMenu() {
-    if (mobileMenuToggle && navMenu) {
-        mobileMenuToggle.addEventListener('click', () => {
+    if (mobileMenuToggle && navMenu) {        mobileMenuToggle.addEventListener('click', () => {
             navMenu.classList.toggle('active');
+            mobileMenuToggle.classList.toggle('active');
             
             // Change hamburger icon
             const icon = mobileMenuToggle.querySelector('i');
@@ -102,11 +102,11 @@ function initMobileMenu() {
                 icon.classList.add('fa-bars');
             }
         });
-        
-        // Close mobile menu when clicking on a link
+          // Close mobile menu when clicking on a link
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
                 const icon = mobileMenuToggle.querySelector('i');
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-bars');
@@ -521,6 +521,8 @@ function initLoginModal() {
             accountBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 loginModal.style.display = 'flex';
+                setTimeout(() => loginModal.classList.add('active'), 10);
+                document.body.style.overflow = 'hidden';
             });
         }
 
@@ -529,18 +531,28 @@ function initLoginModal() {
             mobileAccountBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 loginModal.style.display = 'flex';
+                setTimeout(() => loginModal.classList.add('active'), 10);
+                document.body.style.overflow = 'hidden';
             });
         }
 
         // Close modal when close button is clicked
         closeModal.addEventListener('click', () => {
-            loginModal.style.display = 'none';
+            loginModal.classList.remove('active');
+            setTimeout(() => {
+                loginModal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
         });
 
         // Close modal when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === loginModal) {
-                loginModal.style.display = 'none';
+                loginModal.classList.remove('active');
+                setTimeout(() => {
+                    loginModal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }, 300);
             }
         });
 
