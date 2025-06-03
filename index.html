@@ -60,9 +60,9 @@
                 <button class="mobile-account" id="mobileAccountBtn">
                     <img src="client/assets/img/accounts.png" alt="Account" class="account-icon">
                 </button>
-                <div class="mobile-menu-toggle">
+                <button type="button" class="mobile-menu-toggle" aria-label="Toggle mobile menu">
                     <i class="fas fa-bars"></i>
-                </div>
+                </button>
             </div>
         </div>
     </nav>
@@ -91,7 +91,6 @@
                             <input type="password" id="password" placeholder="Enter your password" required>
                         </div>
                         <button type="submit" class="login-btn">Sign In</button>
-                        <a href="#" class="forgot-password">Forgot password?</a>
                     </form>
                 </div>
             </div>
@@ -513,5 +512,69 @@
 
     <!-- JavaScript -->
     <script src="client/assets/js/landing.js"></script>
+    
+    <!-- Mobile-specific style fixes -->
+    <style>
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+                visibility: visible !important;
+            }
+            .nav-menu.active {
+                display: flex !important;
+            }
+            .mobile-menu-toggle {
+                display: block !important;
+            }
+        }
+    </style>
+    
+    <!-- Mobile menu fix - simplified implementation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM fully loaded');
+            
+            // Get elements
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            console.log('Menu elements:', {toggle: mobileMenuToggle, menu: navMenu});
+            
+            // Ensure elements exist and add direct click handler
+            if (mobileMenuToggle && navMenu) {
+                // Remove any existing click handlers first
+                const newToggle = mobileMenuToggle.cloneNode(true);
+                mobileMenuToggle.parentNode.replaceChild(newToggle, mobileMenuToggle);
+                
+                // Add new click handler
+                newToggle.addEventListener('click', function(e) {
+                    console.log('Mobile menu button clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Toggle menu visibility
+                    if (navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                        this.classList.remove('active');
+                        const icon = this.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                        console.log('Menu closed');
+                    } else {
+                        navMenu.classList.add('active');
+                        this.classList.add('active');
+                        const icon = this.querySelector('i');
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                        console.log('Menu opened');
+                    }
+                });
+                
+                console.log('Mobile menu click handler attached');
+            }
+        });
+    </script>
 </body>
 </html>

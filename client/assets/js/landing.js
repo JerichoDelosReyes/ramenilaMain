@@ -88,25 +88,43 @@ function updateActiveSection() {
 
 // Mobile menu toggle
 function initMobileMenu() {
-    if (mobileMenuToggle && navMenu) {
-        mobileMenuToggle.addEventListener('click', () => {
+    console.log('Initializing mobile menu...');
+    console.log('mobileMenuToggle:', mobileMenuToggle);
+    console.log('navMenu:', navMenu);
+    
+    // Clear any existing listeners to prevent duplication
+    const newMobileMenuToggle = mobileMenuToggle ? mobileMenuToggle.cloneNode(true) : null;
+    if (mobileMenuToggle && mobileMenuToggle.parentNode) {
+        mobileMenuToggle.parentNode.replaceChild(newMobileMenuToggle, mobileMenuToggle);
+    }
+    
+    if (newMobileMenuToggle && navMenu) {
+        newMobileMenuToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Mobile menu toggle clicked');
+            
+            // Toggle menu visibility
             navMenu.classList.toggle('active');
+            newMobileMenuToggle.classList.toggle('active');
             
             // Change hamburger icon
-            const icon = mobileMenuToggle.querySelector('i');
+            const icon = newMobileMenuToggle.querySelector('i');
             if (navMenu.classList.contains('active')) {
                 icon.classList.remove('fa-bars');
                 icon.classList.add('fa-times');
+                console.log('Menu opened, active state:', navMenu.classList.contains('active'));
             } else {
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-bars');
+                console.log('Menu closed, active state:', navMenu.classList.contains('active'));
             }
         });
-        
-        // Close mobile menu when clicking on a link
+          // Close mobile menu when clicking on a link
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
                 const icon = mobileMenuToggle.querySelector('i');
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-bars');
@@ -166,19 +184,20 @@ function showOrderModal(orderType) {
     
     // Add modal styles
     const modalStyles = `
-        <style>
-            .modal-overlay {
+        <style>            .modal-overlay {
                 position: fixed;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0, 0, 0, 0.7);
+                background: rgba(0, 0, 0, 0.2);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 z-index: 10000;
                 animation: fadeIn 0.3s ease;
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
             }
             
             .order-modal {
@@ -520,6 +539,8 @@ function initLoginModal() {
             accountBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 loginModal.style.display = 'flex';
+                setTimeout(() => loginModal.classList.add('active'), 10);
+                document.body.style.overflow = 'hidden';
             });
         }
 
@@ -528,18 +549,28 @@ function initLoginModal() {
             mobileAccountBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 loginModal.style.display = 'flex';
+                setTimeout(() => loginModal.classList.add('active'), 10);
+                document.body.style.overflow = 'hidden';
             });
         }
 
         // Close modal when close button is clicked
         closeModal.addEventListener('click', () => {
-            loginModal.style.display = 'none';
+            loginModal.classList.remove('active');
+            setTimeout(() => {
+                loginModal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
         });
 
         // Close modal when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === loginModal) {
-                loginModal.style.display = 'none';
+                loginModal.classList.remove('active');
+                setTimeout(() => {
+                    loginModal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }, 300);
             }
         });
 
