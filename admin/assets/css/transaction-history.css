@@ -57,7 +57,8 @@
 .search-box {
     position: relative;
     flex: 1;
-    min-width: 300px;
+    min-width: 250px;
+    width: 100%;
 }
 
 .search-box i {
@@ -86,10 +87,13 @@
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 .filter-group select,
 .filter-group input[type="date"] {
+    flex: 1;
+    min-width: 200px;
     padding: 12px 15px;
     border: 2px solid #e1e5e9;
     border-radius: 8px;
@@ -107,7 +111,13 @@
 .action-buttons {
     display: flex;
     gap: 10px;
-    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.action-buttons .btn {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
 }
 
 /* Buttons */
@@ -251,14 +261,47 @@
     font-size: 14px;
 }
 
-/* Table */
+/* Table Container and Table */
 .table-container {
     overflow-x: auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .transactions-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 800px;
+}
+
+/* Order number column specific styles */
+.transactions-table th:first-child,
+.transactions-table td:first-child {
+    padding-left: 20px;
+    min-width: 110px;
+    position: sticky;
+    left: 0;
+    background: inherit;
+    z-index: 2;
+}
+
+.transactions-table td:first-child {
+    font-weight: 600;
+    color: #873E23;
+    background: white;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.transactions-table tbody tr:nth-child(even) td:first-child {
+    background-color: #f8f9fa;
+}
+
+/* Ensure text doesn't wrap in order number column */
+.transactions-table td:first-child span {
+    white-space: nowrap;
+    display: block;
 }
 
 .transactions-table th,
@@ -275,65 +318,44 @@
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 2px solid #873E23;
 }
 
-.transactions-table td {
-    font-size: 14px;
-    color: #555;
-}
-
-.transactions-table tbody tr:hover {
-    background: #f8f9fa;
-}
-
-/* Status Badges */
-.status-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
+/* Column specific styles */
+.transactions-table td:first-child {
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: #873E23;
 }
 
-.status-completed {
-    background: #d4edda;
-    color: #155724;
+.transactions-table td:nth-child(2) {
+    min-width: 160px;
+    white-space: nowrap;
 }
 
-.status-cancelled {
-    background: #f8d7da;
-    color: #721c24;
+.transactions-table td:nth-child(3) {
+    min-width: 200px;
+    white-space: normal;
+    line-height: 1.4;
 }
 
-.status-refunded {
-    background: #fff3cd;
-    color: #856404;
+.transactions-table td:nth-child(4),
+.transactions-table td:nth-child(5) {
+    white-space: nowrap;
 }
 
-/* Payment Method Badges */
-.payment-badge {
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
+/* Action buttons column */
+.transactions-table td:last-child {
+    width: 100px;
+    text-align: right;
 }
 
-.payment-cash {
-    background: #e2f0d9;
-    color: #4f7942;
-}
-
-.payment-card {
-    background: #dae8fc;
-    color: #2c5282;
-}
-
-/* Action Buttons */
 .action-btns {
     display: flex;
     gap: 5px;
+    justify-content: flex-end;
 }
 
 .action-btn {
@@ -343,33 +365,90 @@
     cursor: pointer;
     font-size: 12px;
     transition: all 0.3s ease;
-}
-
-.view-btn {
-    background: #17a2b8;
-    color: white;
-}
-
-.view-btn:hover {
-    background: #138496;
-}
-
-.refund-btn {
-    background: #dc3545;
-    color: white;
-}
-
-.refund-btn:hover {
-    background: #c82333;
-}
-
-/* Pagination */
-.pagination {
-    padding: 20px 25px;
-    display: flex;
-    justify-content: space-between;
+    display: inline-flex;
     align-items: center;
-    border-top: 1px solid #e1e5e9;
+    justify-content: center;
+    gap: 4px;
+}
+
+/* Status badge positioning */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: center;
+    min-width: 80px;
+}
+
+/* Payment badge positioning */
+.payment-badge {
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: center;
+    min-width: 70px;
+}
+
+/* Zebra striping for better readability */
+.transactions-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.transactions-table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table-container {
+        margin: 0 -15px;
+        border-radius: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .transactions-table th,
+    .transactions-table td {
+        padding: 12px 10px;
+        font-size: 13px;
+    }
+
+    .transactions-table td:first-child {
+        font-size: 12px;
+    }
+
+    .status-badge,
+    .payment-badge {
+        padding: 3px 8px;
+        font-size: 11px;
+        min-width: 60px;
+    }
+
+    .action-btn {
+        padding: 5px 8px;
+        font-size: 11px;
+    }
+
+    .transactions-table th:first-child,
+    .transactions-table td:first-child {
+        position: sticky;
+        left: 0;
+        min-width: 100px;
+        font-size: 13px;
+        padding: 12px 15px;
+        background: white;
+        z-index: 2;
+    }
+
+    .transactions-table tbody tr:nth-child(even) td:first-child {
+        background-color: #f8f9fa;
+    }
 }
 
 /* Modal Styles */

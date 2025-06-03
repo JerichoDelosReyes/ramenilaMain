@@ -125,11 +125,18 @@ body {
 
 /* Logout Section */
 .logout-section {
-    padding: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 80px; /* Same as collapsed sidebar width */
+    padding: 20px 0;
+    background: inherit;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    transition: all 0.4s ease;
+}
+
+.sidebar.expanded .logout-section {
+    width: 250px; /* Same as expanded sidebar width */
 }
 
 .logout-link {
@@ -156,36 +163,23 @@ body {
     margin-right: 15px;
 }
 
-.logout-text {
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.4s ease;
-    white-space: nowrap;
-}
-
-/* Collapsed Logout Section */
-.sidebar.collapsed .logout-section {
-    padding: 0;
-    margin-top: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
 .sidebar.collapsed .logout-link {
     padding: 15px;
     justify-content: center;
     margin: 0 10px 5px 10px;
-    width: 60px;
-    align-self: center;
 }
 
 .sidebar.collapsed .logout-link i {
     margin-right: 0;
-    font-size: 20px;
 }
 
 .sidebar.collapsed .logout-text {
     display: none;
+}
+
+/* Adjust main content to prevent overlap with fixed logout */
+.main-content {
+    padding-bottom: 80px;
 }
 
 /* Toggle Button */
