@@ -1342,19 +1342,6 @@ section {
         opacity: 1;
         transform: scale(1);
     }
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #8B4513;
-    cursor: pointer;
-    z-index: 2;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
 }
 
 .close-modal:hover {
