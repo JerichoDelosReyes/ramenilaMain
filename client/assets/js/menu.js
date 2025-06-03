@@ -526,14 +526,12 @@ function showOrderModal(orderType) {
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0, 0, 0, 0.2);
+                background: rgba(0, 0, 0, 0.7);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 z-index: 10000;
                 animation: fadeIn 0.3s ease;
-                backdrop-filter: blur(15px);
-                -webkit-backdrop-filter: blur(15px);
             }
             
             .order-modal {
