@@ -120,6 +120,7 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-left: 20px;
 }
 
 .kiosk-btn, .delivery-btn {
@@ -1348,6 +1349,69 @@ section {
     background-color: rgba(139, 69, 19, 0.1);
 }
 
+.desktop-only {
+    display: flex !important;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-actions.desktop-only {
+    margin-left: 20px;
+}
+
+.nav-actions.desktop-only .kiosk-btn {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #8B4513, #A0522D);
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+}
+
+/* Full button style (default) */
+@media screen and (min-width: 1024px) {
+    .nav-actions.desktop-only .kiosk-btn {
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 14px;
+    }
+    .nav-actions.desktop-only .kiosk-btn span {
+        display: inline;
+    }
+}
+
+/* Circle button style (smaller screens) */
+@media screen and (max-width: 1023px) {
+    .nav-actions.desktop-only .kiosk-btn {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    .nav-actions.desktop-only .kiosk-btn span {
+        display: none;
+    }
+    .nav-actions.desktop-only .kiosk-btn i {
+        margin: 0;
+        font-size: 16px;
+    }
+}
+
+.nav-actions.desktop-only .kiosk-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+}
+
+@media (max-width: 768px) {
+    .desktop-only {
+        display: none !important;
+    }
+}
 @media (max-width: 1024px) {
     .hero-content {
         grid-template-columns: 1fr 1.5fr 1fr;
