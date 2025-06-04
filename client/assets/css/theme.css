@@ -1,0 +1,1106 @@
+/* Dark Mode Theme CSS */
+
+/* CSS Variables for Light and Dark Themes */
+:root {
+    /* Light theme colors */
+    --bg-light: #ffffff;
+    --text-light: #333333;
+    --nav-bg-light: rgba(255, 255, 255, 0.98);
+    --card-bg-light: #ffffff;
+    --border-light: #e0d5c7;
+    --accent-light: #8B4513;
+    
+    /* Dark theme colors */
+    --bg-dark: #1a1f2e;
+    --bg-dark-gradient: linear-gradient(135deg, #1a1f2e 0%, #232836 100%);
+    --text-dark: #ffffff;
+    --text-dark-secondary: #a8b3cf;
+    --nav-bg-dark: rgba(26, 31, 46, 0.95);
+    --card-bg-dark: #242937;
+    --border-dark: rgba(255, 255, 255, 0.1);
+    --accent-dark: #FF6B35;
+    --hover-dark: rgba(255, 107, 53, 0.1);
+    
+    /* Button colors */
+    --btn-bg-dark: linear-gradient(135deg, #FF6B35, #FF8A50);
+    --btn-secondary-dark: #374151;
+    --btn-success-dark: #10B981;
+    --btn-danger-dark: #EF4444;
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 2px solid var(--accent-light);
+    color: var(--accent-light);
+    padding: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    width: 45px;
+    height: 45px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    outline: none;
+    z-index: 100;
+}
+
+.theme-toggle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--accent-light), #A0522D);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 50%;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
+    border-color: var(--accent-light);
+}
+
+.theme-toggle:hover::before {
+    opacity: 1;
+}
+
+.theme-toggle:hover i {
+    color: white;
+    transform: rotate(360deg) scale(1.1);
+}
+
+.theme-toggle:active {
+    transform: translateY(-1px) scale(1.02);
+    transition: all 0.1s ease;
+}
+
+.theme-toggle i {
+    position: relative;
+    z-index: 2;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+}
+
+/* Toggle animation when switching themes */
+.theme-toggle.switching i {
+    animation: themeSwitch 0.6s ease-in-out;
+}
+
+@keyframes themeSwitch {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(0.8); opacity: 0.5; }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Mobile theme toggle */
+.mobile-theme-toggle {
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 2px solid var(--accent-light);
+    color: var(--accent-light);
+    padding: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.mobile-theme-toggle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--accent-light), #A0522D);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 50%;
+}
+
+.mobile-theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+}
+
+.mobile-theme-toggle:hover::before {
+    opacity: 1;
+}
+
+.mobile-theme-toggle:hover i {
+    color: white;
+    transform: rotate(360deg) scale(1.1);
+}
+
+.mobile-theme-toggle:active {
+    transform: scale(1.05);
+    transition: all 0.1s ease;
+}
+
+.mobile-theme-toggle i {
+    position: relative;
+    z-index: 2;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+}
+
+.mobile-theme-toggle.switching i {
+    animation: themeSwitch 0.6s ease-in-out;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background: var(--bg-dark-gradient) !important;
+    color: var(--text-dark) !important;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* CRITICAL DARK MODE OVERRIDES - These must override all existing styles */
+
+/* Force dark mode body styles */
+body.dark-mode {
+    background: #1a1f2e !important;
+    background-image: linear-gradient(135deg, #1a1f2e 0%, #232836 100%) !important;
+    color: #ffffff !important;
+}
+
+/* Force dark mode for all major containers */
+body.dark-mode *,
+body.dark-mode .container,
+body.dark-mode .hero-container,
+body.dark-mode .nav-container {
+    color: inherit !important;
+}
+
+/* Force specific section backgrounds */
+body.dark-mode .hero,
+body.dark-mode .hero-background,
+body.dark-mode .about,
+body.dark-mode .how-to-order,
+body.dark-mode section {
+    background: #1a1f2e !important;
+    background-image: linear-gradient(135deg, #1a1f2e 0%, #232836 100%) !important;
+}
+
+/* Force navbar dark styles */
+body.dark-mode .navbar {
+    background: rgba(26, 31, 46, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Force navigation link styles - remove ALL borders */
+body.dark-mode .nav-link {
+    color: #a8b3cf !important;
+    border: none !important;
+    border-bottom: none !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+body.dark-mode .nav-link::before,
+body.dark-mode .nav-link::after {
+    display: none !important;
+    border: none !important;
+}
+
+body.dark-mode .nav-link.active,
+body.dark-mode .nav-link:hover {
+    color: #FF6B35 !important;
+    border: none !important;
+}
+
+body.dark-mode .nav-link.active::before,
+body.dark-mode .nav-link.active::after,
+body.dark-mode .nav-link:hover::before,
+body.dark-mode .nav-link:hover::after {
+    display: none !important;
+}
+
+/* Force logo text color */
+body.dark-mode .logo-text {
+    color: #FF6B35 !important;
+}
+
+/* Force all headings to white */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #ffffff !important;
+}
+
+/* Force all paragraphs to secondary white */
+body.dark-mode p {
+    color: #a8b3cf !important;
+}
+
+/* Force footer dark styles */
+body.dark-mode .footer {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .footer h3,
+body.dark-mode .footer h4 {
+    color: #FF6B35 !important;
+}
+
+body.dark-mode .footer p,
+body.dark-mode .footer a,
+body.dark-mode .footer li {
+    color: #a8b3cf !important;
+}
+
+body.dark-mode .footer a:hover {
+    color: #FF6B35 !important;
+}
+
+/* Force all cards to dark theme */
+body.dark-mode .card,
+body.dark-mode .feature-card,
+body.dark-mode .about-feature,
+body.dark-mode .order-method,
+body.dark-mode .method-card {
+    background: #242937 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Force buttons to orange theme */
+body.dark-mode .btn,
+body.dark-mode .order-btn,
+body.dark-mode .kiosk-btn,
+body.dark-mode button:not(.theme-toggle):not(.mobile-theme-toggle) {
+    background: #FF6B35 !important;
+    color: white !important;
+    border: none !important;
+}
+
+body.dark-mode .btn:hover,
+body.dark-mode .order-btn:hover,
+body.dark-mode .kiosk-btn:hover,
+body.dark-mode button:not(.theme-toggle):not(.mobile-theme-toggle):hover {
+    background: #FF8A50 !important;
+}
+
+/* Ensure steaming animation and images don't interfere */
+body.dark-mode .steam,
+body.dark-mode .floating-element {
+    opacity: 0.3 !important;
+}
+
+/* Brown to orange theme conversion */
+body.dark-mode [style*="8B4513"],
+body.dark-mode [style*="#8B4513"] {
+    color: #FF6B35 !important;
+}
+
+/* Force override any remaining brown colors */
+body.dark-mode .text-brown,
+body.dark-mode .brown-text,
+body.dark-mode .accent-brown {
+    color: #FF6B35 !important;
+}
+
+/* Force mobile navigation dark styles */
+body.dark-mode .mobile-nav,
+body.dark-mode .mobile-menu {
+    background: #242937 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Force all icons to appropriate colors */
+body.dark-mode .fa,
+body.dark-mode .fas,
+body.dark-mode .fab,
+body.dark-mode i {
+    color: inherit !important;
+}
+
+body.dark-mode .feature-icon i,
+body.dark-mode .method-icon i {
+    color: #FF6B35 !important;
+}
+
+/* Force contact info and other elements */
+body.dark-mode .contact-info p {
+    color: #a8b3cf !important;
+}
+
+body.dark-mode .social-links a {
+    background: #242937 !important;
+    color: #a8b3cf !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-mode .social-links a:hover {
+    background: #FF6B35 !important;
+    color: white !important;
+}
+
+/* Dark mode navbar */
+body.dark-mode .navbar {
+    background: rgba(26, 31, 46, 0.98) !important;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Dark mode navigation links */
+body.dark-mode .nav-link {
+    color: var(--text-dark-secondary) !important;
+    border-bottom: none !important;
+}
+
+body.dark-mode .nav-link.active,
+body.dark-mode .nav-link:hover {
+    color: var(--accent-dark) !important;
+}
+
+body.dark-mode .nav-link.active::after,
+body.dark-mode .nav-link:hover::after {
+    background: var(--accent-dark) !important;
+}
+
+/* Dark mode logo text */
+body.dark-mode .logo-text {
+    color: var(--accent-dark) !important;
+}
+
+/* Dark mode header and hero sections */
+body.dark-mode .hero {
+    background: var(--bg-dark-gradient) !important;
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .hero-content h1 {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .hero-content p {
+    color: var(--text-dark-secondary) !important;
+}
+
+/* Dark mode footer */
+body.dark-mode .footer {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%) !important;
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .footer h3 {
+    color: var(--accent-dark) !important;
+}
+
+body.dark-mode .footer p,
+body.dark-mode .footer a {
+    color: var(--text-dark-secondary) !important;
+}
+
+body.dark-mode .footer a:hover {
+    color: var(--accent-dark) !important;
+}
+
+/* Dark mode sections */
+body.dark-mode .section {
+    background: var(--bg-dark) !important;
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .section h2 {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .section p {
+    color: var(--text-dark-secondary) !important;
+}
+
+/* Dark mode cards */
+body.dark-mode .card,
+body.dark-mode .menu-card,
+body.dark-mode .feature-card {
+    background: var(--card-bg-dark) !important;
+    border: 1px solid var(--border-dark) !important;
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .card h3,
+body.dark-mode .menu-card h3,
+body.dark-mode .feature-card h3 {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .card p,
+body.dark-mode .menu-card p,
+body.dark-mode .feature-card p {
+    color: var(--text-dark-secondary) !important;
+}
+
+/* Dark mode buttons */
+body.dark-mode .btn-primary {
+    background: var(--accent-dark) !important;
+    border-color: var(--accent-dark) !important;
+    color: white !important;
+}
+
+body.dark-mode .btn-primary:hover {
+    background: #FF8A50 !important;
+    border-color: #FF8A50 !important;
+}
+
+body.dark-mode .btn-secondary {
+    background: var(--card-bg-dark) !important;
+    border: 1px solid var(--border-dark) !important;
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: var(--accent-dark) !important;
+    color: white !important;
+}
+
+/* Dark mode theme toggle buttons */
+.dark-mode .theme-toggle {
+    background: linear-gradient(135deg, var(--card-bg-dark) 0%, #2a3441 100%);
+    border-color: var(--accent-dark);
+    color: var(--accent-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .theme-toggle::before {
+    background: linear-gradient(135deg, var(--accent-dark), #FF8A50);
+}
+
+.dark-mode .theme-toggle:hover {
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+    border-color: var(--accent-dark);
+}
+
+.dark-mode .theme-toggle:hover i {
+    color: var(--bg-dark);
+}
+
+.dark-mode .mobile-theme-toggle {
+    background: linear-gradient(135deg, var(--card-bg-dark) 0%, #2a3441 100%);
+    border-color: var(--accent-dark);
+    color: var(--accent-dark);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .mobile-theme-toggle::before {
+    background: linear-gradient(135deg, var(--accent-dark), #FF8A50);
+}
+
+.dark-mode .mobile-theme-toggle:hover {
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+.dark-mode .mobile-theme-toggle:hover i {
+    color: var(--bg-dark);
+}
+
+/* Navigation Dark Mode */
+.dark-mode .navbar {
+    background: var(--nav-bg-dark);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .nav-link {
+    color: var(--text-dark-secondary);
+}
+
+.dark-mode .nav-link:hover,
+.dark-mode .nav-link.active {
+    color: var(--accent-dark);
+}
+
+.dark-mode .nav-link.active::after,
+.dark-mode .nav-link:hover::after {
+    background: linear-gradient(90deg, var(--accent-dark), #FF8A50);
+}
+
+.dark-mode .logo-text {
+    color: var(--text-dark);
+}
+
+.dark-mode .mobile-menu-toggle {
+    color: var(--accent-dark);
+}
+
+/* Hero Section Dark Mode */
+.dark-mode .menu-hero {
+    background: linear-gradient(135deg, var(--bg-dark) 0%, #2a3441 100%);
+}
+
+.dark-mode .menu-hero-content h1 {
+    color: var(--text-dark);
+}
+
+.dark-mode .menu-hero-content p {
+    color: var(--text-dark-secondary);
+}
+
+/* Menu Categories Dark Mode */
+.dark-mode .menu-category h2 {
+    color: var(--text-dark);
+}
+
+.dark-mode .menu-category h2::after {
+    background: linear-gradient(90deg, var(--accent-dark), #FF8A50);
+}
+
+/* Menu Items Dark Mode */
+.dark-mode .menu-item {
+    background: var(--card-bg-dark);
+    border: 1px solid var(--border-dark);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .menu-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(255, 107, 53, 0.2);
+}
+
+.dark-mode .menu-content h3 {
+    color: var(--text-dark);
+}
+
+.dark-mode .menu-content p {
+    color: var(--text-dark-secondary);
+}
+
+.dark-mode .menu-price {
+    color: var(--accent-dark);
+}
+
+/* Buttons Dark Mode */
+.dark-mode .add-to-cart-btn,
+.dark-mode .kiosk-btn,
+.dark-mode .checkout-btn,
+.dark-mode .auth-btn,
+.dark-mode .login-btn {
+    background: var(--btn-bg-dark);
+    border: none;
+}
+
+.dark-mode .add-to-cart-btn:hover,
+.dark-mode .kiosk-btn:hover,
+.dark-mode .checkout-btn:hover,
+.dark-mode .auth-btn:hover,
+.dark-mode .login-btn:hover {
+    background: linear-gradient(135deg, #FF8A50, #FF6B35);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+/* Menu Filter Dark Mode */
+.dark-mode .filter-btn {
+    background: var(--card-bg-dark);
+    color: var(--text-dark-secondary);
+    border: 1px solid var(--border-dark);
+}
+
+.dark-mode .filter-btn:hover,
+.dark-mode .filter-btn.active {
+    background: var(--accent-dark);
+    color: var(--bg-dark);
+    border-color: var(--accent-dark);
+}
+
+/* Cart Sidebar Dark Mode */
+.dark-mode .cart-sidebar {
+    background: var(--card-bg-dark);
+    border-left: 1px solid var(--border-dark);
+}
+
+.dark-mode .cart-header {
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.dark-mode .cart-header h3 {
+    color: var(--text-dark);
+}
+
+.dark-mode .cart-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-dark);
+}
+
+.dark-mode .cart-item-name {
+    color: var(--text-dark);
+}
+
+.dark-mode .cart-item-price,
+.dark-mode .cart-total {
+    color: var(--accent-dark);
+}
+
+.dark-mode .cart-footer {
+    border-top: 1px solid var(--border-dark);
+}
+
+/* Modal Dark Mode */
+.dark-mode .login-modal {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.dark-mode .login-content,
+.dark-mode .auth-modal,
+.dark-mode .order-confirmation-modal {
+    background: var(--card-bg-dark);
+    border: 1px solid var(--border-dark);
+}
+
+.dark-mode .login-header h2,
+.dark-mode .auth-form h2,
+.dark-mode .order-success h2 {
+    color: var(--text-dark);
+}
+
+.dark-mode .login-header p,
+.dark-mode .auth-form p,
+.dark-mode .order-instruction {
+    color: var(--text-dark-secondary);
+}
+
+.dark-mode .login-prototype {
+    color: var(--accent-dark) !important;
+}
+
+/* Form Elements Dark Mode */
+.dark-mode .form-group label {
+    color: var(--text-dark);
+}
+
+.dark-mode .form-group input,
+.dark-mode .input-group input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--border-dark);
+    color: var(--text-dark);
+}
+
+.dark-mode .form-group input::placeholder,
+.dark-mode .input-group input::placeholder {
+    color: var(--text-dark-secondary);
+}
+
+.dark-mode .form-group input:focus,
+.dark-mode .input-group input:focus {
+    border-color: var(--accent-dark);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.dark-mode .input-group i {
+    color: var(--text-dark-secondary);
+}
+
+/* Close Modal Button Dark Mode */
+.dark-mode .close-modal,
+.dark-mode .modal-close {
+    color: var(--text-dark-secondary);
+}
+
+.dark-mode .close-modal:hover,
+.dark-mode .modal-close:hover {
+    color: var(--accent-dark);
+}
+
+/* Account Icon Dark Mode */
+.dark-mode .account-icon {
+    filter: brightness(1.2) contrast(1.1);
+}
+
+/* Menu Badges Dark Mode */
+.dark-mode .menu-badge {
+    background: var(--accent-dark);
+    color: var(--bg-dark);
+}
+
+/* Quantity Controls Dark Mode */
+.dark-mode .qty-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-dark);
+    border: 1px solid var(--border-dark);
+}
+
+.dark-mode .qty-btn:hover {
+    background: var(--hover-dark);
+    border-color: var(--accent-dark);
+}
+
+/* Google Button Dark Mode */
+.dark-mode .google-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--border-dark);
+    color: var(--text-dark);
+}
+
+.dark-mode .google-btn:hover {
+    background: var(--hover-dark);
+    border-color: var(--accent-dark);
+}
+
+/* Auth Divider Dark Mode */
+.dark-mode .auth-divider::before {
+    background: var(--border-dark);
+}
+
+.dark-mode .auth-divider span {
+    background: var(--card-bg-dark);
+    color: var(--text-dark-secondary);
+}
+
+/* Auth Switch Dark Mode */
+.dark-mode .auth-switch {
+    color: var(--text-dark-secondary);
+}
+
+.dark-mode .auth-switch a {
+    color: var(--accent-dark);
+}
+
+/* Order Code Dark Mode */
+.dark-mode .order-code {
+    background: var(--btn-bg-dark);
+    color: var(--bg-dark);
+}
+
+/* Mobile Navigation Dark Mode */
+.dark-mode .nav-menu {
+    background: var(--card-bg-dark);
+    border: 1px solid var(--border-dark);
+}
+
+/* Feature Cards Dark Mode (for index.html compatibility) */
+.dark-mode .feature-card,
+.dark-mode .card {
+    background: var(--card-bg-dark);
+    border: 1px solid var(--border-dark);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .feature-card h3,
+.dark-mode .card h3 {
+    color: var(--text-dark);
+}
+
+.dark-mode .feature-card p,
+.dark-mode .card p {
+    color: var(--text-dark-secondary);
+}
+
+/* Location Cards Dark Mode */
+.dark-mode .location-card {
+    background: var(--card-bg-dark);
+    border: 1px solid var(--border-dark);
+    color: var(--text-dark);
+}
+
+.dark-mode .location-card h3 {
+    color: var(--text-dark);
+}
+
+.dark-mode .location-card p {
+    color: var(--text-dark-secondary);
+}
+
+/* Team Member Cards Dark Mode */
+.dark-mode .team-member {
+    background: var(--card-bg-dark);
+    border: 1px solid var(--border-dark);
+}
+
+.dark-mode .team-member h3 {
+    color: var(--text-dark);
+}
+
+.dark-mode .team-member p {
+    color: var(--text-dark-secondary);
+}
+
+/* Section Headings Dark Mode */
+.dark-mode section h2 {
+    color: var(--text-dark);
+}
+
+.dark-mode section p {
+    color: var(--text-dark-secondary);
+}
+
+/* Additional dark mode section styles */
+body.dark-mode .about,
+body.dark_mode .how-to-order,
+body.dark_mode .locations-section,
+body.dark_mode .team-section,
+body.dark_mode .menu-preview,
+body.dark_mode .features-section {
+    background: var(--bg-dark) !important;
+    color: var(--text-dark) !important;
+}
+
+/* Dark mode hero section */
+body.dark-mode .hero {
+    background: var(--bg-dark-gradient) !important;
+}
+
+body.dark-mode .hero-background {
+    background: var(--bg-dark-gradient) !important;
+}
+
+body.dark-mode .hero-content h1,
+body.dark-mode .ramen-title,
+body.dark-mode .ramen-title-right {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .hero-content p,
+body.dark-mode .ramen-subtitle,
+body.dark-mode .order-note {
+    color: var(--text-dark-secondary) !important;
+}
+
+body.dark-mode .subtitle,
+body.dark-mode .subtitle-right {
+    color: var(--accent-dark) !important;
+}
+
+body.dark-mode .stat-number {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .stat-label {
+    color: var(--text-dark-secondary) !important;
+}
+
+/* Dark mode about section */
+body.dark-mode .about {
+    background: var(--bg-dark) !important;
+}
+
+body.dark-mode .about h2,
+body.dark-mode .about h4 {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .about p {
+    color: var(--text-dark-secondary) !important;
+}
+
+body.dark-mode .about-feature i {
+    color: var(--accent-dark) !important;
+}
+
+/* Dark mode how-to-order section */
+body.dark-mode .how-to-order {
+    background: var(--bg-dark) !important;
+}
+
+body.dark-mode .how-to-order h2 {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .how-to-order p {
+    color: var(--text-dark-secondary) !important;
+}
+
+body.dark-mode .order-method {
+    background: var(--card-bg-dark) !important;
+    border: 1px solid var(--border-dark) !important;
+}
+
+body.dark-mode .method-icon {
+    background: var(--accent-dark) !important;
+    color: white !important;
+}
+
+/* Dark mode team cards */
+body.dark-mode .team-card {
+    background: var(--card-bg-dark) !important;
+    border: 1px solid var(--border-dark) !important;
+    color: var(--text-dark) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .team-card h3 {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .team-card p {
+    color: var(--text-dark-secondary) !important;
+}
+
+/* Dark mode location cards */
+body.dark-mode .location-card {
+    background: var(--card-bg-dark) !important;
+    border: 1px solid var(--border-dark) !important;
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .location-card h3 {
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .location-card p {
+    color: var(--text-dark-secondary) !important;
+}
+
+/* Remove borders from nav links in dark mode */
+body.dark-mode .nav-link::after {
+    display: none !important;
+    content: none !important;
+    height: 0 !important;
+    background: none !important;
+}
+
+body.dark-mode .nav-link.active::after,
+body.dark-mode .nav-link:hover::after {
+    display: none !important;
+    content: none !important;
+    height: 0 !important;
+    background: none !important;
+    animation: none !important;
+}
+
+/* Ensure no borders on navigation links */
+body.dark-mode .nav-link {
+    border: none !important;
+    border-bottom: none !important;
+    border-top: none !important;
+    box-shadow: none !important;
+}
+
+body.dark-mode .nav-link.active,
+body.dark-mode .nav-link:hover {
+    border: none !important;
+    border-bottom: none !important;
+    border-top: none !important;
+    box-shadow: none !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Dark mode footer with better contrast */
+body.dark-mode .footer {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%) !important;
+    color: var(--text-dark) !important;
+}
+
+body.dark-mode .footer-logo span {
+    color: var(--accent-dark) !important;
+}
+
+body.dark-mode .footer h4 {
+    color: var(--accent-dark) !important;
+}
+
+body.dark-mode .footer p,
+body.dark-mode .footer li a {
+    color: var(--text-dark-secondary) !important;
+}
+
+body.dark-mode .footer a:hover {
+    color: var(--accent-dark) !important;
+}
+
+body.dark-mode .footer-bottom {
+    border-top: 1px solid var(--border-dark) !important;
+    color: var(--text-dark-secondary) !important;
+}
+
+body.dark-mode .social-links a {
+    background: var(--card-bg-dark) !important;
+    color: var(--text-dark-secondary) !important;
+    border: 1px solid var(--border-dark) !important;
+}
+
+body.dark-mode .social-links a:hover {
+    background: var(--accent-dark) !important;
+    color: white !important;
+}
+
+/* Dark mode order buttons */
+body.dark-mode .order-btn.primary {
+    background: var(--accent-dark) !important;
+    color: white !important;
+    border: none !important;
+}
+
+body.dark-mode .order-btn.primary:hover {
+    background: #FF8A50 !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Dark mode floating elements */
+body.dark-mode .floating-element {
+    background: rgba(255, 107, 53, 0.1) !important;
+    border: 1px solid rgba(255, 107, 53, 0.2) !important;
+}
+
+/* ULTIMATE BODY OVERRIDE - This must be the last override */
+body.dark-mode {
+    background: #1a1f2e !important;
+    background-image: linear-gradient(135deg, #1a1f2e 0%, #232836 100%) !important;
+    background-color: #1a1f2e !important;
+    color: #ffffff !important;
+    font-family: 'Inter', sans-serif !important;
+    line-height: 1.6 !important;
+}
+
+/* Force all major sections to inherit dark background */
+body.dark-mode section,
+body.dark-mode .hero,
+body.dark-mode .about,
+body.dark_mode .how-to-order,
+body.dark_mode .team,
+body.dark_mode .locations,
+body.dark_mode main,
+body.dark_mode article {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: inherit !important;
+}
+
+/* Reset any specific background gradients or colors on sections */
+body.dark-mode .hero-background,
+body.dark-mode .section-background {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* Smooth transitions for theme switching */
+* {
+    transition: background-color 0.3s ease, 
+                color 0.3s ease, 
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+/* Focus states for accessibility */
+.theme-toggle:focus,
+.mobile-theme-toggle:focus {
+    outline: 2px solid var(--accent-light);
+    outline-offset: 2px;
+}
+
+.dark-mode .theme-toggle:focus,
+.dark-mode .mobile-theme-toggle:focus {
+    outline-color: var(--accent-dark);
+}

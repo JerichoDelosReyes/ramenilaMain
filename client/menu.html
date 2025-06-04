@@ -15,6 +15,7 @@
         }
     </style>
     <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="assets/img/ramenlogo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -49,6 +50,9 @@
 
             <!-- Desktop Navigation Actions -->
             <div class="nav-actions desktop-only">
+                <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
                 <button class="kiosk-btn" onclick="showOrderModal('kiosk')">
                     <i class="fas fa-utensils"></i>
                     Order at Kiosk
@@ -62,6 +66,9 @@
 
             <!-- Mobile Navigation -->
             <div class="mobile-nav">
+                <button class="theme-toggle mobile-theme-toggle" id="mobileThemeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
                 <button class="mobile-kiosk" onclick="showOrderModal('kiosk')">
                     <i class="fas fa-utensils"></i>
                 </button>
@@ -385,6 +392,7 @@
     </div>
 
     <!-- JavaScript -->
+    <script src="assets/js/theme.js"></script>
     <script src="assets/js/menu.js"></script>
 </body>
 </html>
