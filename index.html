@@ -9,7 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="assets/img/ramenlogo.png" type="image/png">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="client/assets/css/theme.css">
+    <link rel="icon" href="client/assets/img/ramenlogo.png" type="image/png">
 </head>
 <body>   
     <nav class="navbar">
@@ -40,10 +42,14 @@
 
             </ul>
             
-            <div class="nav-actions">
-                <button class="kiosk-btn">
+            <!-- Desktop Navigation Actions -->
+            <div class="nav-actions desktop-only">
+                <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="kiosk-btn" onclick="showLoginModal()" title="Order at Kiosk">
                     <i class="fas fa-utensils"></i>
-                    Order at Kiosk
+                    <span>Order at Kiosk</span>
                 </button>
                 <div class="nav-account">
                     <button class="account-link" id="accountBtn">
@@ -54,15 +60,18 @@
 
             <!-- Mobile Navigation -->
             <div class="mobile-nav">
+                <button class="theme-toggle mobile-theme-toggle" id="mobileThemeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
                 <button class="mobile-kiosk" onclick="showKioskModal()">
                     <i class="fas fa-utensils"></i>
                 </button>
                 <button class="mobile-account" id="mobileAccountBtn">
                     <img src="client/assets/img/accounts.png" alt="Account" class="account-icon">
                 </button>
-                <div class="mobile-menu-toggle">
+                <button type="button" class="mobile-menu-toggle" aria-label="Toggle mobile menu">
                     <i class="fas fa-bars"></i>
-                </div>
+                </button>
             </div>
         </div>
     </nav>   
@@ -89,7 +98,6 @@
                             <input type="password" id="password" placeholder="Enter your password" required>
                         </div>
                         <button type="submit" class="login-btn">Sign In</button>
-                        <a href="#" class="forgot-password">Forgot password?</a>
                     </form>
                 </div>
             </div>
@@ -406,7 +414,7 @@
 
                 <a href="https://www.facebook.com/znn666" target="_blank" class="team-member">
                     <div class="member-image">
-                        <img src="client/assets/img/justinePic.jpg" alt="Justine Lawrence">
+                        <img src="client/assets/img/justinePic.png" alt="Justine Lawrence">
                     </div>
                     <h3>Justine Lawrence</h3>
                     <span class="role">Co-Lead, Frontend Developer</span>
@@ -426,7 +434,7 @@
 
                 <a href="https://www.facebook.com/Turonskiiee" target="_blank" class="team-member">
                     <div class="member-image">
-                        <img src="client/assets/img/adrianPic.jpg" alt="Lee Adrian">
+                        <img src="client/assets/img/adrianPic.png" alt="Lee Adrian">
                     </div>
                     <h3>Lee Adrian</h3>
                     <span class="role">Backend Developer</span>
@@ -512,5 +520,70 @@
 
     <!-- JavaScript -->
     <script src="client/assets/js/landing.js"></script>
+    
+    <!-- Mobile-specific style fixes -->
+    <style>
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+                visibility: visible !important;
+            }
+            .nav-menu.active {
+                display: flex !important;
+            }
+            .mobile-menu-toggle {
+                display: block !important;
+            }
+        }
+    </style>
+    
+    <!-- Mobile menu fix - simplified implementation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM fully loaded');
+            
+            // Get elements
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            console.log('Menu elements:', {toggle: mobileMenuToggle, menu: navMenu});
+            
+            // Ensure elements exist and add direct click handler
+            if (mobileMenuToggle && navMenu) {
+                // Remove any existing click handlers first
+                const newToggle = mobileMenuToggle.cloneNode(true);
+                mobileMenuToggle.parentNode.replaceChild(newToggle, mobileMenuToggle);
+                
+                // Add new click handler
+                newToggle.addEventListener('click', function(e) {
+                    console.log('Mobile menu button clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Toggle menu visibility
+                    if (navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                        this.classList.remove('active');
+                        const icon = this.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                        console.log('Menu closed');
+                    } else {
+                        navMenu.classList.add('active');
+                        this.classList.add('active');
+                        const icon = this.querySelector('i');
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                        console.log('Menu opened');
+                    }
+                });
+                
+                console.log('Mobile menu click handler attached');
+            }
+        });
+    </script>
+    <script src="client/assets/js/theme.js"></script>
 </body>
 </html>

@@ -4,12 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu - Ramenila</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            border: none;
+            outline: none;
+            overflow-x: hidden;
+            width: 100%;
+        }
+    </style>
     <link rel="stylesheet" href="assets/css/menu.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="assets/img/ramenlogo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>    <!-- Navigation -->
+<body class="border-fix" style="margin: 0; padding: 0; border: none; outline: none;">    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
@@ -33,12 +44,15 @@
                     <a href="../index.html#locations" class="nav-link">Locations</a>
                 </li>
                 <li class="nav-item">
-                    <a href="../index.html#contact" class="nav-link">Contact</a>
+                    <a href="../index.html#team" class="nav-link">team</a>
                 </li>
             </ul>
 
             <!-- Desktop Navigation Actions -->
             <div class="nav-actions desktop-only">
+                <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
                 <button class="kiosk-btn" onclick="showOrderModal('kiosk')">
                     <i class="fas fa-utensils"></i>
                     Order at Kiosk
@@ -52,6 +66,9 @@
 
             <!-- Mobile Navigation -->
             <div class="mobile-nav">
+                <button class="theme-toggle mobile-theme-toggle" id="mobileThemeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
                 <button class="mobile-kiosk" onclick="showOrderModal('kiosk')">
                     <i class="fas fa-utensils"></i>
                 </button>
@@ -89,7 +106,6 @@
                             <input type="password" id="password" placeholder="Enter your password" required>
                         </div>
                         <button type="submit" class="login-btn">Sign In</button>
-                        <a href="#" class="forgot-password">Forgot password?</a>
                     </form>
                 </div>
             </div>
@@ -130,9 +146,6 @@
                             <h3>Hakodate Ramen</h3>
                             <p>Traditional Hakodate-style ramen with rich seafood broth</p>
                             <div class="menu-price">₱150</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -144,9 +157,6 @@
                             <h3>Kitakata Ramen</h3>
                             <p>Famous for its thick, wavy noodles and light soy sauce-based broth</p>
                             <div class="menu-price">₱270</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -158,9 +168,6 @@
                             <h3>Spicy Ramen</h3>
                             <p>Hot and flavorful ramen with spicy miso-based broth</p>
                             <div class="menu-price">₱150</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -172,9 +179,6 @@
                             <h3>Shoyu Ramen</h3>
                             <p>Classic soy sauce-based ramen with tender chashu pork</p>
                             <div class="menu-price">₱200</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -186,9 +190,6 @@
                             <h3>Tokushima Ramen</h3>
                             <p>Rich pork bone broth with dark soy sauce and raw egg</p>
                             <div class="menu-price">₱250</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -200,9 +201,6 @@
                             <h3>Yamagata Ramen</h3>
                             <p>Regional specialty with chicken-based broth and thin noodles</p>
                             <div class="menu-price">₱150</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -214,9 +212,6 @@
                             <h3>Takayama Ramen</h3>
                             <p>Rich and savory broth with local mountain vegetables</p>
                             <div class="menu-price">₱200</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -228,9 +223,6 @@
                             <h3>Shio Ramen</h3>
                             <p>Light and delicate salt-based broth with tender pork</p>
                             <div class="menu-price">₱200</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -242,9 +234,6 @@
                             <h3>Miso Ramen</h3>
                             <p>Hearty miso-based broth with corn and butter</p>
                             <div class="menu-price">₱200</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -262,9 +251,6 @@
                             <h3>Pork Gyoza (6pcs)</h3>
                             <p>Pan-fried dumplings with juicy pork filling</p>
                             <div class="menu-price">₱150</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -276,9 +262,6 @@
                             <h3>Chicken Karaage</h3>
                             <p>Crispy Japanese fried chicken with mayo dip</p>
                             <div class="menu-price">₱180</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -290,9 +273,6 @@
                             <h3>Edamame</h3>
                             <p>Steamed young soybeans with sea salt</p>
                             <div class="menu-price">₱120</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -304,9 +284,6 @@
                             <h3>Takoyaki (6pcs)</h3>
                             <p>Octopus balls with takoyaki sauce and bonito flakes</p>
                             <div class="menu-price">₱160</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -324,9 +301,6 @@
                             <h3>Hot Green Tea</h3>
                             <p>Traditional Japanese green tea</p>
                             <div class="menu-price">₱80</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -338,9 +312,6 @@
                             <h3>Iced Lemon Tea</h3>
                             <p>Refreshing iced tea with fresh lemon</p>
                             <div class="menu-price">₱90</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -352,9 +323,6 @@
                             <h3>Soft Drinks</h3>
                             <p>Coke, Sprite, Orange, or Royal</p>
                             <div class="menu-price">₱60</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -366,9 +334,6 @@
                             <h3>Japanese Beer</h3>
                             <p>Asahi or Sapporo (18+ only)</p>
                             <div class="menu-price">₱150</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -386,9 +351,6 @@
                             <h3>Mochi Ice Cream (3pcs)</h3>
                             <p>Vanilla, strawberry, and green tea flavors</p>
                             <div class="menu-price">₱140</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
 
@@ -400,9 +362,6 @@
                             <h3>Dorayaki</h3>
                             <p>Pancake sandwich with sweet red bean filling</p>
                             <div class="menu-price">₱120</div>
-                            <button class="add-to-cart-btn" onclick="showOrderModal('kiosk')">
-                                <i class="fas fa-plus"></i> Add to Cart
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -433,6 +392,7 @@
     </div>
 
     <!-- JavaScript -->
+    <script src="assets/js/theme.js"></script>
     <script src="assets/js/menu.js"></script>
 </body>
 </html>
