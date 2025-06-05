@@ -1,5 +1,11 @@
 /* Dark Mode Theme CSS */
 
+/* Basic performance optimization */
+* {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
 /* CSS Variables for Light and Dark Themes */
 :root {
     /* Light theme colors */
@@ -9,17 +15,24 @@
     --card-bg-light: #ffffff;
     --border-light: #e0d5c7;
     --accent-light: #8B4513;
-    
-    /* Dark theme colors */
+      /* Dark theme colors with enhanced contrast */
     --bg-dark: #1a1f2e;
     --bg-dark-gradient: linear-gradient(135deg, #1a1f2e 0%, #232836 100%);
     --text-dark: #ffffff;
-    --text-dark-secondary: #a8b3cf;
+    --text-dark-primary: #ffffff;
+    --text-dark-secondary: #d1d9e6;
+    --text-dark-tertiary: #a8b3cf;
     --nav-bg-dark: rgba(26, 31, 46, 0.95);
     --card-bg-dark: #242937;
-    --border-dark: rgba(255, 255, 255, 0.1);
+    --border-dark: rgba(255, 255, 255, 0.15);
     --accent-dark: #FF6B35;
+    --accent-glow: rgba(255, 107, 53, 0.4);
     --hover-dark: rgba(255, 107, 53, 0.1);
+    
+    /* Glow effects */
+    --text-glow: 0 0 10px rgba(255, 255, 255, 0.3);
+    --accent-text-glow: 0 0 15px rgba(255, 107, 53, 0.5);
+    --card-glow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 107, 53, 0.1);
     
     /* Button colors */
     --btn-bg-dark: linear-gradient(135deg, #FF6B35, #FF8A50);
@@ -90,15 +103,9 @@
     font-weight: 600;
 }
 
-/* Toggle animation when switching themes */
+/* Simple theme toggle styling */
 .theme-toggle.switching i {
-    animation: themeSwitch 0.6s ease-in-out;
-}
-
-@keyframes themeSwitch {
-    0% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(180deg) scale(0.8); opacity: 0.5; }
-    100% { transform: rotate(360deg) scale(1); }
+    transition: transform 0.3s ease;
 }
 
 /* Mobile theme toggle */
@@ -161,7 +168,7 @@
 }
 
 .mobile-theme-toggle.switching i {
-    animation: themeSwitch 0.6s ease-in-out;
+    transition: transform 0.3s ease;
 }
 
 /* Dark Mode Styles */
@@ -276,9 +283,79 @@ body.dark-mode .footer a:hover {
 }
 
 /* Force all cards to dark theme */
+/* Enhanced Dark Mode Styling for About Features */
+body.dark-mode .about-features {
+    background: transparent;
+}
+
+body.dark-mode .about-feature {
+    background: rgba(25, 30, 40, 0.95) !important;
+    border: 1px solid rgba(255, 107, 53, 0.15) !important;
+    backdrop-filter: blur(20px) !important;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 4px 16px rgba(255, 107, 53, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .about-feature:hover {
+    background: rgba(30, 35, 45, 0.98) !important;
+    border-color: rgba(255, 107, 53, 0.3) !important;
+    box-shadow: 
+        0 12px 48px rgba(0, 0, 0, 0.6),
+        0 6px 24px rgba(255, 107, 53, 0.2),
+        0 0 32px rgba(255, 107, 53, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-mode .about-feature::before {
+    background: linear-gradient(90deg, #FF6B35, #FF8A50, #FFA726) !important;
+}
+
+body.dark-mode .about-feature i {
+    background: linear-gradient(135deg, #FF6B35, #FF8A50) !important;
+    box-shadow: 
+        0 6px 20px rgba(255, 107, 53, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-mode .about-feature:hover i {
+    box-shadow: 
+        0 8px 28px rgba(255, 107, 53, 0.5),
+        0 4px 14px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(255, 107, 53, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+body.dark-mode .about-feature h4 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 700 !important;
+}
+
+body.dark-mode .about-feature:hover h4 {
+    color: #FF8A50 !important;
+    text-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.6),
+        0 0 16px rgba(255, 107, 53, 0.3) !important;
+}
+
+body.dark-mode .about-feature p {
+    color: #cbd5e1 !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4) !important;
+    opacity: 0.9 !important;
+}
+
+body.dark-mode .about-feature:hover p {
+    color: #e2e8f0 !important;
+    opacity: 1 !important;
+}
+
+/* Remove the old generic styling */
 body.dark-mode .card,
 body.dark-mode .feature-card,
-body.dark-mode .about-feature,
 body.dark-mode .order-method,
 body.dark-mode .method-card {
     background: #242937 !important;
@@ -289,8 +366,7 @@ body.dark-mode .method-card {
 /* Force buttons to orange theme */
 body.dark-mode .btn,
 body.dark-mode .order-btn,
-body.dark-mode .kiosk-btn,
-body.dark-mode button:not(.theme-toggle):not(.mobile-theme-toggle) {
+body.dark-mode button:not(.theme-toggle):not(.mobile-theme-toggle):not(.kiosk-btn):not(.account-link) {
     background: #FF6B35 !important;
     color: white !important;
     border: none !important;
@@ -298,8 +374,7 @@ body.dark-mode button:not(.theme-toggle):not(.mobile-theme-toggle) {
 
 body.dark-mode .btn:hover,
 body.dark-mode .order-btn:hover,
-body.dark-mode .kiosk-btn:hover,
-body.dark-mode button:not(.theme-toggle):not(.mobile-theme-toggle):hover {
+body.dark-mode button:not(.theme-toggle):not(.mobile-theme-toggle):not(.kiosk-btn):not(.account-link):hover {
     background: #FF8A50 !important;
 }
 
@@ -311,7 +386,7 @@ body.dark-mode .floating-element {
 
 /* Brown to orange theme conversion */
 body.dark-mode [style*="8B4513"],
-body.dark-mode [style*="#8B4513"] {
+body.dark.mode [style*="#8B4513"] {
     color: #FF6B35 !important;
 }
 
@@ -329,7 +404,7 @@ body.dark-mode .mobile-menu {
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Force all icons to appropriate colors */
+/* Force all icons to appropriate colors - with stronger specificity for feature icons */
 body.dark-mode .fa,
 body.dark-mode .fas,
 body.dark-mode .fab,
@@ -337,9 +412,47 @@ body.dark-mode i {
     color: inherit !important;
 }
 
+/* Override inheritance for feature icons specifically */
+body.dark-mode .feature-card i,
+body.dark-mode .features-section i,
+body.dark-mode .about-feature i {
+    color: #ffffff !important;
+}
+
+/* Feature Card Icon Visibility Fix - Enhanced for Premium Dark Mode */
+body.dark-mode .feature-icon,
+body.dark-mode .method-icon {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #FF6B35, #FF8A50) !important;
+}
+
 body.dark-mode .feature-icon i,
-body.dark-mode .method-icon i {
-    color: #FF6B35 !important;
+body.dark-mode .method-icon i,
+body.dark-mode .feature-card .feature-icon i,
+body.dark-mode .card .feature-icon i,
+body.dark-mode .features-section .feature-icon i {
+    color: #ffffff !important;
+    font-size: 1.8rem !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2)) !important;
+    z-index: 10 !important;
+    position: relative !important;
+    opacity: 1 !important;
+    font-weight: 900 !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-fill-color: #ffffff !important;
+}
+
+/* Specific targeting for FontAwesome classes */
+body.dark-mode .feature-icon .fa,
+body.dark-mode .feature-icon .fas,
+body.dark-mode .feature-icon .fab,
+body.dark-mode .method-icon .fa,
+body.dark-mode .method-icon .fas,
+body.dark-mode .method-icon .fab {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-fill-color: #ffffff !important;
 }
 
 /* Force contact info and other elements */
@@ -568,33 +681,106 @@ body.dark-mode .btn-secondary:hover {
     background: linear-gradient(90deg, var(--accent-dark), #FF8A50);
 }
 
-/* Menu Items Dark Mode */
+/* Menu Items Dark Mode - Enhanced Premium Styling */
 .dark-mode .menu-item {
-    background: var(--card-bg-dark);
-    border: 1px solid var(--border-dark);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, 
+        rgba(36, 41, 55, 0.95) 0%, 
+        rgba(45, 55, 72, 0.9) 50%,
+        rgba(32, 37, 50, 0.95) 100%) !important;
+    border: 1px solid rgba(255, 107, 53, 0.15) !important;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(255, 107, 53, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(15px) !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
 }
 
 .dark-mode .menu-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(255, 107, 53, 0.2);
+    transform: translateY(-10px) scale(1.03) !important;
+    box-shadow: 
+        0 35px 90px rgba(0, 0, 0, 0.5),
+        0 20px 45px rgba(0, 0, 0, 0.4),
+        0 0 35px rgba(255, 107, 53, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 107, 53, 0.3) !important;
+}
+
+.dark-mode .menu-item::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: radial-gradient(circle at 30% 70%, rgba(255, 107, 53, 0.04) 0%, transparent 60%) !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+}
+
+.dark-mode .menu-item .menu-image {
+    position: relative !important;
+    z-index: 2 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark-mode .menu-item .menu-image img {
+    transition: all 0.3s ease !important;
+    filter: brightness(0.9) contrast(1.1) saturate(1.1) !important;
+}
+
+.dark-mode .menu-item:hover .menu-image img {
+    transform: scale(1.05) !important;
+    filter: brightness(1.0) contrast(1.2) saturate(1.2) !important;
+}
+
+.dark-mode .menu-content {
+    position: relative !important;
+    z-index: 2 !important;
 }
 
 .dark-mode .menu-content h3 {
-    color: var(--text-dark);
+    color: var(--text-dark) !important;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.2) !important;
+    font-weight: 700 !important;
+    margin-bottom: 12px !important;
 }
 
 .dark-mode .menu-content p {
-    color: var(--text-dark-secondary);
+    color: #e2e8f0 !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1) !important;
+    line-height: 1.6 !important;
+    margin-bottom: 16px !important;
 }
 
 .dark-mode .menu-price {
-    color: var(--accent-dark);
+    background: linear-gradient(135deg, #FF6B35, #FF8A50) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    text-shadow: 0 0 20px rgba(255, 107, 53, 0.5) !important;
+    filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3)) !important;
+    font-weight: 800 !important;
+    font-size: 1.4em !important;
+}
+
+.dark-mode .menu-badge {
+    background: linear-gradient(135deg, #FF6B35, #FF8A50) !important;
+    color: white !important;
+    box-shadow: 
+        0 4px 15px rgba(255, 107, 53, 0.4),
+        0 0 10px rgba(255, 107, 53, 0.3) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(10px) !important;
 }
 
 /* Buttons Dark Mode */
 .dark-mode .add-to-cart-btn,
-.dark-mode .kiosk-btn,
 .dark-mode .checkout-btn,
 .dark-mode .auth-btn,
 .dark-mode .login-btn {
@@ -603,7 +789,6 @@ body.dark-mode .btn-secondary:hover {
 }
 
 .dark-mode .add-to-cart-btn:hover,
-.dark-mode .kiosk-btn:hover,
 .dark-mode .checkout-btn:hover,
 .dark-mode .auth-btn:hover,
 .dark-mode .login-btn:hover {
@@ -783,28 +968,108 @@ body.dark-mode .btn-secondary:hover {
     color: var(--bg-dark);
 }
 
-/* Mobile Navigation Dark Mode */
-.dark-mode .nav-menu {
-    background: var(--card-bg-dark);
-    border: 1px solid var(--border-dark);
-}
+/* Mobile Navigation Dark Mode - Removed as requested */
 
-/* Feature Cards Dark Mode (for index.html compatibility) */
+/* Feature Cards Dark Mode - Enhanced Premium Styling */
 .dark-mode .feature-card,
 .dark-mode .card {
-    background: var(--card-bg-dark);
-    border: 1px solid var(--border-dark);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, 
+        rgba(36, 41, 55, 0.95) 0%, 
+        rgba(45, 55, 72, 0.9) 50%,
+        rgba(32, 37, 50, 0.95) 100%) !important;
+    border: 1px solid rgba(255, 107, 53, 0.15) !important;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(255, 107, 53, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(15px) !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.dark-mode .feature-card:hover,
+.dark-mode .card:hover {
+    transform: translateY(-8px) scale(1.02) !important;
+    box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.5),
+        0 15px 35px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(255, 107, 53, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 107, 53, 0.25) !important;
+}
+
+.dark-mode .feature-card::before,
+.dark-mode .card::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.03) 0%, transparent 70%) !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+}
+
+.dark-mode .feature-card .feature-icon,
+.dark-mode .card .feature-icon {
+    position: relative !important;
+    z-index: 2 !important;
+    background: linear-gradient(135deg, #FF6B35, #FF8A50) !important;
+    box-shadow: 
+        0 8px 20px rgba(255, 107, 53, 0.3),
+        0 0 15px rgba(255, 107, 53, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+.dark-mode .feature-card:hover .feature-icon,
+.dark-mode .card:hover .feature-icon {
+    transform: scale(1.1) !important;
+    box-shadow: 
+        0 12px 30px rgba(255, 107, 53, 0.4),
+        0 0 25px rgba(255, 107, 53, 0.3) !important;
+}
+
+/* Enhanced hover state for feature card icons */
+.dark-mode .feature-card:hover .feature-icon,
+.dark-mode .card:hover .feature-icon {
+    transform: scale(1.1) !important;
+    background: linear-gradient(135deg, #FF8A50, #FFA726) !important;
+    box-shadow: 
+        0 12px 30px rgba(255, 107, 53, 0.4),
+        0 0 25px rgba(255, 107, 53, 0.3) !important;
+}
+
+.dark-mode .feature-card:hover .feature-icon i,
+.dark-mode .card:hover .feature-icon i {
+    color: #ffffff !important;
+    transform: scale(1.05) !important;
+    text-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.6),
+        0 0 15px rgba(255, 255, 255, 0.4) !important;
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.3)) brightness(1.2) !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-fill-color: #ffffff !important;
 }
 
 .dark-mode .feature-card h3,
 .dark-mode .card h3 {
-    color: var(--text-dark);
+    color: var(--text-dark) !important;
+    position: relative !important;
+    z-index: 2 !important;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.2) !important;
+    font-weight: 700 !important;
 }
 
 .dark-mode .feature-card p,
 .dark-mode .card p {
-    color: var(--text-dark-secondary);
+    color: #e2e8f0 !important;
+    position: relative !important;
+    z-index: 2 !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1) !important;
+    line-height: 1.7 !important;
 }
 
 /* Location Cards Dark Mode */
@@ -826,23 +1091,105 @@ body.dark-mode .btn-secondary:hover {
 .dark-mode .team-member {
     background: var(--card-bg-dark);
     border: 1px solid var(--border-dark);
+    box-shadow: var(--card-glow);
+}
+
+.dark-mode .team-member:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 0 25px rgba(255, 107, 53, 0.15);
 }
 
 .dark-mode .team-member h3 {
     color: var(--text-dark);
+    text-shadow: var(--text-glow);
+    font-weight: 600;
 }
 
-.dark-mode .team-member p {
-    color: var(--text-dark-secondary);
+.dark-mode .team-member p,
+.dark-mode .team-member .member-desc {
+    color: #e8f0fc !important; /* Much brighter than --text-dark-secondary for better readability */
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    font-weight: 400;
 }
 
-/* Section Headings Dark Mode */
-.dark-mode section h2 {
+.dark-mode .team-member .role {
+    color: var(--accent-dark);
+    text-shadow: var(--accent-text-glow);
+    font-weight: 500;
+}
+
+.dark-mode .team-member .hobby,
+.dark-mode .team-member .member-hobby,
+.dark-mode .team-member .member-hobby span {
+    color: #f0f8ff !important; /* Even brighter for hobby text */
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+.dark-mode .team-member .tech-stack span {
     color: var(--text-dark);
+    background: rgba(255, 107, 53, 0.15);
+    border: 1px solid rgba(255, 107, 53, 0.3);
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .team-member .tech-stack span:hover {
+    background: rgba(255, 107, 53, 0.25);
+    border-color: var(--accent-dark);
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+}
+
+/* Section Headings Dark Mode - Enhanced */
+.dark-mode section h2 {
+    color: var(--text-dark) !important;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3) !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2)) !important;
+    position: relative !important;
+}
+
+.dark-mode section h2::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: -8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 60px !important;
+    height: 3px !important;
+    background: linear-gradient(90deg, #FF6B35, #FF8A50, #FFA726) !important;
+    border-radius: 2px !important;
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.5) !important;
 }
 
 .dark-mode section p {
-    color: var(--text-dark-secondary);
+    color: #e2e8f0 !important;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.15) !important;
+    line-height: 1.7 !important;
+}
+
+/* Enhanced Section Backgrounds */
+.dark-mode .menu-preview,
+.dark-mode .about,
+.dark-mode .features-section {
+    background: var(--bg-dark-gradient) !important;
+    position: relative !important;
+}
+
+.dark-mode .menu-preview::before,
+.dark-mode .about::before,
+.dark-mode .features-section::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 138, 80, 0.02) 0%, transparent 50%) !important;
+    pointer-events: none !important;
 }
 
 /* Additional dark mode section styles */
@@ -850,10 +1197,158 @@ body.dark-mode .about,
 body.dark_mode .how-to-order,
 body.dark_mode .locations-section,
 body.dark_mode .team-section,
+body.dark_mode .team,
 body.dark_mode .menu-preview,
 body.dark_mode .features-section {
     background: var(--bg-dark) !important;
     color: var(--text-dark) !important;
+}
+
+/* Team section specific styling */
+body.dark-mode .team h2,
+body.dark-mode .team-section h2 {
+    color: var(--text-dark) !important;
+    text-shadow: var(--text-glow) !important;
+}
+
+body.dark-mode .team p,
+body.dark-mode .team-section p {
+    color: #e8f0fc !important; /* Enhanced brightness for team section text */
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* University section dark mode styling - Enhanced */
+body.dark-mode .university-info {
+    background: linear-gradient(135deg, 
+        rgba(36, 41, 55, 0.95) 0%, 
+        rgba(45, 55, 72, 0.9) 50%,
+        rgba(32, 37, 50, 0.95) 100%) !important;
+    border: 1px solid rgba(255, 107, 53, 0.15) !important;
+    box-shadow: 
+        0 25px 80px rgba(0, 0, 0, 0.4),
+        0 12px 32px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(255, 107, 53, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(20px) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+}
+
+body.dark-mode .university-info:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 
+        0 35px 100px rgba(0, 0, 0, 0.5),
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(255, 107, 53, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 107, 53, 0.25) !important;
+}
+
+body.dark-mode .university-info::before {
+    background: linear-gradient(90deg, #FF6B35, #FF8A50, #FFA726, #FF6B35) !important;
+    height: 5px !important;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5) !important;
+}
+
+body.dark-mode .university-info::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: radial-gradient(circle at 70% 30%, rgba(255, 107, 53, 0.05) 0%, transparent 50%) !important;
+    pointer-events: none !important;
+}
+
+body.dark-mode .uni-content {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+body.dark-mode .uni-content h3 {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8A50 50%, #FFA726 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    text-shadow: 0 0 20px rgba(255, 107, 53, 0.6) !important;
+    filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3)) !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px !important;
+}
+
+body.dark-mode .uni-content p {
+    color: #e2e8f0 !important;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.15) !important;
+    line-height: 1.8 !important;
+    font-weight: 400 !important;
+}
+
+body.dark-mode .uni-content p strong {
+    color: #FF6B35 !important;
+    text-shadow: 
+        0 0 15px rgba(255, 107, 53, 0.4),
+        0 1px 3px rgba(255, 107, 53, 0.2) !important;
+    font-weight: 700 !important;
+    background: linear-gradient(135deg, #FF6B35, #FF8A50) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+body.dark-mode .location-link {
+    color: #FF6B35 !important;
+    text-shadow: 0 0 15px rgba(255, 107, 53, 0.4) !important;
+    background: rgba(255, 107, 53, 0.1) !important;
+    padding: 12px 24px !important;
+    border-radius: 50px !important;
+    border: 2px solid rgba(255, 107, 53, 0.2) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+body.dark-mode .location-link:hover {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #FF6B35, #FF8A50) !important;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5) !important;
+    border-color: #FF8A50 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 
+        0 8px 25px rgba(255, 107, 53, 0.4),
+        0 0 20px rgba(255, 107, 53, 0.3) !important;
+}
+
+body.dark-mode .location-link i {
+    font-size: 1.1em !important;
+    filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.5)) !important;
+}
+
+body.dark-mode .uni-map {
+    position: relative !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(255, 107, 53, 0.1) !important;
+}
+
+body.dark-mode .uni-map img {
+    opacity: 0.85 !important;
+    filter: brightness(0.75) contrast(1.15) saturate(1.1) !important;
+    transition: all 0.3s ease !important;
+    border-radius: 16px !important;
+}
+
+body.dark-mode .uni-map:hover img {
+    opacity: 0.95 !important;
+    filter: brightness(0.85) contrast(1.2) saturate(1.2) !important;
+    transform: scale(1.02) !important;
 }
 
 /* Dark mode hero section */
@@ -890,174 +1385,201 @@ body.dark-mode .stat-label {
     color: var(--text-dark-secondary) !important;
 }
 
-/* Dark mode about section */
-body.dark-mode .about {
-    background: var(--bg-dark) !important;
+/* Enhanced Hero Stats Dark Mode Styling */
+body.dark-mode .hero-stats {
+    margin-top: 40px;
 }
 
-body.dark-mode .about h2,
-body.dark-mode .about h4 {
-    color: var(--text-dark) !important;
-}
-
-body.dark-mode .about p {
-    color: var(--text-dark-secondary) !important;
-}
-
-body.dark-mode .about-feature i {
-    color: var(--accent-dark) !important;
-}
-
-/* Dark mode how-to-order section */
-body.dark-mode .how-to-order {
-    background: var(--bg-dark) !important;
-}
-
-body.dark-mode .how-to-order h2 {
-    color: var(--text-dark) !important;
-}
-
-body.dark-mode .how-to-order p {
-    color: var(--text-dark-secondary) !important;
-}
-
-body.dark-mode .order-method {
-    background: var(--card-bg-dark) !important;
-    border: 1px solid var(--border-dark) !important;
-}
-
-body.dark-mode .method-icon {
-    background: var(--accent-dark) !important;
-    color: white !important;
-}
-
-/* Dark mode team cards */
-body.dark-mode .team-card {
-    background: var(--card-bg-dark) !important;
-    border: 1px solid var(--border-dark) !important;
-    color: var(--text-dark) !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
-}
-
-body.dark-mode .team-card h3 {
-    color: var(--text-dark) !important;
-}
-
-body.dark-mode .team-card p {
-    color: var(--text-dark-secondary) !important;
-}
-
-/* Dark mode location cards */
-body.dark-mode .location-card {
-    background: var(--card-bg-dark) !important;
-    border: 1px solid var(--border-dark) !important;
-    color: var(--text-dark) !important;
-}
-
-body.dark-mode .location-card h3 {
-    color: var(--text-dark) !important;
-}
-
-body.dark-mode .location-card p {
-    color: var(--text-dark-secondary) !important;
-}
-
-/* Remove borders from nav links in dark mode */
-body.dark-mode .nav-link::after {
-    display: none !important;
-    content: none !important;
-    height: 0 !important;
-    background: none !important;
-}
-
-body.dark-mode .nav-link.active::after,
-body.dark-mode .nav-link:hover::after {
-    display: none !important;
-    content: none !important;
-    height: 0 !important;
-    background: none !important;
-    animation: none !important;
-}
-
-/* Ensure no borders on navigation links */
-body.dark-mode .nav-link {
-    border: none !important;
-    border-bottom: none !important;
-    border-top: none !important;
-    box-shadow: none !important;
-}
-
-body.dark-mode .nav-link.active,
-body.dark-mode .nav-link:hover {
-    border: none !important;
-    border-bottom: none !important;
-    border-top: none !important;
-    box-shadow: none !important;
-    transform: translateY(-1px) !important;
-}
-
-/* Dark mode footer with better contrast */
-body.dark-mode .footer {
-    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%) !important;
-    color: var(--text-dark) !important;
-}
-
-body.dark-mode .footer-logo span {
-    color: var(--accent-dark) !important;
-}
-
-body.dark-mode .footer h4 {
-    color: var(--accent-dark) !important;
-}
-
-body.dark-mode .footer p,
-body.dark-mode .footer li a {
-    color: var(--text-dark-secondary) !important;
-}
-
-body.dark-mode .footer a:hover {
-    color: var(--accent-dark) !important;
-}
-
-body.dark-mode .footer-bottom {
-    border-top: 1px solid var(--border-dark) !important;
-    color: var(--text-dark-secondary) !important;
-}
-
-body.dark-mode .social-links a {
-    background: var(--card-bg-dark) !important;
-    color: var(--text-dark-secondary) !important;
-    border: 1px solid var(--border-dark) !important;
-}
-
-body.dark-mode .social-links a:hover {
-    background: var(--accent-dark) !important;
-    color: white !important;
-}
-
-/* Dark mode order buttons */
-body.dark-mode .order-btn.primary {
-    background: var(--accent-dark) !important;
-    color: white !important;
-    border: none !important;
-}
-
-body.dark-mode .order-btn.primary:hover {
-    background: #FF8A50 !important;
-    transform: translateY(-2px) !important;
-}
-
-/* Dark mode floating elements */
-body.dark-mode .floating-element {
-    background: rgba(255, 107, 53, 0.1) !important;
+body.dark-mode .stat {
+    background: linear-gradient(135deg, 
+        rgba(30, 35, 45, 0.95) 0%, 
+        rgba(25, 30, 40, 0.9) 100%) !important;
     border: 1px solid rgba(255, 107, 53, 0.2) !important;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 4px 16px rgba(255, 107, 53, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px) !important;
 }
+
+body.dark-mode .stat::before {
+    background: linear-gradient(90deg, #ff6b35, #ff8c42, #ffa726) !important;
+}
+
+body.dark-mode .stat:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 
+        0 16px 48px rgba(0, 0, 0, 0.5),
+        0 8px 24px rgba(255, 107, 53, 0.2),
+        0 0 20px rgba(255, 107, 53, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 107, 53, 0.4) !important;
+}
+
+body.dark-mode .stat-number {
+    background: linear-gradient(135deg, #ff6b35, #ffa726, #ffcc02) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3)) !important;
+    text-shadow: none !important;
+}
+
+body.dark-mode .stat:hover .stat-number {
+    filter: drop-shadow(0 4px 8px rgba(255, 107, 53, 0.4)) brightness(1.2) !important;
+    transform: scale(1.1);
+}
+
+body.dark-mode .stat-label {
+    color: var(--text-dark-secondary) !important;
+    opacity: 0.9 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .stat:hover .stat-label {
+    color: var(--text-dark-primary) !important;
+    opacity: 1 !important;
+    text-shadow: 0 0 8px rgba(255, 107, 53, 0.6) !important;
+}
+
+/* Add subtle pulsing animation for stats in dark mode */
+body.dark-mode .stat {
+    transition: box-shadow 0.3s ease;
+}
+
+/* =====================================================
+   HERO SECTION ALIGNMENT FIXES FOR DARK MODE
+   ===================================================== */
+
+/* Ensure hero grid layout consistency in dark mode */
+body.dark-mode .hero-content {
+    display: grid !important;
+    grid-template-columns: 1fr 2fr 1fr !important;
+    align-items: center !important;
+    gap: 50px !important;
+    margin-top: 80px !important;
+    padding: 40px 0 !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* Dark mode hero container alignment */
+body.dark-mode .hero-container {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 20px !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* Ensure proper flex alignment for hero sections */
+body.dark-mode .hero-left,
+body.dark-mode .hero-right {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+body.dark-mode .hero-left {
+    align-items: flex-start !important;
+    text-align: left !important;
+}
+
+body.dark-mode .hero-right {
+    align-items: flex-end !important;
+    text-align: right !important;
+}
+
+body.dark-mode .hero-center {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+/* Responsive adjustments for dark mode */
+@media (max-width: 1024px) {
+    body.dark-mode .hero-content {
+        gap: 30px !important;
+        margin-top: 60px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    body.dark-mode .hero-content {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+        margin-top: 40px !important;
+        text-align: center !important;
+    }
+
+    body.dark-mode .hero-center {
+        order: -1 !important;
+    }
+
+    body.dark-mode .hero-left,
+    body.dark-mode .hero-right {
+        text-align: center !important;
+        align-items: center !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.dark-mode .hero-content {
+        margin-top: 20px !important;
+        padding: 20px 0 !important;
+        gap: 20px !important;
+    }
+    
+    body.dark-mode .hero-container {
+        padding: 0 15px !important;
+    }
+}
+
+/* Ensure stats alignment in dark mode */
+body.dark-mode .hero-stats {
+    display: flex !important;
+    gap: 30px !important;
+    margin-top: 35px !important;
+    justify-content: flex-start !important;
+}
+
+@media (max-width: 768px) {
+    body.dark-mode .hero-stats {
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+    }
+}
+
+/* Order options alignment in dark mode */
+body.dark-mode .order-options {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    align-items: flex-end !important;
+}
+
+@media (max-width: 768px) {
+    body.dark-mode .order-options {
+        align-items: center !important;
+    }
+}
+
+/* Ensure bowl centering in dark mode */
+body.dark-mode .ramen-bowl {
+    position: relative !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+}
+
+/* ===================================================== */
 
 /* ULTIMATE BODY OVERRIDE - This must be the last override */
 body.dark-mode {
-    background: #1a1f2e !important;
-    background-image: linear-gradient(135deg, #1a1f2e 0%, #232836 100%) !important;
-    background-color: #1a1f2e !important;
+    background: #1f1f2e !important;
+    background-image: linear-gradient(135deg, #1f1f2e 0%, #2a2e3e 100%) !important;
+    background-color: #1f1f2e !important;
     color: #ffffff !important;
     font-family: 'Inter', sans-serif !important;
     line-height: 1.6 !important;
@@ -1104,3 +1626,158 @@ body.dark-mode .section-background {
 .dark-mode .mobile-theme-toggle:focus {
     outline-color: var(--accent-dark);
 }
+
+/* Navbar specific button styling in dark mode - simple without animations */
+body.dark-mode .account-link {
+    background: linear-gradient(135deg, #FF6B35, #FF8C42) !important;
+    border-radius: 50% !important;
+    padding: 10px !important;
+    border: none !important;
+    color: var(--text-dark-primary) !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4) !important;
+    width: 48px !important;
+    height: 48px !important;
+}
+
+/* Clear any conflicting animations on light mode switch */
+body:not(.dark-mode) .account-link {
+    background: transparent !important;
+    border-radius: 50% !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Remove all glow effects and animations */
+body.dark-mode .account-link::before {
+    display: none;
+}
+
+body.dark-mode .account-link:hover {
+    background: linear-gradient(135deg, #FF8C42, #FF6B35) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.5) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Account icon styling - simple without animations */
+body.dark-mode .account-icon {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    filter: brightness(0) invert(1) !important;
+    opacity: 1 !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Clear any conflicting animations on light mode switch */
+body:not(.dark-mode) .account-icon {
+    filter: none !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Nav account larger icon - simple without animations */
+body.dark-mode .nav-account .account-icon {
+    width: 24px !important;
+    height: 24px !important;
+}
+
+body.dark-mode .account-link:hover .account-icon {
+    transform: scale(1.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Mobile account styling - simple without animations */
+body.dark-mode .mobile-account {
+    background: linear-gradient(135deg, #FF6B35, #FF8C42) !important;
+    border-radius: 50% !important;
+    padding: 10px !important;
+    width: 44px !important;
+    height: 44px !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Clear mobile account animations on light mode */
+body:not(.dark-mode) .mobile-account {
+    background: transparent !important;
+    border-radius: 50% !important;
+    transition: all 0.3s ease !important;
+}
+
+body.dark-mode .mobile-account:hover {
+    background: linear-gradient(135deg, #FF8C42, #FF6B35) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.5) !important;
+    transition: all 0.3s ease !important;
+}
+
+body.dark-mode .mobile-account .account-icon {
+    width: 22px !important;
+    height: 22px !important;
+    filter: brightness(0) invert(1) !important;
+    transition: all 0.3s ease !important;
+}
+
+body.dark-mode .mobile-account:hover .account-icon {
+    transform: scale(1.1) !important;
+}
+
+/* =====================================================
+   SIMPLIFIED DARK MODE LOGIN ICON STYLING
+   ===================================================== */
+
+/* Enhanced idle state - no animation */
+body.dark-mode .account-link:not(:hover),
+body.dark-mode .mobile-account:not(:hover) {
+    transition: all 0.3s ease;
+}
+
+/* Simple appearance when switching to dark mode - no animation */
+body.dark-mode .account-link {
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .mobile-account {
+    transition: all 0.3s ease;
+}
+
+/* =====================================================
+   SIMPLIFIED THEME SWITCHING STYLES
+   ===================================================== */
+
+/* Simple ripple effect styling - no animation */
+.account-ripple {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    z-index: 0;
+}
+
+/* Theme transition active state - simplified */
+.theme-transition-active {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+/* Simple icon theme switching - no animation */
+.icon-theme-switching {
+    transition: all 0.3s ease;
+}
+
+/* Enhanced theme switching detection - simplified */
+body.theme-switching .account-link,
+body.theme-switching .mobile-account {
+    transition: all 0.3s ease !important;
+}
+
+/* Simple staggered styling for multiple account buttons */
+.account-link:nth-child(1) { transition-delay: 0s; }
+.account-link:nth-child(2) { transition-delay: 0.05s; }
+.mobile-account:nth-child(1) { transition-delay: 0.03s; }
+.mobile-account:nth-child(2) { transition-delay: 0.08s; }
+
+/* ===================================================== */

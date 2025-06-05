@@ -2,6 +2,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Theme.js loaded successfully');
     
+    // Simple theme switching without debounce
+    let isThemeSwitching = false;
+    
     // Get theme toggle buttons
     const themeToggle = document.getElementById('themeToggle');
     const mobileThemeToggle = document.getElementById('mobileThemeToggle');
@@ -50,44 +53,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 mobileIcon.classList.add('fa-moon');
             }
         }
-    }      // Function to toggle theme
+    }    // Simple function to toggle theme
     function toggleTheme() {
+        // Prevent rapid theme switching
+        if (isThemeSwitching) {
+            console.log('Theme switch already in progress, ignoring...');
+            return;
+        }
+        
+        isThemeSwitching = true;
         console.log('Toggle theme called');
         const isDarkMode = document.body.classList.contains('dark-mode');
         console.log('Current mode before toggle:', isDarkMode ? 'dark' : 'light');
         
-        // Add switching animation to buttons
-        if (themeToggle) {
-            themeToggle.classList.add('switching');
-            setTimeout(() => {
-                themeToggle.classList.remove('switching');
-            }, 600);
-        }
-        
-        if (mobileThemeToggle) {
-            mobileThemeToggle.classList.add('switching');
-            setTimeout(() => {
-                mobileThemeToggle.classList.remove('switching');
-            }, 600);
-        }
-          if (isDarkMode) {
+        if (isDarkMode) {
             // Switch to light mode
             document.body.classList.remove('dark-mode');
             localStorage.setItem('theme', 'light');
             console.log('Switched to light mode');
-            setTimeout(() => updateToggleIcons('light'), 300);
+            updateToggleIcons('light');
         } else {
             // Switch to dark mode
             document.body.classList.add('dark-mode');
             localStorage.setItem('theme', 'dark');
             console.log('Switched to dark mode');
-            setTimeout(() => updateToggleIcons('dark'), 300);
+            updateToggleIcons('dark');
         }
         
+        // Reset switching flag quickly
+        setTimeout(() => {
+            isThemeSwitching = false;
+        }, 100);
+        
         // Update button titles
-        setTimeout(() => updateButtonTitles(), 300);
-    }
-      // Add event listeners to theme toggle buttons
+        updateButtonTitles();
+    }    
+    // Add event listeners to theme toggle buttons
     if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
         console.log('Desktop theme toggle event listener added');

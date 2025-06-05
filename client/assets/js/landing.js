@@ -1,4 +1,5 @@
 /* filepath: c:\VSC Projects\Ramenila\client\assets\js\landing.js */
+/* eslint-disable no-unused-vars */
 // Modern Ramenila Landing Page JavaScript
 
 // DOM Elements
@@ -164,11 +165,14 @@ function showOrderModal(orderType) {
             action: 'Call for Delivery'
         };
     
+    // Check if dark mode is active
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    
     // Create modal overlay
     const modalOverlay = document.createElement('div');
     modalOverlay.className = 'modal-overlay';
     modalOverlay.innerHTML = `
-        <div class="order-modal">
+        <div class="order-modal ${isDarkMode ? 'dark-theme' : ''}">
             <button class="modal-close">&times;</button>
             <div class="modal-icon">
                 <i class="fas ${orderType === 'kiosk' ? 'fa-utensils' : 'fa-truck'}"></i>
@@ -182,7 +186,7 @@ function showOrderModal(orderType) {
         </div>
     `;
     
-    // Add modal styles
+    // Add modal styles with dark mode support
     const modalStyles = `
         <style>            .modal-overlay {
                 position: fixed;
@@ -200,6 +204,12 @@ function showOrderModal(orderType) {
                 -webkit-backdrop-filter: blur(15px);
             }
             
+            body.dark-mode .modal-overlay {
+                background: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(10px) saturate(80%);
+                -webkit-backdrop-filter: blur(10px) saturate(80%);
+            }
+            
             .order-modal {
                 background: white;
                 padding: 40px;
@@ -211,18 +221,50 @@ function showOrderModal(orderType) {
                 animation: slideUp 0.3s ease;
                 position: relative;
             }
-            
-            .modal-close {
+              /* Dark theme styles for the modal */
+            .order-modal.dark-theme {
+                background: #1a1a1a;
+                color: #f0f0f0;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(210, 105, 30, 0.2);
+                border: 1px solid #333;
+                background-image: linear-gradient(to bottom right, rgba(210, 105, 30, 0.05), transparent);
+            }
+              .modal-close {
                 position: absolute;
                 top: 15px;
                 right: 20px;
                 background: none;
                 border: none;
-                font-size: 1.5rem;
+                font-size: 1.2rem;
                 color: #999;
                 cursor: pointer;
-                padding: 5px;
+                padding: 8px;
                 line-height: 1;
+                border-radius: 50%;
+                width: 36px;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f2f2f2;
+                transition: all 0.3s ease;
+            }
+            
+            .order-modal.dark-theme .modal-close {
+                color: #eee;
+                background: #444;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            }
+            
+            .modal-close:hover {
+                transform: rotate(90deg);
+                background: #e0e0e0;
+                color: #777;
+            }
+            
+            .order-modal.dark-theme .modal-close:hover {
+                background: #555;
+                color: white;
             }
             
             .modal-icon {
@@ -237,17 +279,53 @@ function showOrderModal(orderType) {
                 color: white;
                 font-size: 2rem;
             }
+              .order-modal.dark-theme .modal-icon {
+                background: linear-gradient(135deg, #D2691E, #A52A2A);
+                box-shadow: 0 0 20px rgba(210, 105, 30, 0.4);
+                position: relative;
+                overflow: hidden;
+                animation: pulse 3s infinite ease-in-out;
+            }
+            
+            @keyframes pulse {
+                0% { box-shadow: 0 0 20px rgba(210, 105, 30, 0.3); }
+                50% { box-shadow: 0 0 30px rgba(210, 105, 30, 0.5); }
+                100% { box-shadow: 0 0 20px rgba(210, 105, 30, 0.3); }
+            }
+            
+            .order-modal.dark-theme .modal-icon::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+                opacity: 0.5;
+            }
             
             .order-modal h3 {
                 font-size: 1.5rem;
                 color: #8B4513;
                 margin-bottom: 15px;
             }
+              .order-modal.dark-theme h3 {
+                color: #D2691E;
+                text-shadow: 0 0 10px rgba(210, 105, 30, 0.3);
+                letter-spacing: 0.5px;
+            }
             
             .order-modal p {
                 color: #6B4423;
                 line-height: 1.6;
                 margin-bottom: 30px;
+            }
+            
+            .order-modal.dark-theme p {
+                color: #bbb;
+                line-height: 1.7;
+                font-weight: 300;
+                letter-spacing: 0.2px;
             }
             
             .modal-actions {
@@ -269,14 +347,70 @@ function showOrderModal(orderType) {
                 background: linear-gradient(135deg, #8B4513, #A0522D);
                 color: white;
             }
+              .order-modal.dark-theme .modal-btn.primary {
+                background: linear-gradient(135deg, #D2691E, #A52A2A);
+                box-shadow: 0 0 15px rgba(210, 105, 30, 0.25);
+                border: none;
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+            }
+            
+            .order-modal.dark-theme .modal-btn.primary::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: left 0.7s ease;
+                z-index: -1;
+            }
+            
+            .order-modal.dark-theme .modal-btn.primary:hover::before {
+                left: 100%;
+            }
             
             .modal-btn.secondary {
                 background: #f5f5f5;
                 color: #666;
+                transition: all 0.3s ease;
+            }
+            
+            .order-modal.dark-theme .modal-btn.secondary {
+                background: #333;
+                color: #ccc;
+                border: 1px solid #555;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .order-modal.dark-theme .modal-btn.secondary::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255,255,255,0.05);
+                transform: scaleX(0);
+                transform-origin: right;
+                transition: transform 0.3s ease;
+            }
+            
+            .order-modal.dark-theme .modal-btn.secondary:hover::before {
+                transform: scaleX(1);
+                transform-origin: left;
             }
             
             .modal-btn:hover {
                 transform: translateY(-2px);
+            }
+            
+            .order-modal.dark-theme .modal-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             }
             
             @keyframes fadeIn {
@@ -296,17 +430,40 @@ function showOrderModal(orderType) {
     
     // Add modal to body
     document.body.appendChild(modalOverlay);
+      // Close modal functionality
+    // Create a flag to track if modal is already closing to prevent double-click issues
+    let isClosing = false;
     
-    // Close modal functionality
     const closeModal = () => {
+        if (isClosing) return; // Prevent multiple close attempts
+        isClosing = true;
+        
         modalOverlay.style.animation = 'fadeIn 0.3s ease reverse';
         setTimeout(() => {
-            document.body.removeChild(modalOverlay);
+            if (document.body.contains(modalOverlay)) {
+                document.body.removeChild(modalOverlay);
+            }
         }, 300);
     };
     
-    modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
-    modalOverlay.querySelector('.modal-close-btn').addEventListener('click', closeModal);
+    // Use a single handler function with event delegation for all close actions
+    const closeButton = modalOverlay.querySelector('.modal-close');
+    const closeButtonSecondary = modalOverlay.querySelector('.modal-close-btn');
+    
+    if (closeButton) {
+        closeButton.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent event bubbling
+            closeModal();
+        });
+    }
+    
+    if (closeButtonSecondary) {
+        closeButtonSecondary.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent event bubbling
+            closeModal();
+        });
+    }
+    
     modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) closeModal();
     });
@@ -324,212 +481,148 @@ function showOrderModal(orderType) {
     });
 }
 
-// Animate elements on scroll
-function initScrollAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+// Enhanced Hero Stats Animation
+function initHeroStatsAnimation() {
+    const stats = document.querySelectorAll('.stat');
+    const statNumbers = document.querySelectorAll('.stat-number');
+    
+    // Add entrance animation
+    stats.forEach((stat, index) => {
+        stat.style.opacity = '0';
+        stat.style.transform = 'translateY(30px)';
+        
+        setTimeout(() => {
+            stat.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            stat.style.opacity = '1';
+            stat.style.transform = 'translateY(0)';
+        }, 600 + (index * 200));
+    });
+    
+    // Add count-up animation for numbers
+    const countUpNumber = (element, target, duration = 2000) => {
+        const startTime = performance.now();
+        const startValue = 0;
+        
+        const animate = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function for smooth count-up
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const currentValue = Math.floor(startValue + (target * easeOutQuart));
+            
+            if (target === 10) {
+                element.textContent = currentValue + '+';
+            } else if (target === 24) {
+                element.textContent = currentValue + '/7';
+            }
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+        
+        requestAnimationFrame(animate);
     };
     
-    const observer = new IntersectionObserver((entries) => {
+    // Intersection Observer for stats animation
+    const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
-                entry.target.style.opacity = '1';
+            if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                entry.target.classList.add('animated');
+                
+                // Trigger count-up animation
+                const numberElement = entry.target.querySelector('.stat-number');
+                const currentText = numberElement.textContent;
+                
+                if (currentText.includes('10+')) {
+                    setTimeout(() => countUpNumber(numberElement, 10, 1500), 800);
+                } else if (currentText.includes('24/7')) {
+                    setTimeout(() => countUpNumber(numberElement, 24, 1500), 800);
+                }
             }
         });
-    }, observerOptions);
-    
-    // Observe elements for animation
-    const animateElements = document.querySelectorAll(
-        '.feature-card, .menu-item, .about-feature, .order-method, .location-card'
-    );
-    
-    animateElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        observer.observe(el);
+    }, {
+        threshold: 0.5,
+        rootMargin: '0px 0px -50px 0px'
     });
     
-    // Add animation styles
-    const animationStyles = `
-        <style>
-            @keyframes fadeInUp {
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        </style>
-    `;
-    document.head.insertAdjacentHTML('beforeend', animationStyles);
-}
-
-// Menu filter functionality (for future enhancement)
-function initMenuFilter() {
-    const menuItems = document.querySelectorAll('.menu-item');
+    stats.forEach(stat => statsObserver.observe(stat));
     
-    // Add category filters if needed
-    // This is a placeholder for future menu filtering functionality
-}
-
-// Contact form handling (if added later)
-function initContactForm() {
-    const contactForms = document.querySelectorAll('form');
-    
-    contactForms.forEach(form => {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Form submission will be handled in a future update
+    // Add interactive hover effects
+    stats.forEach(stat => {
+        stat.addEventListener('mouseenter', () => {
+            stat.style.transform = 'translateY(-8px) scale(1.05)';
+            
+            // Add ripple effect
+            const ripple = document.createElement('div');
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(139, 69, 19, 0.2);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+                top: 50%;
+                left: 50%;
+                width: 100px;
+                height: 100px;
+                margin-left: -50px;
+                margin-top: -50px;
+            `;
+            
+            stat.style.position = 'relative';
+            stat.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+        
+        stat.addEventListener('mouseleave', () => {
+            stat.style.transform = 'translateY(0) scale(1)';
+        });
+        
+        // Add click animation
+        stat.addEventListener('click', () => {
+            stat.style.transform = 'translateY(-4px) scale(1.02)';
+            setTimeout(() => {
+                stat.style.transform = 'translateY(-8px) scale(1.05)';
+            }, 150);
         });
     });
 }
 
-// Show notification
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    
-    // Add notification styles
-    const styles = {
-        success: {
-            background: '#4CAF50',
-            icon: '<i class="fas fa-check-circle"></i>'
-        },
-        error: {
-            background: '#f44336',
-            icon: '<i class="fas fa-times-circle"></i>'
-        }
-    };
-    
-    const style = styles[type];
-    
-    notification.innerHTML = `${style.icon} ${message}`;
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        left: 50%;
-        transform: translateX(-50%) translateY(-100%);
-        background: ${style.background};
-        color: white;
-        padding: 15px 25px;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        z-index: 10001;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        min-width: 300px;
-        justify-content: center;
-        font-weight: 500;
-        animation: slideInTop 0.3s ease forwards;
-    `;
-    
-    // Add animation keyframes if not already added
-    if (!document.querySelector('#notification-styles')) {
-        const keyframes = document.createElement('style');
-        keyframes.id = 'notification-styles';
-        keyframes.textContent = `
-            @keyframes slideInTop {
-                from {
-                    transform: translateX(-50%) translateY(-100%);
-                    opacity: 0;
-                }
+// Add ripple animation keyframes
+const addRippleAnimation = () => {
+    if (!document.querySelector('#ripple-keyframes')) {
+        const style = document.createElement('style');
+        style.id = 'ripple-keyframes';
+        style.textContent = `
+            @keyframes ripple {
                 to {
-                    transform: translateX(-50%) translateY(0);
-                    opacity: 1;
-                }
-            }
-            @keyframes slideOutTop {
-                from {
-                    transform: translateX(-50%) translateY(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(-50%) translateY(-100%);
+                    transform: scale(2);
                     opacity: 0;
-                }
-            }
-            @media (max-width: 768px) {
-                .notification {
-                    width: 90%;
-                    min-width: unset;
-                    font-size: 14px;
                 }
             }
         `;
-        document.head.appendChild(keyframes);
+        document.head.appendChild(style);
     }
-    
-    document.body.appendChild(notification);
-    
-    // Remove notification after 4 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideOutTop 0.3s ease forwards';
-        setTimeout(() => {
-            if (document.body.contains(notification)) {
-                document.body.removeChild(notification);
-            }
-        }, 300);
-    }, 4000);
-}
-
-// Preload images for better performance
-function preloadImages() {
-    const images = [
-        'client/assets/img/middleramen.png',
-        'client/assets/img/ramenlogo.png',
-        'client/assets/img/accounts.png'
-    ];
-    
-    images.forEach(src => {
-        const img = new Image();
-        img.src = src;
-    });
-}
-
-// Initialize all functionality when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize core functionality
-    initSmoothScrolling();
-    initNavbarScrollEffect();
-    initMobileMenu();
-    initOrderButtons();
-    initScrollAnimations();
-    initContactForm();
-    initLoginModal();
-    
-    // Preload images
-    preloadImages();
-    
-    // Set initial active section
-    updateActiveSection();
-    
-    console.log('🍜 Ramenila website initialized successfully!');
-});
-
-// Handle window resize for responsive behavior
-window.addEventListener('resize', () => {
-    // Update any layout-dependent calculations
-    updateActiveSection();
-});
-
-// Export functions for potential external use
-window.RamenilaApp = {
-    showOrderModal,
-    showNotification,
-    updateActiveSection
 };
 
-// Show Kiosk modal for mobile button
-function showKioskModal() {
-    // Trigger same action as desktop kiosk button
-    const mainKioskBtn = document.querySelector('.kiosk-btn');
-    if (mainKioskBtn) {
-        mainKioskBtn.click();
-    }
-}
+// Mobile menu close on link click
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        const mobileMenu = document.querySelector('.nav-menu');
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        
+        if (mobileMenu.classList.contains('active')) {
+            mobileMenu.classList.remove('active');
+            mobileMenuToggle.classList.remove('active');
+            const icon = mobileMenuToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    });
+});
 
 // Login Modal Functionality
 function initLoginModal() {
@@ -593,5 +686,511 @@ function initLoginModal() {
                 }
             });
         }
+    }
+}
+
+// Smooth scroll to top functionality
+const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+if (scrollToTopBtn) {
+    scrollToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// Initialize all functionality when DOM is loaded
+// Empty placeholder functions for any missing initializers
+function initScrollAnimations() {
+    // This function can be implemented later
+    console.log('Scroll animations not yet implemented');
+}
+
+function initContactForm() {
+    // This function can be implemented later
+    console.log('Contact form not yet implemented');
+}
+
+// Function to preload images
+function preloadImages() {
+    const images = [
+        'client/assets/img/ramenlogo.png',
+        'client/assets/img/middleramen.png',
+        'client/assets/img/accounts.png'
+    ];
+    
+    images.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize core functionality
+    initSmoothScrolling();
+    initNavbarScrollEffect();
+    initMobileMenu();
+    initOrderButtons();
+    initScrollAnimations();
+    initContactForm();
+    initLoginModal();
+    initHeroStatsAnimation();
+    addRippleAnimation();
+    
+    // Preload images
+    preloadImages();
+    
+    // Set initial active section
+    updateActiveSection();
+    
+    console.log('🍜 Ramenila website initialized successfully!');
+});
+
+// Handle window resize for responsive behavior
+window.addEventListener('resize', () => {
+    // Update any layout-dependent calculations
+    updateActiveSection();
+});
+
+// Notification system
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+            <p>${message}</p>
+        </div>
+    `;
+    
+    // Add notification styles if not already added
+    if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10000;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                transform: translateX(150%);
+                transition: transform 0.3s ease;
+                max-width: 350px;
+            }
+            .notification.success {
+                background: linear-gradient(135deg, #4CAF50, #2E7D32);
+                color: white;
+            }
+            .notification.error {
+                background: linear-gradient(135deg, #F44336, #C62828);
+                color: white;
+            }
+            .notification-content {
+                display: flex;
+                align-items: center;
+            }
+            .notification-content i {
+                font-size: 1.5rem;
+                margin-right: 15px;
+            }
+            .notification-content p {
+                margin: 0;
+                font-size: 0.95rem;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Show notification
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 10);
+    
+    // Hide and remove after 3 seconds
+    setTimeout(() => {
+        notification.style.transform = 'translateX(150%)';
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Export functions for potential external use
+window.RamenilaApp = {
+    showOrderModal,
+    showNotification,
+    updateActiveSection
+};
+
+// Show Kiosk modal for mobile button
+function showKioskModal() {
+    // Use the order modal directly for kiosk
+    showOrderModal('kiosk');
+}
+
+// Function to handle kiosk ordering directly from HTML
+function showKioskOrderModal() {
+    // Setup a mutation observer to detect theme changes while modal is open
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'class' && 
+                mutation.target === document.body && 
+                document.querySelector('.order-modal')) {
+                
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                const orderModal = document.querySelector('.order-modal');
+                
+                if (isDarkMode) {
+                    orderModal.classList.add('dark-theme');
+                } else {
+                    orderModal.classList.remove('dark-theme');
+                }
+            }
+        });
+    });
+
+    // Create a customized order modal that handles observer disconnection properly
+    const modalContent = {
+        title: 'Kiosk Ordering',
+        message: 'Visit any of our locations to use our digital kiosk for quick ordering. No online payment required!',
+        action: 'Find Locations'
+    };
+    
+    // Check if dark mode is active
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    
+    // Create modal overlay
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    modalOverlay.innerHTML = `
+        <div class="order-modal ${isDarkMode ? 'dark-theme' : ''}">
+            <button class="modal-close">&times;</button>
+            <div class="modal-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h3>${modalContent.title}</h3>
+            <p>${modalContent.message}</p>
+            <div class="modal-actions">
+                <button class="modal-btn primary">${modalContent.action}</button>
+                <button class="modal-btn secondary modal-close-btn">Close</button>
+            </div>
+        </div>
+    `;
+    
+    // Add modal styles with dark mode support - using styles from showOrderModal
+    const modalStyles = `
+        <style>
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease;
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+            }
+            
+            body.dark-mode .modal-overlay {
+                background: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(10px) saturate(80%);
+                -webkit-backdrop-filter: blur(10px) saturate(80%);
+            }
+            
+            .order-modal {
+                background: white;
+                padding: 40px;
+                border-radius: 20px;
+                text-align: center;
+                max-width: 400px;
+                margin: 20px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                animation: slideUp 0.3s ease;
+                position: relative;
+            }
+            
+            .order-modal.dark-theme {
+                background: #1a1a1a;
+                color: #f0f0f0;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(210, 105, 30, 0.2);
+                border: 1px solid #333;
+                background-image: linear-gradient(to bottom right, rgba(210, 105, 30, 0.05), transparent);
+            }
+            
+            .modal-close {
+                position: absolute;
+                top: 15px;
+                right: 20px;
+                background: none;
+                border: none;
+                font-size: 1.2rem;
+                color: #999;
+                cursor: pointer;
+                padding: 8px;
+                line-height: 1;
+                border-radius: 50%;
+                width: 36px;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f2f2f2;
+                transition: all 0.3s ease;
+            }
+            
+            .order-modal.dark-theme .modal-close {
+                color: #eee;
+                background: #444;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            }
+            
+            .modal-close:hover {
+                transform: rotate(90deg);
+                background: #e0e0e0;
+                color: #777;
+            }
+            
+            .order-modal.dark-theme .modal-close:hover {
+                background: #555;
+                color: white;
+            }
+            
+            .modal-icon {
+                width: 80px;
+                height: 80px;
+                background: linear-gradient(135deg, #8B4513, #A0522D);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 25px;
+                color: white;
+                font-size: 2rem;
+            }
+            
+            .order-modal.dark-theme .modal-icon {
+                background: linear-gradient(135deg, #D2691E, #A52A2A);
+                box-shadow: 0 0 20px rgba(210, 105, 30, 0.4);
+                position: relative;
+                overflow: hidden;
+                animation: pulse 3s infinite ease-in-out;
+            }
+            
+            @keyframes pulse {
+                0% { box-shadow: 0 0 20px rgba(210, 105, 30, 0.3); }
+                50% { box-shadow: 0 0 30px rgba(210, 105, 30, 0.5); }
+                100% { box-shadow: 0 0 20px rgba(210, 105, 30, 0.3); }
+            }
+            
+            .order-modal.dark-theme .modal-icon::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+                opacity: 0.5;
+            }
+            
+            .order-modal h3 {
+                font-size: 1.5rem;
+                color: #8B4513;
+                margin-bottom: 15px;
+            }
+            
+            .order-modal.dark-theme h3 {
+                color: #D2691E;
+                text-shadow: 0 0 10px rgba(210, 105, 30, 0.3);
+                letter-spacing: 0.5px;
+            }
+            
+            .order-modal p {
+                color: #6B4423;
+                line-height: 1.6;
+                margin-bottom: 30px;
+            }
+            
+            .order-modal.dark-theme p {
+                color: #bbb;
+                line-height: 1.7;
+                font-weight: 300;
+                letter-spacing: 0.2px;
+            }
+            
+            .modal-actions {
+                display: flex;
+                gap: 15px;
+                justify-content: center;
+            }
+            
+            .modal-btn {
+                padding: 12px 25px;
+                border: none;
+                border-radius: 25px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .modal-btn.primary {
+                background: linear-gradient(135deg, #8B4513, #A0522D);
+                color: white;
+            }
+            
+            .order-modal.dark-theme .modal-btn.primary {
+                background: linear-gradient(135deg, #D2691E, #A52A2A);
+                box-shadow: 0 0 15px rgba(210, 105, 30, 0.25);
+                border: none;
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+            }
+            
+            .order-modal.dark-theme .modal-btn.primary::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: left 0.7s ease;
+                z-index: -1;
+            }
+            
+            .order-modal.dark-theme .modal-btn.primary:hover::before {
+                left: 100%;
+            }
+            
+            .modal-btn.secondary {
+                background: #f5f5f5;
+                color: #666;
+                transition: all 0.3s ease;
+            }
+            
+            .order-modal.dark-theme .modal-btn.secondary {
+                background: #333;
+                color: #ccc;
+                border: 1px solid #555;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .order-modal.dark-theme .modal-btn.secondary::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255,255,255,0.05);
+                transform: scaleX(0);
+                transform-origin: right;
+                transition: transform 0.3s ease;
+            }
+            
+            .order-modal.dark-theme .modal-btn.secondary:hover::before {
+                transform: scaleX(1);
+                transform-origin: left;
+            }
+            
+            .modal-btn:hover {
+                transform: translateY(-2px);
+            }
+            
+            .order-modal.dark-theme .modal-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            
+            @keyframes slideUp {
+                from { transform: translateY(20px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+        </style>
+    `;
+    
+    // Add styles to head
+    document.head.insertAdjacentHTML('beforeend', modalStyles);
+    
+    // Add modal to body
+    document.body.appendChild(modalOverlay);
+    
+    // Start observing for theme changes
+    observer.observe(document.body, { attributes: true });
+    
+    // Create a flag to track if modal is already closing
+    let isClosing = false;
+    
+    // Unified closing function that handles observer disconnection
+    const closeKioskModal = () => {
+        // Prevent double-closing attempts
+        if (isClosing) return;
+        isClosing = true;
+        
+        // Disconnect observer first to prevent memory leaks
+        observer.disconnect();
+        console.log('Theme observer disconnected');
+        
+        // Animate and remove modal
+        modalOverlay.style.animation = 'fadeIn 0.3s ease reverse';
+        setTimeout(() => {
+            if (document.body.contains(modalOverlay)) {
+                document.body.removeChild(modalOverlay);
+            }
+        }, 300);
+    };
+    
+    // Set up event listeners for closing
+    const closeButton = modalOverlay.querySelector('.modal-close');
+    const closeButtonSecondary = modalOverlay.querySelector('.modal-close-btn');
+    
+    if (closeButton) {
+        closeButton.addEventListener('click', closeKioskModal);
+    }
+    
+    if (closeButtonSecondary) {
+        closeButtonSecondary.addEventListener('click', closeKioskModal);
+    }
+    
+    // Close when clicking on the overlay background
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeKioskModal();
+    });
+    
+    // Primary action button
+    modalOverlay.querySelector('.modal-btn.primary').addEventListener('click', () => {
+        // Scroll to locations section
+        document.querySelector('#locations').scrollIntoView({ behavior: 'smooth' });
+        closeKioskModal();
+    });
+}
+
+// Show Login modal function that can be called from HTML
+function showLoginModal() {
+    if (loginModal) {
+        loginModal.style.display = 'flex';
+        setTimeout(() => loginModal.classList.add('active'), 10);
+        document.body.style.overflow = 'hidden';
     }
 }
