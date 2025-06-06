@@ -38,19 +38,47 @@ const deleteProductName = document.getElementById('deleteProductName');
 let productToDeleteId = null;
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Show loading overlay initially
+    showLoadingOverlay();
+    
     initializeInventory();
     setupEventListeners();
     initializeImageUpload();
 });
 
+function showLoadingOverlay() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('hidden');
+    }
+}
+
+function hideLoadingOverlay() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        setTimeout(() => {
+            loadingOverlay.classList.add('hidden');
+        }, 800); // Small delay to show the loading animation
+    }
+}
+
 async function initializeInventory() {
-    const querySnapshot = await getDocs(collection(db, "products"));
-    products = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-    }));
-    renderProducts();
-    updateActiveNavItem();
+    try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        products = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        renderProducts();
+        updateActiveNavItem();
+        
+        // Hide loading overlay after data is loaded
+        hideLoadingOverlay();
+    } catch (error) {
+        console.error("Error loading inventory:", error);
+        // Hide loading overlay even if there's an error
+        hideLoadingOverlay();
+    }
 }
 
 
