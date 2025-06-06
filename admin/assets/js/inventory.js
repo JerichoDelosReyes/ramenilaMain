@@ -159,7 +159,6 @@ function renderProducts(productsToRender = products) {
                         <button class="btn btn-primary btn-small" onclick="editProduct('${product.id}')">
                             <i class="fas fa-edit"></i> Edit
                         </button>            <button class="btn btn-danger btn-small" onclick="deleteProduct('${product.id}')">
->
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </div>

@@ -4,11 +4,14 @@
     padding: 20px;
     background-color: #f8f9fa;
     min-height: 100vh;
-    transition: margin-left 0.3s ease;
+    width: calc(100% - 80px);
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    box-sizing: border-box;
 }
 
 .sidebar.expanded + .main-content {
     margin-left: 250px;
+    width: calc(100% - 250px);
 }
 
 .content-wrapper {

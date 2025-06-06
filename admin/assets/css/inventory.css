@@ -1,17 +1,33 @@
 /* Inventory Page Styles */
 .page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background: linear-gradient(135deg, #873E23, #E1B46D);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
     margin-bottom: 30px;
-    padding: 20px 0;
-    border-bottom: 2px solid #f0f0f0;
+    box-shadow: 0 4px 15px rgba(135, 62, 35, 0.2);
 }
 
 .page-header h1 {
-    color: #873E23;
+    color: white;
     font-size: 2.5rem;
     font-weight: 700;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.page-header h1 i {
+    color: white;
+    font-size: 2.2rem;
+}
+
+.page-header p {
+    color: white;
+    font-size: 1.1rem;
+    margin: 0;
+    opacity: 0.9;
 }
 
 .btn {
@@ -55,6 +71,14 @@
 
 .btn-danger:hover {
     background: #c82333;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    justify-content: flex-end;
 }
 
 /* Search and Filter Section */

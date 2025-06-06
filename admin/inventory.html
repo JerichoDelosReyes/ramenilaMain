@@ -89,15 +89,15 @@
         </button>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="main-content expanded" id="mainContent">
-        <div class="page-header">
-            <h1>Inventory</h1>
-            <button class="btn btn-primary" id="addProductBtn">
-                <i class="fas fa-plus"></i> Add New Product
-            </button>
-        </div>
-
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="content-wrapper">
+            <!-- Header -->
+            <div class="page-header">
+                <h1><i class="fa-solid fa-utensils"></i> Inventory Management</h1>
+                <p>Manage your restaurant's inventory and menu items</p>
+            </div>
+            
         <!-- Search and Filter Section -->
         <div class="search-filter-section">
             <div class="search-box">
@@ -118,6 +118,9 @@
                     <option value="low-stock">Low Stock</option>
                     <option value="out-of-stock">Out of Stock</option>
                 </select>
+                <button class="btn btn-primary" id="addProductBtn">
+                    <i class="fas fa-plus"></i> Add New Product
+                </button>
             </div>
         </div>
 
@@ -245,6 +248,8 @@
                     <i class="fas fa-trash"></i> Delete Product
                 </button>
             </div>
+        </div>
+    </div>
         </div>
     </div>
 
