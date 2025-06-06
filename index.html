@@ -12,6 +12,27 @@
     <!-- Theme CSS -->
     <link rel="stylesheet" href="client/assets/css/theme.css">
     <link rel="icon" href="client/assets/img/ramenlogo.png" type="image/png">
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+      
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAR75Wj4GyR8g-lboC_zEs9rwE8YbajzJI",
+            authDomain: "ramenila.firebaseapp.com",
+            projectId: "ramenila",
+            storageBucket: "ramenila.firebasestorage.app",
+            messagingSenderId: "538536470051",
+            appId: "1:538536470051:web:1abde073b47b5d3244f396",
+            measurementId: "G-SG324J43CZ"
+        };
+      
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        window.firestoreDB = db; // Make it accessible globally
+      </script>
+      
 </head>
 <body>   
     <nav class="navbar">
@@ -46,8 +67,7 @@
             <div class="nav-actions desktop-only">
                 <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
                     <i class="fas fa-moon"></i>
-                </button>
-                <button class="kiosk-btn" onclick="showLoginModal()" title="Order at Kiosk">
+                </button>                <button class="kiosk-btn" onclick="showKioskOrderModal()" title="Order at Kiosk">
                     <i class="fas fa-utensils"></i>
                     <span>Order at Kiosk</span>
                 </button>
@@ -74,9 +94,7 @@
                 </button>
             </div>
         </div>
-    </nav>
-
-    <!-- Login Modal -->
+    </nav>   
     <div class="login-modal" id="loginModal">
         <div class="login-content">
             <button class="close-modal" id="closeModal">X</button>
@@ -105,6 +123,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Hero Section -->    <section class="hero" id="home">
         <div class="hero-background">

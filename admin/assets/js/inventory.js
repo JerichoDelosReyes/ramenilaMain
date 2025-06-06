@@ -1,219 +1,11 @@
 // Inventory Management System
-let products = [
-    // Ramen Section
-    {
-        id: 1,
-        name: "Hakodate Ramen",
-        category: "ramen",
-        price: 150,
-        stock: 50,
-        minStock: 10,
-        unit: "bowls",
-        description: "Traditional Hakodate-style ramen with rich seafood broth",
-        image: "../client/assets/img/HAKODATE.png"
-    },
-    {
-        id: 2,
-        name: "Kitakata Ramen",
-        category: "ramen",
-        price: 270,
-        stock: 50,
-        minStock: 10,
-        unit: "bowls",
-        description: "Famous for its thick, wavy noodles and light soy sauce-based broth",
-        image: "../client/assets/img/KITAKITA.png"
-    },
-    {
-        id: 3,
-        name: "Spicy Ramen",
-        category: "ramen",
-        price: 150,
-        stock: 50,
-        minStock: 10,
-        unit: "bowls",
-        description: "Hot and flavorful ramen with spicy miso-based broth",
-        image: "../client/assets/img/SPICYRAMEN.png"
-    },
-    {
-        id: 4,
-        name: "Shoyu Ramen",
-        category: "ramen",
-        price: 200,
-        stock: 50,
-        minStock: 10,
-        unit: "bowls",
-        description: "Classic soy sauce-based ramen with tender chashu pork",
-        image: "../client/assets/img/SHOYURAMEN.png"
-    },
-    {
-        id: 5,
-        name: "Tokushima Ramen",
-        category: "ramen",
-        price: 250,
-        stock: 50,
-        minStock: 10,
-        unit: "bowls",
-        description: "Rich pork bone broth with dark soy sauce and raw egg",
-        image: "../client/assets/img/TOKUSHIMA.png"
-    },
-    {
-        id: 6,
-        name: "Yamagata Ramen",
-        category: "ramen",
-        price: 150,
-        stock: 50,
-        minStock: 10,
-        unit: "bowls",
-        description: "Regional specialty with chicken-based broth and thin noodles",
-        image: "../client/assets/img/YAMAGATA.png"
-    },
-    {
-        id: 7,
-        name: "Takayama Ramen",
-        category: "ramen",
-        price: 200,
-        stock: 50,
-        minStock: 10,
-        unit: "bowls",
-        description: "Rich and savory broth with local mountain vegetables",
-        image: "../client/assets/img/TAKAYAMARAMEN.png"
-    },
-    {
-        id: 8,
-        name: "Shio Ramen",
-        category: "ramen",
-        price: 200,
-        stock: 50,
-        minStock: 10,
-        unit: "bowls",
-        description: "Light and delicate salt-based broth with tender pork",
-        image: "../client/assets/img/SHIORAMEN.png"
-    },
-    {
-        id: 9,
-        name: "Miso Ramen",
-        category: "ramen",
-        price: 200,
-        stock: 50,
-        minStock: 10,
-        unit: "bowls",
-        description: "Hearty miso-based broth with corn and butter",
-        image: "../client/assets/img/MISORAMEN.png"
-    },
-    // Sides Section
-    {
-        id: 10,
-        name: "Pork Gyoza (6pcs)",
-        category: "sides",
-        price: 150,
-        stock: 100,
-        minStock: 20,
-        unit: "plates",
-        description: "Pan-fried dumplings with juicy pork filling",
-        image: "../client/assets/img/PORKGYOZA.png"
-    },
-    {
-        id: 11,
-        name: "Chicken Karaage",
-        category: "sides",
-        price: 180,
-        stock: 80,
-        minStock: 15,
-        unit: "plates",
-        description: "Crispy Japanese fried chicken with mayo dip",
-        image: "../client/assets/img/PORKKARAAGE.png"
-    },
-    {
-        id: 12,
-        name: "Edamame",
-        category: "sides",
-        price: 120,
-        stock: 100,
-        minStock: 20,
-        unit: "plates",
-        description: "Steamed young soybeans with sea salt",
-        image: "../client/assets/img/Edamame.png"
-    },
-    {
-        id: 13,
-        name: "Takoyaki (6pcs)",
-        category: "sides",
-        price: 160,
-        stock: 80,
-        minStock: 15,
-        unit: "plates",
-        description: "Octopus balls with takoyaki sauce and bonito flakes",
-        image: "../client/assets/img/TAKOYAKI.png"
-    },
-    // Drinks Section
-    {
-        id: 14,
-        name: "Hot Green Tea",
-        category: "drinks",
-        price: 80,
-        stock: 100,
-        minStock: 20,
-        unit: "cups",
-        description: "Traditional Japanese green tea",
-        image: "../client/assets/img/HOT GREEN TEA.png"
-    },
-    {
-        id: 15,
-        name: "Iced Lemon Tea",
-        category: "drinks",
-        price: 90,
-        stock: 100,
-        minStock: 20,
-        unit: "glasses",
-        description: "Refreshing iced tea with fresh lemon",
-        image: "../client/assets/img/ICED LEMON TEA.png"
-    },
-    {
-        id: 16,
-        name: "Soft Drinks",
-        category: "drinks",
-        price: 60,
-        stock: 200,
-        minStock: 40,
-        unit: "cans",
-        description: "Coke, Sprite, Orange, or Royal",
-        image: "../client/assets/img/SOFTDRINKS.png"
-    },
-    {
-        id: 17,
-        name: "Japanese Beer",
-        category: "drinks",
-        price: 150,
-        stock: 100,
-        minStock: 20,
-        unit: "bottles",
-        description: "Asahi or Sapporo (18+ only)",
-        image: "../client/assets/img/BEER.png"
-    },
-    // Desserts Section
-    {
-        id: 18,
-        name: "Mochi Ice Cream (3pcs)",
-        category: "desserts",
-        price: 140,
-        stock: 60,
-        minStock: 15,
-        unit: "plates",
-        description: "Vanilla, strawberry, and green tea flavors",
-        image: "../client/assets/img/MOCHI.png"
-    },
-    {
-        id: 19,
-        name: "Dorayaki",
-        category: "desserts",
-        price: 120,
-        stock: 50,
-        minStock: 10,
-        unit: "pieces",
-        description: "Pancake sandwich with sweet red bean filling",
-        image: "../client/assets/img/DORAYAKI.png"
-    }
-];
+import { getDocs, collection, doc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const db = window.firestoreDB;
+
+
+
+let products = [];
 
 let editingProductId = null;
 
@@ -251,10 +43,16 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeImageUpload();
 });
 
-function initializeInventory() {
+async function initializeInventory() {
+    const querySnapshot = await getDocs(collection(db, "products"));
+    products = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+    }));
     renderProducts();
     updateActiveNavItem();
 }
+
 
 function setupEventListeners() {
     // Modal controls
@@ -358,9 +156,10 @@ function renderProducts(productsToRender = products) {
                     </div>
                     <div class="product-description">${product.description}</div>
                     <div class="product-actions">
-                        <button class="btn btn-primary btn-small" onclick="editProduct(${product.id})">
+                        <button class="btn btn-primary btn-small" onclick="editProduct('${product.id}')">
                             <i class="fas fa-edit"></i> Edit
-                        </button>                        <button class="btn btn-danger btn-small" onclick="deleteProduct(${product.id})">
+                        </button>            <button class="btn btn-danger btn-small" onclick="deleteProduct('${product.id}')">
+>
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </div>
@@ -420,11 +219,10 @@ function resetForm() {
 function editProduct(id) {
     const product = products.find(p => p.id === id);
     if (!product) return;
-    
+
     editingProductId = id;
     document.getElementById('modalTitle').textContent = 'Edit Product';
-    
-    // Populate form with product data
+
     document.getElementById('productName').value = product.name;
     document.getElementById('productCategory').value = product.category;
     document.getElementById('productPrice').value = product.price;
@@ -432,14 +230,14 @@ function editProduct(id) {
     document.getElementById('minStock').value = product.minStock;
     document.getElementById('productUnit').value = product.unit;
     document.getElementById('productDescription').value = product.description;
-    
-    // Set the image preview
+
     previewImg.src = product.image;
     currentImageData = product.image;
-    
+
     document.getElementById('productModal').classList.add('show');
     document.body.classList.add('modal-open');
 }
+
 
 function deleteProduct(id) {
     const product = products.find(p => p.id === id);
@@ -451,9 +249,13 @@ function deleteProduct(id) {
     document.body.classList.add('modal-open');
 }
 
-function handleFormSubmit(e) {
+async function handleFormSubmit(e) {
     e.preventDefault();
-    
+    if (!db) {
+        showNotification("Firestore not initialized", "error");
+        return;
+    }
+
     // Get form data
     const name = document.getElementById('productName').value.trim();
     const category = document.getElementById('productCategory').value;
@@ -462,63 +264,62 @@ function handleFormSubmit(e) {
     const minStock = parseInt(document.getElementById('minStock').value);
     const unit = document.getElementById('productUnit').value.trim();
     const description = document.getElementById('productDescription').value.trim();
-    
+
     // Validate required fields
     if (!name || !category || isNaN(price) || isNaN(stock) || isNaN(minStock) || !unit) {
-        showNotification('Please fill in all required fields', 'error');
+        showNotification("Please fill in all required fields", "error");
         return;
     }
-    
-    // Validate positive numbers
+
     if (price <= 0 || stock < 0 || minStock < 0) {
-        showNotification('Price must be positive and stock values cannot be negative', 'error');
+        showNotification("Invalid number values", "error");
         return;
     }
-    
-    // Set default image based on category if no custom image is uploaded
+
+    // Image
     let productImage = currentImageData || previewImg.src;
     if (!currentImageData) {
-        if (category === 'drinks') {
-            productImage = 'assets/img/drinks.png';
-        } else if (category === 'toppings') {
-            productImage = 'assets/img/toppings.png';
+        if (category === "drinks") {
+            productImage = "assets/img/drinks.png";
+        } else if (category === "toppings") {
+            productImage = "assets/img/toppings.png";
         } else {
-            productImage = 'assets/img/ramen.png';
+            productImage = "assets/img/ramen.png";
         }
     }
-    
+
     const formData = {
-        name: name,
-        category: category,
-        price: price,
-        stock: stock,
-        minStock: minStock,
-        unit: unit,
-        description: description,
+        name,
+        category,
+        price,
+        stock,
+        minStock,
+        unit,
+        description,
         image: productImage
     };
-    
-    if (editingProductId) {
-        // Update existing product
-        const productIndex = products.findIndex(p => p.id === editingProductId);
-        if (productIndex !== -1) {
-            products[productIndex] = { ...products[productIndex], ...formData };
-            showNotification('Product updated successfully!', 'success');
+
+    try {
+        if (editingProductId) {
+            // Update existing product
+            const ref = doc(db, "products", editingProductId);
+            await updateDoc(ref, formData);
+            showNotification("Product updated successfully!", "success");
+        } else {
+            // Add new product
+            await addDoc(collection(db, "products"), formData);
+            showNotification("Product added successfully!", "success");
         }
-    } else {
-        // Add new product
-        const newProduct = {
-            id: Math.max(...products.map(p => p.id)) + 1,
-            ...formData
-        };
-        products.push(newProduct);
-        showNotification('Product added successfully!', 'success');
+
+        await initializeInventory(); // Refresh product list from Firestore
+        closeModal();                // Close modal
+        resetForm();                 // Clear form
+    } catch (error) {
+        console.error("Error saving product:", error);
+        showNotification("Failed to save product", "error");
     }
-    
-    renderProducts();
-    closeModal();
-    resetForm();
 }
+
 
 // Image upload functionality
 function initializeImageUpload() {
@@ -705,17 +506,15 @@ function closeDeleteModalHandler() {
     productToDeleteId = null;
 }
 
-function handleDeleteConfirmation() {
+async function handleDeleteConfirmation() {
     if (productToDeleteId) {
-        const product = products.find(p => p.id === productToDeleteId);
-        const productName = product ? product.name : 'Product';
-        
-        products = products.filter(p => p.id !== productToDeleteId);
-        renderProducts();
-        showNotification(`${productName} deleted successfully`, 'success');
+        await deleteDoc(doc(db, "products", productToDeleteId));
+        showNotification(`Product deleted successfully`, 'success');
+        initializeInventory();
         closeDeleteModalHandler();
     }
 }
+
 
 // Add CSS for notifications
 const style = document.createElement('style');
@@ -743,3 +542,5 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+window.editProduct = editProduct;
+window.deleteProduct = deleteProduct;
