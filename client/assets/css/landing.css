@@ -1664,7 +1664,7 @@ section {
         top: 100%;
         left: 0;
         right: 0;
-        background: transparent;
+        background: var(--nav-bg-light);
         backdrop-filter: none;
         flex-direction: column;
         padding: 20px;
@@ -1743,6 +1743,7 @@ section {
     
     .nav-menu.active {
         display: flex !important;
+        background: var(--nav-bg-light);
     }
       .nav-link {
         font-size: 16px;

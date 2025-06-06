@@ -1025,7 +1025,7 @@ a.filter-btn {
         top: 100%;
         left: 0;
         right: 0;
-        background: transparent;
+        background: var(--nav-bg-light);
         flex-direction: column;
         padding: 20px;
         /* Removed box-shadow border effect from mobile nav menu */
@@ -1039,6 +1039,7 @@ a.filter-btn {
 
     .nav-menu.active {
         display: flex;
+        background: var(--nav-bg-light);
     }
 
     .mobile-menu-toggle {
@@ -1249,8 +1250,8 @@ a.filter-btn {
     margin: 0;
     cursor: pointer;
     border-radius: 50%;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     justify-content: center;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
@@ -1263,8 +1264,8 @@ a.filter-btn {
 }
 
 .mobile-account .account-icon {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     transition: transform 0.3s ease;
     filter: brightness(0) invert(1);
