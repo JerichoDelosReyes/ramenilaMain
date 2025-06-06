@@ -58,7 +58,7 @@ function hideLoadingOverlay() {
     if (loadingOverlay) {
         setTimeout(() => {
             loadingOverlay.classList.add('hidden');
-        }, 800); // Small delay to show the loading animation
+        }, 400); // Fast loading - 0.4 second delay
     }
 }
 
