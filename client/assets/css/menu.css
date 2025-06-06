@@ -202,6 +202,7 @@ html {
     cursor: pointer;
     transition: transform 0.3s ease;
     border-radius: 50%;
+    filter: brightness(0.6) contrast(1.3);
     /* Removed box-shadow border effect */
 }
 
@@ -1244,7 +1245,7 @@ a.filter-btn {
 .mobile-account {
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #FF6B35, #FF8C42);
+    background: transparent;
     border: none;
     padding: 10px;
     margin: 0;
@@ -1254,21 +1255,18 @@ a.filter-btn {
     height: 40px;
     justify-content: center;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
 }
 
 .mobile-account:hover {
-    background: linear-gradient(135deg, #FF8C42, #FF6B35);
+    background: rgba(255, 107, 53, 0.1);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
 }
 
 .mobile-account .account-icon {
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     transition: transform 0.3s ease;
-    filter: brightness(0) invert(1);
 }
 
 .mobile-account .account-icon:hover {

@@ -153,6 +153,12 @@ function initOrderButtons() {
 
 // Show order modal/notification
 function showOrderModal(orderType) {
+    // Check if a modal overlay already exists to prevent duplicates
+    const existingModal = document.querySelector('.modal-overlay');
+    if (existingModal) {
+        return; // Exit early if modal already exists
+    }
+    
     const modalContent = orderType === 'kiosk' 
         ? {
             title: 'Kiosk Ordering',
@@ -434,7 +440,13 @@ function showOrderModal(orderType) {
     // Create a flag to track if modal is already closing to prevent double-click issues
     let isClosing = false;
     
-    const closeModal = () => {
+    const closeModal = (e) => {
+        // Prevent default behavior and stop propagation if event exists
+        if (e && typeof e.preventDefault === 'function') {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
         if (isClosing) return; // Prevent multiple close attempts
         isClosing = true;
         
@@ -443,6 +455,11 @@ function showOrderModal(orderType) {
             if (document.body.contains(modalOverlay)) {
                 document.body.removeChild(modalOverlay);
             }
+            
+            // Reset the closing flag after a short delay to allow new modals to be opened
+            setTimeout(() => {
+                isClosing = false;
+            }, 100);
         }, 300);
     };
     
@@ -451,21 +468,24 @@ function showOrderModal(orderType) {
     const closeButtonSecondary = modalOverlay.querySelector('.modal-close-btn');
     
     if (closeButton) {
-        closeButton.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent event bubbling
-            closeModal();
-        });
+        // Remove any existing event listeners to prevent duplication
+        const newCloseButton = closeButton.cloneNode(true);
+        closeButton.parentNode.replaceChild(newCloseButton, closeButton);
+        // Add new event listener
+        newCloseButton.addEventListener('click', closeModal);
     }
     
     if (closeButtonSecondary) {
-        closeButtonSecondary.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent event bubbling
-            closeModal();
-        });
+        // Remove any existing event listeners to prevent duplication
+        const newCloseButtonSecondary = closeButtonSecondary.cloneNode(true);
+        closeButtonSecondary.parentNode.replaceChild(newCloseButtonSecondary, closeButtonSecondary);
+        // Add new event listener
+        newCloseButtonSecondary.addEventListener('click', closeModal);
     }
     
+    // Handle overlay click to close modal
     modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) closeModal();
+        if (e.target === modalOverlay) closeModal(e);
     });
     
     // Primary action
@@ -839,351 +859,8 @@ function showKioskModal() {
 
 // Function to handle kiosk ordering directly from HTML
 function showKioskOrderModal() {
-    // Setup a mutation observer to detect theme changes while modal is open
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.attributeName === 'class' && 
-                mutation.target === document.body && 
-                document.querySelector('.order-modal')) {
-                
-                const isDarkMode = document.body.classList.contains('dark-mode');
-                const orderModal = document.querySelector('.order-modal');
-                
-                if (isDarkMode) {
-                    orderModal.classList.add('dark-theme');
-                } else {
-                    orderModal.classList.remove('dark-theme');
-                }
-            }
-        });
-    });
-
-    // Create a customized order modal that handles observer disconnection properly
-    const modalContent = {
-        title: 'Kiosk Ordering',
-        message: 'Visit any of our locations to use our digital kiosk for quick ordering. No online payment required!',
-        action: 'Find Locations'
-    };
-    
-    // Check if dark mode is active
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    
-    // Create modal overlay
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'modal-overlay';
-    modalOverlay.innerHTML = `
-        <div class="order-modal ${isDarkMode ? 'dark-theme' : ''}">
-            <button class="modal-close">&times;</button>
-            <div class="modal-icon">
-                <i class="fas fa-utensils"></i>
-            </div>
-            <h3>${modalContent.title}</h3>
-            <p>${modalContent.message}</p>
-            <div class="modal-actions">
-                <button class="modal-btn primary">${modalContent.action}</button>
-                <button class="modal-btn secondary modal-close-btn">Close</button>
-            </div>
-        </div>
-    `;
-    
-    // Add modal styles with dark mode support - using styles from showOrderModal
-    const modalStyles = `
-        <style>
-            .modal-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.2);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 10000;
-                animation: fadeIn 0.3s ease;
-                backdrop-filter: blur(15px);
-                -webkit-backdrop-filter: blur(15px);
-            }
-            
-            body.dark-mode .modal-overlay {
-                background: rgba(0, 0, 0, 0.4);
-                backdrop-filter: blur(10px) saturate(80%);
-                -webkit-backdrop-filter: blur(10px) saturate(80%);
-            }
-            
-            .order-modal {
-                background: white;
-                padding: 40px;
-                border-radius: 20px;
-                text-align: center;
-                max-width: 400px;
-                margin: 20px;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-                animation: slideUp 0.3s ease;
-                position: relative;
-            }
-            
-            .order-modal.dark-theme {
-                background: #1a1a1a;
-                color: #f0f0f0;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(210, 105, 30, 0.2);
-                border: 1px solid #333;
-                background-image: linear-gradient(to bottom right, rgba(210, 105, 30, 0.05), transparent);
-            }
-            
-            .modal-close {
-                position: absolute;
-                top: 15px;
-                right: 20px;
-                background: none;
-                border: none;
-                font-size: 1.2rem;
-                color: #999;
-                cursor: pointer;
-                padding: 8px;
-                line-height: 1;
-                border-radius: 50%;
-                width: 36px;
-                height: 36px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: #f2f2f2;
-                transition: all 0.3s ease;
-            }
-            
-            .order-modal.dark-theme .modal-close {
-                color: #eee;
-                background: #444;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            }
-            
-            .modal-close:hover {
-                transform: rotate(90deg);
-                background: #e0e0e0;
-                color: #777;
-            }
-            
-            .order-modal.dark-theme .modal-close:hover {
-                background: #555;
-                color: white;
-            }
-            
-            .modal-icon {
-                width: 80px;
-                height: 80px;
-                background: linear-gradient(135deg, #8B4513, #A0522D);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 0 auto 25px;
-                color: white;
-                font-size: 2rem;
-            }
-            
-            .order-modal.dark-theme .modal-icon {
-                background: linear-gradient(135deg, #D2691E, #A52A2A);
-                box-shadow: 0 0 20px rgba(210, 105, 30, 0.4);
-                position: relative;
-                overflow: hidden;
-                animation: pulse 3s infinite ease-in-out;
-            }
-            
-            @keyframes pulse {
-                0% { box-shadow: 0 0 20px rgba(210, 105, 30, 0.3); }
-                50% { box-shadow: 0 0 30px rgba(210, 105, 30, 0.5); }
-                100% { box-shadow: 0 0 20px rgba(210, 105, 30, 0.3); }
-            }
-            
-            .order-modal.dark-theme .modal-icon::after {
-                content: '';
-                position: absolute;
-                top: -50%;
-                left: -50%;
-                width: 200%;
-                height: 200%;
-                background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-                opacity: 0.5;
-            }
-            
-            .order-modal h3 {
-                font-size: 1.5rem;
-                color: #8B4513;
-                margin-bottom: 15px;
-            }
-            
-            .order-modal.dark-theme h3 {
-                color: #D2691E;
-                text-shadow: 0 0 10px rgba(210, 105, 30, 0.3);
-                letter-spacing: 0.5px;
-            }
-            
-            .order-modal p {
-                color: #6B4423;
-                line-height: 1.6;
-                margin-bottom: 30px;
-            }
-            
-            .order-modal.dark-theme p {
-                color: #bbb;
-                line-height: 1.7;
-                font-weight: 300;
-                letter-spacing: 0.2px;
-            }
-            
-            .modal-actions {
-                display: flex;
-                gap: 15px;
-                justify-content: center;
-            }
-            
-            .modal-btn {
-                padding: 12px 25px;
-                border: none;
-                border-radius: 25px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            }
-            
-            .modal-btn.primary {
-                background: linear-gradient(135deg, #8B4513, #A0522D);
-                color: white;
-            }
-            
-            .order-modal.dark-theme .modal-btn.primary {
-                background: linear-gradient(135deg, #D2691E, #A52A2A);
-                box-shadow: 0 0 15px rgba(210, 105, 30, 0.25);
-                border: none;
-                position: relative;
-                overflow: hidden;
-                z-index: 1;
-            }
-            
-            .order-modal.dark-theme .modal-btn.primary::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-                transition: left 0.7s ease;
-                z-index: -1;
-            }
-            
-            .order-modal.dark-theme .modal-btn.primary:hover::before {
-                left: 100%;
-            }
-            
-            .modal-btn.secondary {
-                background: #f5f5f5;
-                color: #666;
-                transition: all 0.3s ease;
-            }
-            
-            .order-modal.dark-theme .modal-btn.secondary {
-                background: #333;
-                color: #ccc;
-                border: 1px solid #555;
-                position: relative;
-                overflow: hidden;
-            }
-            
-            .order-modal.dark-theme .modal-btn.secondary::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(255,255,255,0.05);
-                transform: scaleX(0);
-                transform-origin: right;
-                transition: transform 0.3s ease;
-            }
-            
-            .order-modal.dark-theme .modal-btn.secondary:hover::before {
-                transform: scaleX(1);
-                transform-origin: left;
-            }
-            
-            .modal-btn:hover {
-                transform: translateY(-2px);
-            }
-            
-            .order-modal.dark-theme .modal-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            }
-            
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            
-            @keyframes slideUp {
-                from { transform: translateY(20px); opacity: 0; }
-                to { transform: translateY(0); opacity: 1; }
-            }
-        </style>
-    `;
-    
-    // Add styles to head
-    document.head.insertAdjacentHTML('beforeend', modalStyles);
-    
-    // Add modal to body
-    document.body.appendChild(modalOverlay);
-    
-    // Start observing for theme changes
-    observer.observe(document.body, { attributes: true });
-    
-    // Create a flag to track if modal is already closing
-    let isClosing = false;
-    
-    // Unified closing function that handles observer disconnection
-    const closeKioskModal = () => {
-        // Prevent double-closing attempts
-        if (isClosing) return;
-        isClosing = true;
-        
-        // Disconnect observer first to prevent memory leaks
-        observer.disconnect();
-        console.log('Theme observer disconnected');
-        
-        // Animate and remove modal
-        modalOverlay.style.animation = 'fadeIn 0.3s ease reverse';
-        setTimeout(() => {
-            if (document.body.contains(modalOverlay)) {
-                document.body.removeChild(modalOverlay);
-            }
-        }, 300);
-    };
-    
-    // Set up event listeners for closing
-    const closeButton = modalOverlay.querySelector('.modal-close');
-    const closeButtonSecondary = modalOverlay.querySelector('.modal-close-btn');
-    
-    if (closeButton) {
-        closeButton.addEventListener('click', closeKioskModal);
-    }
-    
-    if (closeButtonSecondary) {
-        closeButtonSecondary.addEventListener('click', closeKioskModal);
-    }
-    
-    // Close when clicking on the overlay background
-    modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) closeKioskModal();
-    });
-    
-    // Primary action button
-    modalOverlay.querySelector('.modal-btn.primary').addEventListener('click', () => {
-        // Scroll to locations section
-        document.querySelector('#locations').scrollIntoView({ behavior: 'smooth' });
-        closeKioskModal();
-    });
+    // Use the reliable showOrderModal function for consistent behavior
+    showOrderModal('kiosk');
 }
 
 // Show Login modal function that can be called from HTML

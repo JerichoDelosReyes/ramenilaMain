@@ -499,11 +499,14 @@ function showOrderModal(orderType) {
             action: 'Call for Delivery'
         };
     
+    // Check if dark mode is active
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    
     // Create modal overlay
     const modalOverlay = document.createElement('div');
     modalOverlay.className = 'modal-overlay';
     modalOverlay.innerHTML = `
-        <div class="order-modal">
+        <div class="order-modal ${isDarkMode ? 'dark-theme' : ''}">
             <button class="modal-close">&times;</button>
             <div class="modal-icon">
                 <i class="fas ${orderType === 'kiosk' ? 'fa-utensils' : 'fa-truck'}"></i>
@@ -517,7 +520,7 @@ function showOrderModal(orderType) {
         </div>
     `;
     
-    // Add modal styles
+    // Add modal styles with dark mode support
     const modalStyles = `
         <style>
             .modal-overlay {
@@ -536,6 +539,12 @@ function showOrderModal(orderType) {
                 -webkit-backdrop-filter: blur(15px);
             }
             
+            body.dark-mode .modal-overlay {
+                background: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(10px) saturate(80%);
+                -webkit-backdrop-filter: blur(10px) saturate(80%);
+            }
+            
             .order-modal {
                 background: white;
                 padding: 40px;
@@ -548,17 +557,50 @@ function showOrderModal(orderType) {
                 position: relative;
             }
             
+            .order-modal.dark-theme {
+                background: #1a1a1a;
+                color: #f0f0f0;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(210, 105, 30, 0.2);
+                border: 1px solid #333;
+                background-image: linear-gradient(to bottom right, rgba(210, 105, 30, 0.05), transparent);
+            }
+            
             .modal-close {
                 position: absolute;
                 top: 15px;
                 right: 20px;
                 background: none;
                 border: none;
-                font-size: 1.5rem;
+                font-size: 1.2rem;
                 color: #999;
                 cursor: pointer;
-                padding: 5px;
+                padding: 8px;
                 line-height: 1;
+                border-radius: 50%;
+                width: 36px;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f2f2f2;
+                transition: all 0.3s ease;
+            }
+            
+            .order-modal.dark-theme .modal-close {
+                color: #eee;
+                background: #444;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            }
+            
+            .modal-close:hover {
+                transform: rotate(90deg);
+                background: #e0e0e0;
+                color: #777;
+            }
+            
+            .order-modal.dark-theme .modal-close:hover {
+                background: #555;
+                color: white;
             }
             
             .modal-icon {
@@ -574,16 +616,54 @@ function showOrderModal(orderType) {
                 font-size: 2rem;
             }
             
+            .order-modal.dark-theme .modal-icon {
+                background: linear-gradient(135deg, #D2691E, #A52A2A);
+                box-shadow: 0 0 20px rgba(210, 105, 30, 0.4);
+                position: relative;
+                overflow: hidden;
+                animation: pulse 3s infinite ease-in-out;
+            }
+            
+            @keyframes pulse {
+                0% { box-shadow: 0 0 20px rgba(210, 105, 30, 0.3); }
+                50% { box-shadow: 0 0 30px rgba(210, 105, 30, 0.5); }
+                100% { box-shadow: 0 0 20px rgba(210, 105, 30, 0.3); }
+            }
+            
+            .order-modal.dark-theme .modal-icon::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+                opacity: 0.5;
+            }
+            
             .order-modal h3 {
                 font-size: 1.5rem;
                 color: #8B4513;
                 margin-bottom: 15px;
             }
             
+            .order-modal.dark-theme h3 {
+                color: #D2691E;
+                text-shadow: 0 0 10px rgba(210, 105, 30, 0.3);
+                letter-spacing: 0.5px;
+            }
+            
             .order-modal p {
                 color: #6B4423;
                 line-height: 1.6;
                 margin-bottom: 30px;
+            }
+            
+            .order-modal.dark-theme p {
+                color: #bbb;
+                line-height: 1.7;
+                font-weight: 300;
+                letter-spacing: 0.2px;
             }
             
             .modal-actions {
@@ -606,13 +686,70 @@ function showOrderModal(orderType) {
                 color: white;
             }
             
+            .order-modal.dark-theme .modal-btn.primary {
+                background: linear-gradient(135deg, #D2691E, #A52A2A);
+                box-shadow: 0 0 15px rgba(210, 105, 30, 0.25);
+                border: none;
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+            }
+            
+            .order-modal.dark-theme .modal-btn.primary::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: left 0.7s ease;
+                z-index: -1;
+            }
+            
+            .order-modal.dark-theme .modal-btn.primary:hover::before {
+                left: 100%;
+            }
+            
             .modal-btn.secondary {
                 background: #f5f5f5;
                 color: #666;
+                transition: all 0.3s ease;
+            }
+            
+            .order-modal.dark-theme .modal-btn.secondary {
+                background: #333;
+                color: #ccc;
+                border: 1px solid #555;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .order-modal.dark-theme .modal-btn.secondary::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255,255,255,0.05);
+                transform: scaleX(0);
+                transform-origin: right;
+                transition: transform 0.3s ease;
+            }
+            
+            .order-modal.dark-theme .modal-btn.secondary:hover::before {
+                transform: scaleX(1);
+                transform-origin: left;
             }
             
             .modal-btn:hover {
                 transform: translateY(-2px);
+            }
+            
+            .order-modal.dark-theme .modal-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             }
             
             @keyframes fadeIn {
