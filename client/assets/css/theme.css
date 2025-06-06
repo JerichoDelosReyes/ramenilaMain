@@ -192,7 +192,7 @@ body.dark-mode *,
 body.dark-mode .container,
 body.dark-mode .hero-container,
 body.dark-mode .nav-container {
-    color: inherit !important;
+    color: #FF6B35 !important;
 }
 
 /* Force specific section backgrounds */
