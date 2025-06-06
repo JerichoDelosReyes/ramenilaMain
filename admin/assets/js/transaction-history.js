@@ -221,9 +221,9 @@ class TransactionHistory {
         const avgOrderValue = totalTransactions > 0 ? totalRevenue / totalTransactions : 0;
 
         document.getElementById('total-transactions').textContent = totalTransactions;
-        document.getElementById('total-revenue').textContent = `$${totalRevenue.toFixed(2)}`;
+        document.getElementById('total-revenue').textContent = `₱${totalRevenue.toFixed(2)}`;
         document.getElementById('today-transactions').textContent = todayTransactions;
-        document.getElementById('avg-order-value').textContent = `$${avgOrderValue.toFixed(2)}`;
+        document.getElementById('avg-order-value').textContent = `₱${avgOrderValue.toFixed(2)}`;
     }
 
     displayTransactions() {
@@ -284,7 +284,7 @@ class TransactionHistory {
             <td>${itemsText}</td>
             <td>${getPaymentBadge(transaction.paymentMethod)}</td>
             <td>${getStatusBadge(transaction.status)}</td>
-            <td><strong>$${transaction.total.toFixed(2)}</strong></td>
+            <td><strong>₱${transaction.total.toFixed(2)}</strong></td>
             <td>
                 <div class="action-btns">
                     <button class="action-btn view-btn" onclick="transactionHistory.viewTransaction('${transaction.orderNumber}')">
@@ -332,9 +332,9 @@ class TransactionHistory {
                 <div class="item-row">
                     <div class="item-info">
                         <div class="item-name">${item.name}</div>
-                        <div class="item-details">Quantity: ${item.quantity} × $${item.price.toFixed(2)}</div>
+                        <div class="item-details">Quantity: ${item.quantity} × ₱${item.price.toFixed(2)}</div>
                     </div>
-                    <div class="item-total">$${(item.price * item.quantity).toFixed(2)}</div>
+                    <div class="item-total">₱${(item.price * item.quantity).toFixed(2)}</div>
                 </div>
             `;
         });
@@ -373,7 +373,7 @@ class TransactionHistory {
                             <div class="item-name" style="font-size: 1.1rem;"><strong>Total Amount</strong></div>
                         </div>
                         <div class="item-total" style="font-size: 1.2rem; color: #873E23;">
-                            <strong>$${transaction.total.toFixed(2)}</strong>
+                            <strong>₱${transaction.total.toFixed(2)}</strong>
                         </div>
                     </div>
                 </div>
@@ -393,7 +393,7 @@ class TransactionHistory {
             return;
         }
 
-        document.getElementById('refund-amount').textContent = `$${this.currentTransaction.total.toFixed(2)}`;
+        document.getElementById('refund-amount').textContent = `₱${this.currentTransaction.total.toFixed(2)}`;
         document.getElementById('transaction-modal').style.display = 'none';
         document.getElementById('refund-modal').style.display = 'block';
     }
@@ -467,8 +467,8 @@ class TransactionHistory {
                 <tr>
                     <td>${item.name}</td>
                     <td style="text-align: center;">${item.quantity}</td>
-                    <td style="text-align: right;">$${item.price.toFixed(2)}</td>
-                    <td style="text-align: right;">$${(item.price * item.quantity).toFixed(2)}</td>
+                    <td style="text-align: right;">₱${item.price.toFixed(2)}</td>
+                    <td style="text-align: right;">₱${(item.price * item.quantity).toFixed(2)}</td>
                 </tr>
             `;
         });
@@ -517,7 +517,7 @@ class TransactionHistory {
                     </table>
                     
                     <div class="total">
-                        Total: $${transaction.total.toFixed(2)}
+                        Total: ₱${transaction.total.toFixed(2)}
                     </div>
                     
                     <div class="footer">
