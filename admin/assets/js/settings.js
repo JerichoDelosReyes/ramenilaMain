@@ -17,8 +17,8 @@ class SettingsManager {
             general: {
                 theme: 'light',
                 language: 'en',
-                currency: 'USD',
-                timezone: 'America/New_York',
+                currency: 'PHP',
+                timezone: 'Asia/Manila',
                 dateFormat: 'MM/DD/YYYY',
                 timeFormat: '12'
             },
@@ -290,7 +290,8 @@ class SettingsManager {
             'USD': '$',
             'EUR': '€',
             'GBP': '£',
-            'JPY': '¥'
+            'JPY': '¥',
+            'PHP': '₱'
         };
         
         // This would update currency display throughout the app
