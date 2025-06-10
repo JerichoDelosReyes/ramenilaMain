@@ -10,6 +10,24 @@
     <link rel="icon" href="assets/img/logo.png" type="image/png">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAR75Wj4GyR8g-lboC_zEs9rwE8YbajzJI",
+            authDomain: "ramenila.firebaseapp.com",
+            projectId: "ramenila",
+            storageBucket: "ramenila.firebasestorage.app",
+            messagingSenderId: "538536470051",
+            appId: "1:538536470051:web:1abde073b47b5d3244f396",
+            measurementId: "G-SG324J43CZ"
+        };
+      
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        window.firestoreDB = db;
+      </script>
 </head>
 <body>
     <!-- Sidebar -->
@@ -256,6 +274,6 @@
 
     <!-- JavaScript -->
     <script src="assets/js/sidebar.js"></script>
-    <script src="assets/js/transaction-history.js"></script>
+    <script type="module" src="assets/js/transaction-history.js"></script>
 </body>
 </html>

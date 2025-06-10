@@ -1,3 +1,6 @@
+import { getFirestore, collection, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const db = window.firestoreDB;
 // Transaction/POS JavaScript functionality
 class POSSystem {    constructor() {
         this.cart = [];
@@ -12,6 +15,19 @@ class POSSystem {    constructor() {
         this.updateDateTime();
         this.toggleCashPaymentFields(); // Initialize payment fields visibility
         setInterval(() => this.updateDateTime(), 1000);
+    }
+    async updateProductStockAfterSale() {
+    const db = window.firestoreDB;
+    try {
+        for (const item of this.cart) {
+            const newStock = item.stock - item.quantity;
+            const ref = doc(db, "products", item.id);
+            await updateDoc(ref, { stock: newStock });
+        }
+        console.log("Product stocks updated after sale.");
+    } catch (error) {
+        console.error("Failed to update product stock:", error);
+    }
     }
 
     generateOrderNumber() {
@@ -35,138 +51,10 @@ class POSSystem {    constructor() {
         if (dateTimeElement) {
             dateTimeElement.textContent = dateTimeString;
         }
-    }    loadMenuItems() {
-        console.log('Loading menu items...');
-        // Test products for transaction page (separate from inventory)
-        this.testProducts = [
-            {
-                id: 1,
-                name: 'Tonkotsu Ramen',
-                description: 'Rich pork bone broth with tender chashu',
-                category: 'ramen',
-                price: 295.00,
-                stock: 15,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCf35w8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 2,
-                name: 'Shoyu Ramen',
-                description: 'Clear soy sauce based broth with green onions',
-                category: 'ramen',
-                price: 275.00,
-                stock: 12,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCf35w8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 3,
-                name: 'Miso Ramen',
-                description: 'Rich fermented soybean paste broth',
-                category: 'ramen',
-                price: 285.00,
-                stock: 8,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCf35w8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 4,
-                name: 'Spicy Tantanmen',
-                description: 'Spicy sesame and minced pork ramen',
-                category: 'ramen',
-                price: 315.00,
-                stock: 6,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCf35w8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 5,
-                name: 'Gyoza (6 pcs)',
-                description: 'Pan-fried pork and vegetable dumplings',
-                category: 'sides',
-                price: 185.00,
-                stock: 20,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfpZ88L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 6,
-                name: 'Chicken Karaage',
-                description: 'Japanese style fried chicken pieces',
-                category: 'sides',
-                price: 215.00,
-                stock: 14,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfkpc8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 7,
-                name: 'Edamame',
-                description: 'Steamed young soybeans with sea salt',
-                category: 'sides',
-                price: 125.00,
-                stock: 25,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfq5g8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 8,
-                name: 'Takoyaki (6 pcs)',
-                description: 'Octopus balls with takoyaki sauce',
-                category: 'sides',
-                price: 235.00,
-                stock: 0,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfkJk8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 9,
-                name: 'Green Tea',
-                description: 'Hot Japanese green tea',
-                category: 'drinks',
-                price: 75.00,
-                stock: 30,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfkYU8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 10,
-                name: 'Ramune Soda',
-                description: 'Traditional Japanese marble soda',
-                category: 'drinks',
-                price: 95.00,
-                stock: 18,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfpKQ8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 11,
-                name: 'Japanese Beer',
-                description: 'Cold Asahi or Sapporo draft beer',
-                category: 'drinks',
-                price: 145.00,
-                stock: 12,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfkLo8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 12,
-                name: 'Extra Chashu',
-                description: 'Additional braised pork belly slices',
-                category: 'toppings',
-                price: 55.00,
-                stock: 22,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfpZA8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 13,
-                name: 'Soft Boiled Egg',
-                description: 'Perfectly cooked ramen egg',
-                category: 'toppings',
-                price: 35.00,
-                stock: 28,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCfpJU8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            },
-            {
-                id: 14,
-                name: 'Extra Noodles',
-                description: 'Additional portion of ramen noodles',
-                category: 'toppings',
-                price: 45.00,
-                stock: 35,
-                image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGRkY4RUEiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHA+PGVtb2ppPjCf35w8L2Vtb2ppPjwvcD4KPC9zdmc+Cjwvc3ZnPgo='
-            }
-        ];
-
+    }    async loadMenuItems() {
+        console.log('Loading products from Firestore...');
+        const querySnapshot = await getDocs(collection(db, "products"));
+        this.testProducts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         this.filteredProducts = [...this.testProducts];
         this.renderMenuTable();
     }    renderMenuTable() {
@@ -176,6 +64,7 @@ class POSSystem {    constructor() {
             console.error('menuTableBody not found!');
             return;
         }
+        
 
         tableBody.innerHTML = '';
 
@@ -193,7 +82,7 @@ class POSSystem {    constructor() {
         }
 
         // Get image based on category
-        const categoryImage = this.getCategoryImage(product.category);
+        const categoryImage = this.getCategoryImage(product);
 
         row.innerHTML = `
             <td>
@@ -226,14 +115,8 @@ class POSSystem {    constructor() {
         return row;
     }
 
-    getCategoryImage(category) {
-        const imageMap = {
-            'ramen': 'assets/img/ramen.png',
-            'toppings': 'assets/img/toppings.png',
-            'drinks': 'assets/img/drinks.png',
-            'sides': 'assets/img/sides.png'
-        };
-        return imageMap[category] || 'assets/img/ramen.png'; // Default to ramen if category not found
+    getCategoryImage(product) {
+    return product.image || 'assets/img/ramen.png'; // fallback if no image is set
     }
 
     getStockClass(stock) {
@@ -403,18 +286,9 @@ class POSSystem {    constructor() {
         });
 
         // Prevent scrolling when modal is open
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                const paymentModal = document.getElementById('paymentModal');
-                const orderModal = document.getElementById('orderModal');
-                
-                if (paymentModal && paymentModal.classList.contains('show')) {
-                    this.closePaymentModal();
-                } else if (orderModal && orderModal.classList.contains('show')) {
-                    this.closeOrderModal();
-                }
-            }
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+        window.pos = new POSSystem();
+     });
     }    addToCart(item) {
         const existingItem = this.cart.find(cartItem => cartItem.id === item.id);
         if (existingItem) {
@@ -779,7 +653,7 @@ class POSSystem {    constructor() {
         }, 2000);
     }
 
-    completeTransaction(total, subtotal, discount, tax, customerName, orderType, paymentType) {
+    async completeTransaction(total, subtotal, discount, tax, customerName, orderType, paymentType) {
         // Get additional payment data
         const referenceNumber = paymentType !== 'cash' ? document.getElementById('referenceNumber')?.value.trim() : null;
         const amountReceived = paymentType === 'cash' ? parseFloat(document.getElementById('amountReceived')?.value) : total;
@@ -804,7 +678,10 @@ class POSSystem {    constructor() {
         };
 
         // Save transaction to localStorage
-        this.saveTransaction(transaction);
+        await this.saveTransaction(transaction);
+        await this.updateProductStockAfterSale();
+
+
 
         // Show order completion modal
         this.showOrderModal(transaction);        // Reset for next order
@@ -822,17 +699,17 @@ class POSSystem {    constructor() {
         }
     }
 
-    saveTransaction(transaction) {
-        const transactions = JSON.parse(localStorage.getItem('ramenila_transactions') || '[]');
-        transactions.unshift(transaction);
-        
-        // Keep only last 100 transactions
-        if (transactions.length > 100) {
-            transactions.splice(100);
+        async saveTransaction(transaction) {
+            const db = window.firestoreDB;
+            try {
+                await addDoc(collection(db, "transactions"), transaction);
+                console.log("Transaction saved to Firestore:", transaction);
+            } catch (error) {
+                console.error("Failed to save transaction:", error);
+                this.showNotification("Failed to save transaction", "error");
+            }
         }
-        
-        localStorage.setItem('ramenila_transactions', JSON.stringify(transactions));
-    }    showOrderModal(transaction) {
+        showOrderModal(transaction) {
         const modal = document.getElementById('orderModal');
         const orderReceipt = document.getElementById('orderReceipt');
         

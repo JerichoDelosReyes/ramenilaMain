@@ -1,3 +1,6 @@
+import { getFirestore, collection, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const db = window.firestoreDB;
 // Transaction History Management System
 class TransactionHistory {
     constructor() {
@@ -16,17 +19,24 @@ class TransactionHistory {
         this.displayTransactions();
     }
 
-    loadTransactions() {
-        // Load transactions from localStorage
-        const savedTransactions = localStorage.getItem('transactions');
-        if (savedTransactions) {
-            this.transactions = JSON.parse(savedTransactions);
-        } else {
-            // Generate sample data if no transactions exist
-            this.generateSampleData();
+    async loadTransactions() {
+        try {
+            const snapshot = await getDocs(collection(db, "transactions"));
+            this.transactions = snapshot.docs.map(doc => ({
+            id: doc.id, // 👈 this adds the Firestore document ID!
+            ...doc.data()
+        }));
+
+
+            this.filteredTransactions = [...this.transactions];
+            this.displayTransactions();
+            this.updateSummaryCards();
+        } catch (error) {
+            console.error("Error loading transactions from Firestore:", error);
+            this.showNotification('Failed to load transaction history', 'error');
         }
-        this.filteredTransactions = [...this.transactions];
     }
+
 
     generateSampleData() {
         const sampleTransactions = [
@@ -208,17 +218,21 @@ class TransactionHistory {
 
     updateSummaryCards() {
         const transactions = this.filteredTransactions;
+
         const totalTransactions = transactions.length;
+
         const totalRevenue = transactions
             .filter(t => t.status === 'completed')
-            .reduce((sum, t) => sum + t.total, 0);
-        
-        const today = new Date().toISOString().split('T')[0];
-        const todayTransactions = transactions.filter(t => 
+            .reduce((sum, t) => sum + (t.total || 0), 0);
+
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const todayTransactions = transactions.filter(t =>
             new Date(t.timestamp).toISOString().split('T')[0] === today
         ).length;
-        
-        const avgOrderValue = totalTransactions > 0 ? totalRevenue / totalTransactions : 0;
+
+        const avgOrderValue = totalTransactions > 0
+            ? totalRevenue / totalTransactions
+            : 0;
 
         document.getElementById('total-transactions').textContent = totalTransactions;
         document.getElementById('total-revenue').textContent = `₱${totalRevenue.toFixed(2)}`;
@@ -398,7 +412,7 @@ class TransactionHistory {
         document.getElementById('refund-modal').style.display = 'block';
     }
 
-    processRefund() {
+    async processRefund() {
         if (!this.currentTransaction) return;
 
         const reason = document.getElementById('refund-reason').value;
@@ -409,6 +423,21 @@ class TransactionHistory {
         this.currentTransaction.refundReason = reason;
         this.currentTransaction.refundNotes = notes;
         this.currentTransaction.refundDate = new Date().toISOString();
+        try {
+            const transactionRef = doc(db, "transactions", this.currentTransaction.id); // must store Firestore doc ID in each transaction
+            await updateDoc(transactionRef, {
+                status: 'refunded',
+                refundReason: reason,
+                refundNotes: notes,
+                refundDate: new Date().toISOString()
+            });
+            console.log("Transaction updated in Firestore.");
+        } catch (error) {
+            console.error("Failed to update transaction in Firestore:", error);
+            this.showNotification("Failed to update Firestore", "error");
+        }
+
+        
 
         // Save to localStorage
         localStorage.setItem('transactions', JSON.stringify(this.transactions));
