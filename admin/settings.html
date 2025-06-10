@@ -89,14 +89,8 @@
                 <button class="tab-btn" data-tab="pos">
                     <i class="fas fa-cash-register"></i> POS System
                 </button>
-                <button class="tab-btn" data-tab="notifications">
-                    <i class="fas fa-bell"></i> Notifications
-                </button>
                 <button class="tab-btn" data-tab="users">
                     <i class="fas fa-users"></i> Users
-                </button>
-                <button class="tab-btn" data-tab="backup">
-                    <i class="fas fa-database"></i> Data & Backup
                 </button>
             </div>
 
@@ -309,67 +303,6 @@
                     </div>
                 </div>
 
-                <!-- Notifications Settings -->
-                <div id="notifications-tab" class="tab-pane">
-                    <div class="settings-section">
-                        <h2>Notification Preferences</h2>
-                        
-                        <div class="settings-grid">
-                            <div class="setting-card">
-                                <h3><i class="fas fa-exclamation-triangle"></i> Inventory Alerts</h3>
-                                <div class="form-group">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="low-stock-alerts" checked>
-                                        Low stock alerts
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label for="low-stock-threshold">Low Stock Threshold</label>
-                                    <input type="number" id="low-stock-threshold" value="10" min="1">
-                                </div>
-                                <div class="form-group">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="out-of-stock-alerts" checked>
-                                        Out of stock alerts
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="expiry-alerts" checked>
-                                        Product expiry alerts
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="setting-card">
-                                <h3><i class="fas fa-chart-line"></i> Sales Notifications</h3>
-                                <div class="form-group">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="daily-reports" checked>
-                                        Daily sales reports
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="weekly-reports">
-                                        Weekly summary reports
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="goal-alerts">
-                                        Sales goal notifications
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label for="daily-goal">Daily Sales Goal ($)</label>
-                                    <input type="number" id="daily-goal" value="1000" min="0">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Users Settings -->
                 <div id="users-tab" class="tab-pane">
                     <div class="settings-section">
@@ -394,102 +327,50 @@
                                     </tr>
                                 </thead>
                                 <tbody id="users-tbody">
-                                    <tr>
+                                    <tr data-user-id="1">
                                         <td><strong>Admin User</strong></td>
                                         <td>jericho.dlsreyes@gmail.com</td>
                                         <td><span class="role-badge admin">Administrator</span></td>
                                         <td>Today, 2:30 PM</td>
                                         <td><span class="status-badge active">Active</span></td>
                                         <td>
-                                            <button class="action-btn edit-btn">
+                                            <button class="action-btn edit-btn" onclick="settingsManager.editUser(1)">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr data-user-id="2">
                                         <td><strong>Manager User</strong></td>
                                         <td>justinecoronel001@gmail.com</td>
                                         <td><span class="role-badge manager">Manager</span></td>
                                         <td>Yesterday, 5:45 PM</td>
                                         <td><span class="status-badge active">Active</span></td>
                                         <td>
-                                            <button class="action-btn edit-btn">
+                                            <button class="action-btn edit-btn" onclick="settingsManager.editUser(2)">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <button class="action-btn delete-btn">
+                                            <button class="action-btn delete-btn" onclick="settingsManager.deleteUser(2)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr data-user-id="3">
                                         <td><strong>Cashier User</strong></td>
                                         <td>norona.leeadrian022804@gmail.com</td>
                                         <td><span class="role-badge cashier">Cashier</span></td>
                                         <td>2 days ago</td>
-                                        <td><span class="status-badge inactive">Inactive</span></td>
+                                        <td><span class="status-badge active">Active</span></td>
                                         <td>
-                                            <button class="action-btn edit-btn">
+                                            <button class="action-btn edit-btn" onclick="settingsManager.editUser(3)">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <button class="action-btn delete-btn">
+                                            <button class="action-btn delete-btn" onclick="settingsManager.deleteUser(3)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Backup Settings -->
-                <div id="backup-tab" class="tab-pane">
-                    <div class="settings-section">
-                        <h2>Data Management & Backup</h2>
-                        
-                        <div class="settings-grid">
-                            <div class="setting-card">
-                                <h3><i class="fas fa-download"></i> Export Data</h3>
-                                <p>Download your data for backup or migration purposes.</p>
-                                <div class="backup-actions">
-                                    <button class="btn btn-primary" id="export-inventory">
-                                        <i class="fas fa-boxes"></i> Export Inventory
-                                    </button>
-                                    <button class="btn btn-primary" id="export-transactions">
-                                        <i class="fas fa-receipt"></i> Export Transactions
-                                    </button>
-                                    <button class="btn btn-success" id="export-all">
-                                        <i class="fas fa-database"></i> Export All Data
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="setting-card">
-                                <h3><i class="fas fa-upload"></i> Import Data</h3>
-                                <p>Import data from CSV files or restore from backup.</p>
-                                <div class="import-section">
-                                    <div class="form-group">
-                                        <label for="import-file">Select File</label>
-                                        <input type="file" id="import-file" accept=".csv,.json">
-                                    </div>
-                                    <button class="btn btn-info" id="import-data">
-                                        <i class="fas fa-upload"></i> Import Data
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="setting-card">
-                                <h3><i class="fas fa-trash-alt"></i> Reset Data</h3>
-                                <p>Clear all data and start fresh. <strong>This action cannot be undone!</strong></p>
-                                <div class="reset-actions">
-                                    <button class="btn btn-warning" id="clear-transactions">
-                                        <i class="fas fa-history"></i> Clear Transaction History
-                                    </button>
-                                    <button class="btn btn-danger" id="reset-all">
-                                        <i class="fas fa-exclamation-triangle"></i> Reset All Data
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -541,6 +422,57 @@
                     <i class="fas fa-plus"></i> Add User
                 </button>
                 <button class="btn btn-secondary" onclick="document.getElementById('add-user-modal').style.display='none'">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="edit-user-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit User</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="edit-user-form">
+                    <input type="hidden" id="edit-user-id">
+                    <div class="form-group">
+                        <label for="edit-user-name">Full Name</label>
+                        <input type="text" id="edit-user-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-user-email">Email Address</label>
+                        <input type="email" id="edit-user-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-user-role">Role</label>
+                        <select id="edit-user-role" required>
+                            <option value="">Select Role</option>
+                            <option value="admin">Administrator</option>
+                            <option value="manager">Manager</option>
+                            <option value="cashier">Cashier</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-user-status">Status</label>
+                        <select id="edit-user-status" required>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-user-password">New Password (Optional)</label>
+                        <input type="password" id="edit-user-password" placeholder="Leave empty to keep current password">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="edit-user-form" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Update User
+                </button>
+                <button class="btn btn-secondary" onclick="document.getElementById('edit-user-modal').style.display='none'">
                     Cancel
                 </button>
             </div>

@@ -9,6 +9,7 @@ class SettingsManager {
         this.setupTabs();
         this.setupEventListeners();
         this.loadCurrentSettings();
+        this.initializeDefaultUsers();
     }
 
     loadSettings() {
@@ -45,16 +46,6 @@ class SettingsManager {
                 autoPrint: true,
                 emailReceipts: false,
                 receiptFooter: 'Thank you for visiting Ramenila!'
-            },
-            notifications: {
-                lowStockAlerts: true,
-                lowStockThreshold: 10,
-                outOfStockAlerts: true,
-                expiryAlerts: true,
-                dailyReports: true,
-                weeklyReports: false,
-                goalAlerts: false,
-                dailyGoal: 1000
             }
         };
 
@@ -63,6 +54,43 @@ class SettingsManager {
             return { ...defaultSettings, ...JSON.parse(savedSettings) };
         }
         return defaultSettings;
+    }
+
+    initializeDefaultUsers() {
+        // Initialize default users if not already in localStorage
+        const existingUsers = localStorage.getItem('users');
+        if (!existingUsers) {
+            const defaultUsers = [
+                {
+                    id: 1,
+                    name: 'Admin User',
+                    email: 'jericho.dlsreyes@gmail.com',
+                    role: 'admin',
+                    lastLogin: 'Today, 2:30 PM',
+                    status: 'active',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 2,
+                    name: 'Manager User',
+                    email: 'justinecoronel001@gmail.com',
+                    role: 'manager',
+                    lastLogin: 'Yesterday, 5:45 PM',
+                    status: 'active',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 3,
+                    name: 'Cashier User',
+                    email: 'norona.leeadrian022804@gmail.com',
+                    role: 'cashier',
+                    lastLogin: '2 days ago',
+                    status: 'active',
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            localStorage.setItem('users', JSON.stringify(defaultUsers));
+        }
     }
 
     setupTabs() {
@@ -94,33 +122,6 @@ class SettingsManager {
             this.saveAllSettings();
         });
 
-        // Export buttons
-        document.getElementById('export-inventory').addEventListener('click', () => {
-            this.exportData('inventory');
-        });
-
-        document.getElementById('export-transactions').addEventListener('click', () => {
-            this.exportData('transactions');
-        });
-
-        document.getElementById('export-all').addEventListener('click', () => {
-            this.exportData('all');
-        });
-
-        // Import data
-        document.getElementById('import-data').addEventListener('click', () => {
-            this.importData();
-        });
-
-        // Reset data
-        document.getElementById('clear-transactions').addEventListener('click', () => {
-            this.clearTransactions();
-        });
-
-        document.getElementById('reset-all').addEventListener('click', () => {
-            this.resetAllData();
-        });
-
         // Add user functionality
         document.getElementById('add-user-btn').addEventListener('click', () => {
             document.getElementById('add-user-modal').style.display = 'block';
@@ -129,6 +130,12 @@ class SettingsManager {
         document.getElementById('add-user-form').addEventListener('submit', (e) => {
             e.preventDefault();
             this.addUser();
+        });
+
+        // Edit user form
+        document.getElementById('edit-user-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.updateUser();
         });
 
         // Modal close handlers
@@ -199,16 +206,6 @@ class SettingsManager {
         document.getElementById('auto-print').checked = this.settings.pos.autoPrint;
         document.getElementById('email-receipts').checked = this.settings.pos.emailReceipts;
         document.getElementById('receipt-footer').value = this.settings.pos.receiptFooter;
-
-        // Notification settings
-        document.getElementById('low-stock-alerts').checked = this.settings.notifications.lowStockAlerts;
-        document.getElementById('low-stock-threshold').value = this.settings.notifications.lowStockThreshold;
-        document.getElementById('out-of-stock-alerts').checked = this.settings.notifications.outOfStockAlerts;
-        document.getElementById('expiry-alerts').checked = this.settings.notifications.expiryAlerts;
-        document.getElementById('daily-reports').checked = this.settings.notifications.dailyReports;
-        document.getElementById('weekly-reports').checked = this.settings.notifications.weeklyReports;
-        document.getElementById('goal-alerts').checked = this.settings.notifications.goalAlerts;
-        document.getElementById('daily-goal').value = this.settings.notifications.dailyGoal;
     }
 
     saveAllSettings() {
@@ -238,16 +235,6 @@ class SettingsManager {
                 autoPrint: document.getElementById('auto-print').checked,
                 emailReceipts: document.getElementById('email-receipts').checked,
                 receiptFooter: document.getElementById('receipt-footer').value
-            },
-            notifications: {
-                lowStockAlerts: document.getElementById('low-stock-alerts').checked,
-                lowStockThreshold: parseInt(document.getElementById('low-stock-threshold').value),
-                outOfStockAlerts: document.getElementById('out-of-stock-alerts').checked,
-                expiryAlerts: document.getElementById('expiry-alerts').checked,
-                dailyReports: document.getElementById('daily-reports').checked,
-                weeklyReports: document.getElementById('weekly-reports').checked,
-                goalAlerts: document.getElementById('goal-alerts').checked,
-                dailyGoal: parseFloat(document.getElementById('daily-goal').value)
             }
         };
 
@@ -310,112 +297,6 @@ class SettingsManager {
         console.log(`Currency changed to ${currency} (${currencySymbols[currency]})`);
     }
 
-    exportData(type) {
-        let data = {};
-        let filename = '';
-
-        switch(type) {
-            case 'inventory':
-                data = JSON.parse(localStorage.getItem('inventory') || '[]');
-                filename = `ramenila_inventory_${new Date().toISOString().split('T')[0]}.json`;
-                break;
-            case 'transactions':
-                data = JSON.parse(localStorage.getItem('transactions') || '[]');
-                filename = `ramenila_transactions_${new Date().toISOString().split('T')[0]}.json`;
-                break;
-            case 'all':
-                data = {
-                    inventory: JSON.parse(localStorage.getItem('inventory') || '[]'),
-                    transactions: JSON.parse(localStorage.getItem('transactions') || '[]'),
-                    settings: this.settings
-                };
-                filename = `ramenila_full_backup_${new Date().toISOString().split('T')[0]}.json`;
-                break;
-        }
-
-        this.downloadJSON(data, filename);
-        this.showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} data exported successfully!`, 'success');
-    }
-
-    downloadJSON(data, filename) {
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.click();
-        window.URL.revokeObjectURL(url);
-    }
-
-    importData() {
-        const fileInput = document.getElementById('import-file');
-        const file = fileInput.files[0];
-
-        if (!file) {
-            this.showNotification('Please select a file to import', 'error');
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const data = JSON.parse(e.target.result);
-                
-                // Determine data type and import accordingly
-                if (Array.isArray(data)) {
-                    // Assume it's either inventory or transactions
-                    if (data.length > 0 && data[0].hasOwnProperty('stock')) {
-                        localStorage.setItem('inventory', JSON.stringify(data));
-                        this.showNotification('Inventory data imported successfully!', 'success');
-                    } else if (data.length > 0 && data[0].hasOwnProperty('orderNumber')) {
-                        localStorage.setItem('transactions', JSON.stringify(data));
-                        this.showNotification('Transaction data imported successfully!', 'success');
-                    }
-                } else if (data.hasOwnProperty('inventory') || data.hasOwnProperty('transactions')) {
-                    // Full backup file
-                    if (data.inventory) {
-                        localStorage.setItem('inventory', JSON.stringify(data.inventory));
-                    }
-                    if (data.transactions) {
-                        localStorage.setItem('transactions', JSON.stringify(data.transactions));
-                    }
-                    if (data.settings) {
-                        localStorage.setItem('ramenila_settings', JSON.stringify(data.settings));
-                        this.settings = data.settings;
-                        this.loadCurrentSettings();
-                    }
-                    this.showNotification('All data imported successfully!', 'success');
-                }
-                
-                fileInput.value = '';
-            } catch (error) {
-                this.showNotification('Error importing data. Please check file format.', 'error');
-            }
-        };
-        
-        reader.readAsText(file);
-    }
-
-    clearTransactions() {
-        if (confirm('Are you sure you want to clear all transaction history? This action cannot be undone.')) {
-            localStorage.removeItem('transactions');
-            this.showNotification('Transaction history cleared successfully!', 'info');
-        }
-    }
-
-    resetAllData() {
-        if (confirm('Are you sure you want to reset ALL data? This will clear inventory, transactions, and settings. This action cannot be undone.')) {
-            const confirmAgain = confirm('This is your final warning. All data will be permanently deleted. Do you want to continue?');
-            if (confirmAgain) {
-                localStorage.clear();
-                this.showNotification('All data has been reset!', 'info');
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
-            }
-        }
-    }
-
     addUser() {
         const name = document.getElementById('user-name').value;
         const email = document.getElementById('user-email').value;
@@ -456,9 +337,14 @@ class SettingsManager {
     addUserToTable(user) {
         const tbody = document.getElementById('users-tbody');
         const row = document.createElement('tr');
+        row.setAttribute('data-user-id', user.id);
         
         const getRoleBadge = (role) => {
             return `<span class="role-badge ${role}">${role.charAt(0).toUpperCase() + role.slice(1)}</span>`;
+        };
+
+        const getStatusBadge = (status) => {
+            return `<span class="status-badge ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
         };
 
         row.innerHTML = `
@@ -466,14 +352,15 @@ class SettingsManager {
             <td>${user.email}</td>
             <td>${getRoleBadge(user.role)}</td>
             <td>${user.lastLogin}</td>
-            <td><span class="status-badge ${user.status}">${user.status.charAt(0).toUpperCase() + user.status.slice(1)}</span></td>
+            <td>${getStatusBadge(user.status)}</td>
             <td>
                 <button class="action-btn edit-btn" onclick="settingsManager.editUser(${user.id})">
                     <i class="fas fa-edit"></i>
                 </button>
+                ${user.role !== 'admin' ? `
                 <button class="action-btn delete-btn" onclick="settingsManager.deleteUser(${user.id})">
                     <i class="fas fa-trash"></i>
-                </button>
+                </button>` : ''}
             </td>
         `;
         
@@ -481,25 +368,127 @@ class SettingsManager {
     }
 
     editUser(userId) {
-        // In a real app, this would open an edit modal
-        this.showNotification('Edit user functionality would be implemented here', 'info');
+        // Get user data from localStorage
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.id == userId);
+        
+        if (!user) {
+            this.showNotification('User not found', 'error');
+            return;
+        }
+
+        // Populate edit form
+        document.getElementById('edit-user-id').value = user.id;
+        document.getElementById('edit-user-name').value = user.name;
+        document.getElementById('edit-user-email').value = user.email;
+        document.getElementById('edit-user-role').value = user.role;
+        document.getElementById('edit-user-status').value = user.status;
+        document.getElementById('edit-user-password').value = '';
+
+        // Show edit modal
+        document.getElementById('edit-user-modal').style.display = 'block';
+    }
+
+    updateUser() {
+        const userId = parseInt(document.getElementById('edit-user-id').value);
+        const name = document.getElementById('edit-user-name').value;
+        const email = document.getElementById('edit-user-email').value;
+        const role = document.getElementById('edit-user-role').value;
+        const status = document.getElementById('edit-user-status').value;
+        const password = document.getElementById('edit-user-password').value;
+
+        if (!name || !email || !role || !status) {
+            this.showNotification('Please fill in all required fields', 'error');
+            return;
+        }
+
+        // Get users from localStorage
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const userIndex = users.findIndex(u => u.id == userId);
+
+        if (userIndex === -1) {
+            this.showNotification('User not found', 'error');
+            return;
+        }
+
+        // Update user data
+        users[userIndex] = {
+            ...users[userIndex],
+            name: name,
+            email: email,
+            role: role,
+            status: status,
+            updatedAt: new Date().toISOString()
+        };
+
+        // Save to localStorage
+        localStorage.setItem('users', JSON.stringify(users));
+
+        // Update the table row
+        this.updateUserInTable(users[userIndex]);
+
+        // Close modal and show notification
+        document.getElementById('edit-user-modal').style.display = 'none';
+        this.showNotification('User updated successfully!', 'success');
+    }
+
+    updateUserInTable(user) {
+        const row = document.querySelector(`tr[data-user-id="${user.id}"]`);
+        if (!row) return;
+
+        const getRoleBadge = (role) => {
+            return `<span class="role-badge ${role}">${role.charAt(0).toUpperCase() + role.slice(1)}</span>`;
+        };
+
+        const getStatusBadge = (status) => {
+            return `<span class="status-badge ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+        };
+
+        // Update row content
+        row.innerHTML = `
+            <td><strong>${user.name}</strong></td>
+            <td>${user.email}</td>
+            <td>${getRoleBadge(user.role)}</td>
+            <td>${user.lastLogin}</td>
+            <td>${getStatusBadge(user.status)}</td>
+            <td>
+                <button class="action-btn edit-btn" onclick="settingsManager.editUser(${user.id})">
+                    <i class="fas fa-edit"></i>
+                </button>
+                ${user.role !== 'admin' ? `
+                <button class="action-btn delete-btn" onclick="settingsManager.deleteUser(${user.id})">
+                    <i class="fas fa-trash"></i>
+                </button>` : ''}
+            </td>
+        `;
     }
 
     deleteUser(userId) {
-        if (confirm('Are you sure you want to delete this user?')) {
+        // Get user data to check role
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.id == userId);
+        
+        if (!user) {
+            this.showNotification('User not found', 'error');
+            return;
+        }
+
+        // Prevent deletion of admin users
+        if (user.role === 'admin') {
+            this.showNotification('Cannot delete administrator users', 'error');
+            return;
+        }
+
+        if (confirm(`Are you sure you want to delete ${user.name}?`)) {
             // Remove from localStorage
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const updatedUsers = users.filter(user => user.id !== userId);
+            const updatedUsers = users.filter(u => u.id != userId);
             localStorage.setItem('users', JSON.stringify(updatedUsers));
             
             // Remove from table
-            const rows = document.querySelectorAll('#users-tbody tr');
-            rows.forEach(row => {
-                const deleteBtn = row.querySelector('.delete-btn');
-                if (deleteBtn && deleteBtn.onclick.toString().includes(userId)) {
-                    row.remove();
-                }
-            });
+            const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+            if (row) {
+                row.remove();
+            }
             
             this.showNotification('User deleted successfully!', 'success');
         }
