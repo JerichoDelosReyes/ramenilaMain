@@ -125,12 +125,12 @@ function updateImageBasedOnCategory() {
     if (!currentImageData || 
         previewImg.src.includes('assets/img/ramen.png') || 
         previewImg.src.includes('assets/img/drinks.png') || 
-        previewImg.src.includes('assets/img/toppings.png')) {
+        previewImg.src.includes('assets/img/desserts.png')) {
         
         if (category === 'drinks') {
             previewImg.src = 'assets/img/drinks.png';
-        } else if (category === 'toppings') {
-            previewImg.src = 'assets/img/toppings.png';
+        } else if (category === 'desserts') {
+            previewImg.src = 'assets/img/desserts.png';
         } else {
             previewImg.src = 'assets/img/ramen.png';
         }
@@ -160,8 +160,8 @@ function renderProducts(productsToRender = products) {
         if (product.image === 'assets/img/ramen.png') {
             if (product.category === 'drinks') {
                 productImage = 'assets/img/drinks.png';
-            } else if (product.category === 'toppings') {
-                productImage = 'assets/img/toppings.png';
+            } else if (product.category === 'desserts') {
+                productImage = 'assets/img/desserts.png';
             }
         }
         
@@ -308,8 +308,8 @@ async function handleFormSubmit(e) {
     if (!currentImageData) {
         if (category === "drinks") {
             productImage = "assets/img/drinks.png";
-        } else if (category === "toppings") {
-            productImage = "assets/img/toppings.png";
+        } else if (category === "desserts") {
+            productImage = "assets/img/desserts.png";
         } else {
             productImage = "assets/img/ramen.png";
         }
