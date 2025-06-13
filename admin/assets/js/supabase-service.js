@@ -24,37 +24,100 @@ class SupabaseService {
         if (!this.initialized || !this.supabase) {
             throw new Error('SupabaseService not initialized. Call initialize() first.');
         }
-        return this.supabase;
-    }
-
-    // PRODUCTS METHODS
+        return this.supabase;    }    // PRODUCTS METHODS
     async getProducts() {
         await this.initialize();
         const client = this.getClient();
         
         try {
+            console.log('Fetching products with server-side filtering for is_active = true...');
+            
+            // Use server-side filtering first, then client-side as backup
             const { data, error } = await client
                 .from('products')
                 .select('*')
                 .eq('is_active', true)
                 .order('created_at', { ascending: false });
             
-            if (error) throw error;
+            if (error) {
+                console.error('Database query error:', error);
+                throw error;
+            }
             
-            console.log('Raw data from database:', data);
+            console.log('Server-filtered data (is_active = true):', data);
+            console.log('Number of active products found:', data?.length || 0);
+            
+            // Additional client-side filtering as safety net
+            const activeProducts = (data || []).filter(product => {
+                const isActive = product.is_active;
+                console.log(`Verifying Product "${product.name}": is_active = ${isActive} (type: ${typeof isActive})`);
+                
+                // Only include products where is_active is explicitly true
+                if (isActive === true) {
+                    console.log(`✓ Including verified active product: ${product.name}`);
+                    return true;
+                }
+                
+                console.log(`✗ Excluding product: ${product.name} (is_active: ${isActive})`);
+                return false;
+            });
+            
+            console.log('Final verified active products:', activeProducts);
+            console.log('Number of verified active products:', activeProducts.length);
             
             // Map database fields to match frontend expectations
-            const mappedData = (data || []).map(product => ({
+            const mappedData = activeProducts.map(product => ({
                 ...product,
                 image: product.image_url,
                 minStock: product.min_stock
             }));
             
-            console.log('Mapped data for frontend:', mappedData);
+            console.log('Final mapped data for frontend:', mappedData);
             
             return mappedData;
         } catch (error) {
             console.error('Error fetching products:', error);
+            throw error;
+        }
+    }
+
+    // Alternative method with explicit boolean filtering
+    async getActiveProducts() {
+        await this.initialize();
+        const client = this.getClient();
+        
+        try {
+            console.log('Fetching active products using alternative method...');
+            const { data, error } = await client
+                .from('products')
+                .select('*')
+                .neq('is_active', false)  // Not equal to false (should get true and null values)
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('Alternative query error:', error);
+                throw error;
+            }
+            
+            console.log('Alternative method - Raw data:', data);
+            
+            // Additional client-side filtering to be absolutely sure
+            const activeProducts = (data || []).filter(product => 
+                product.is_active === true || product.is_active === null
+            );
+            
+            console.log('After client-side filtering:', activeProducts);
+            
+            // Map database fields to match frontend expectations
+            const mappedData = activeProducts.map(product => ({
+                ...product,
+                image: product.image_url,
+                minStock: product.min_stock
+            }));
+            
+            return mappedData;
+        } catch (error) {
+            console.error('Error in alternative active products fetch:', error);
             throw error;
         }
     }
@@ -123,8 +186,7 @@ class SupabaseService {
             } : null;
             
             return mappedData;
-        } catch (error) {
-            console.error('Error updating product:', error);
+        } catch (error) {            console.error('Error updating product:', error);
             throw error;
         }
     }
@@ -133,18 +195,48 @@ class SupabaseService {
         await this.initialize();
         const client = this.getClient();
         
+        console.log('SupabaseService: Attempting PERMANENT delete for product ID:', id);
+        
         try {
-            const { error } = await client
+            // First, get the product name for logging
+            const { data: productData, error: selectError } = await client
                 .from('products')
-                .update({ is_active: false })
-                .eq('id', id);
+                .select('name')
+                .eq('id', id)
+                .single();
             
-            if (error) throw error;
+            if (selectError && selectError.code !== 'PGRST116') {
+                console.error('Error fetching product for deletion:', selectError);
+                throw selectError;
+            }
+            
+            const productName = productData?.name || 'Unknown Product';
+            console.log(`Permanently deleting product: "${productName}" (ID: ${id})`);
+            
+            // Perform permanent delete
+            const { data, error } = await client
+                .from('products')
+                .delete()
+                .eq('id', id)
+                .select();
+            
+            if (error) {
+                console.error('SupabaseService: Delete error:', error);
+                throw error;
+            }
+            
+            console.log(`SupabaseService: "${productName}" permanently deleted from database`);
+            console.log('Deleted data:', data);
+            
+            if (!data || data.length === 0) {
+                console.warn('SupabaseService: No rows were deleted. Product ID might not exist:', id);
+                return false;
+            }
+            
             return true;
         } catch (error) {
-            console.error('Error deleting product:', error);
-            throw error;
-        }
+            console.error('SupabaseService: Error permanently deleting product:', error);
+            throw error;        }
     }
 
     async updateStock(id, newStock) {
@@ -534,6 +626,115 @@ class SupabaseService {
             paymentMethod: transaction.payment_method,
             payment_method: transaction.payment_method
         }));
+    }
+
+    // Test database connection
+    async testConnection() {
+        await this.initialize();
+        const client = this.getClient();
+        
+        try {
+            console.log('Testing Supabase connection...');
+            const { data, error } = await client
+                .from('products')
+                .select('id')
+                .limit(1);
+            
+            if (error) {
+                console.error('Connection test failed:', error);
+                return false;
+            }
+            
+            console.log('Connection test successful. Sample data:', data);
+            return true;
+        } catch (error) {
+            console.error('Connection test error:', error);
+            return false;
+        }
+    }
+
+    // Debug method to check all products regardless of status
+    async getAllProductsDebug() {
+        await this.initialize();
+        const client = this.getClient();
+        
+        try {
+            console.log('=== DEBUG: Fetching ALL products (active and inactive) ===');
+            const { data, error } = await client
+                .from('products')
+                .select('id, name, is_active')
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('Debug query error:', error);
+                throw error;
+            }
+            
+            console.log('=== ALL PRODUCTS DEBUG ===');
+            (data || []).forEach((product, index) => {
+                console.log(`${index + 1}. ${product.name} (ID: ${product.id.substring(0, 8)}...) - is_active: ${product.is_active}`);
+            });
+            
+            const activeCount = (data || []).filter(p => p.is_active === true).length;
+            const inactiveCount = (data || []).filter(p => p.is_active === false).length;
+            
+            console.log(`Active products: ${activeCount}, Inactive products: ${inactiveCount}`);
+            
+            return data;
+        } catch (error) {
+            console.error('Error in debug fetch:', error);
+            throw error;
+        }
+    }
+
+    // Cleanup method to permanently delete inactive products
+    async cleanupInactiveProducts() {
+        await this.initialize();
+        const client = this.getClient();
+        
+        try {
+            console.log('=== CLEANUP: Finding inactive products ===');
+            
+            // First, get all inactive products
+            const { data: inactiveProducts, error: selectError } = await client
+                .from('products')
+                .select('id, name, is_active')
+                .eq('is_active', false);
+            
+            if (selectError) {
+                console.error('Error finding inactive products:', selectError);
+                throw selectError;
+            }
+            
+            if (!inactiveProducts || inactiveProducts.length === 0) {
+                console.log('No inactive products found to clean up');
+                return { deleted: 0, products: [] };
+            }
+            
+            console.log(`Found ${inactiveProducts.length} inactive products to delete:`, inactiveProducts);
+            
+            // Delete all inactive products permanently
+            const { data: deletedData, error: deleteError } = await client
+                .from('products')
+                .delete()
+                .eq('is_active', false);
+            
+            if (deleteError) {
+                console.error('Error deleting inactive products:', deleteError);
+                throw deleteError;
+            }
+            
+            console.log(`Successfully deleted ${inactiveProducts.length} inactive products`);
+            
+            return { 
+                deleted: inactiveProducts.length, 
+                products: inactiveProducts.map(p => p.name) 
+            };
+            
+        } catch (error) {
+            console.error('Error in cleanup:', error);
+            throw error;
+        }
     }
 }
 

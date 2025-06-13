@@ -72,9 +72,30 @@ function hideLoadingOverlay() {
 async function initializeInventory() {
     showLoadingOverlay();
     try {
+        // Test database connection first
+        const connectionTest = await supabaseService.testConnection();
+        if (!connectionTest) {
+            throw new Error('Database connection failed');
+        }
+        
+        // Debug: Check all products first
+        try {
+            await supabaseService.getAllProductsDebug();
+        } catch (debugError) {
+            console.warn('Debug method failed:', debugError);
+        }
+        
+        console.log('=== FETCHING ACTIVE PRODUCTS ===');
+        
+        // Get products using the improved filtering method
         products = await supabaseService.getProducts();
-        console.log('Products loaded from Supabase:', products);
-        console.log('Number of products:', products.length);
+        console.log('Products loaded:', products);
+        console.log('Number of products to display:', products.length);
+        
+        // Debug: Log each product's is_active status
+        products.forEach(product => {
+            console.log(`Display Product "${product.name}": is_active = ${product.is_active}`);
+        });
         
         // Debug: Log first product details if available
         if (products.length > 0) {
@@ -90,7 +111,7 @@ async function initializeInventory() {
         
     } catch (error) {
         console.error('Error loading products:', error);
-        showNotification('Failed to load products from database', 'error');
+        showNotification('Failed to load products from database: ' + error.message, 'error');
     } finally {
         hideLoadingOverlay();
     }
@@ -454,13 +475,30 @@ function editProduct(id) {
 
 
 function deleteProduct(id) {
+    console.log('Delete button clicked for product ID:', id);
     const product = products.find(p => p.id === id);
-    if (!product) return;
+    console.log('Found product:', product);
+    
+    if (!product) {
+        console.error('Product not found with ID:', id);
+        showNotification('Product not found', 'error');
+        return;
+    }
     
     productToDeleteId = id;
-    deleteProductName.textContent = `"${product.name}" will be permanently deleted.`;
-    deleteModal.classList.add('show');
-    document.body.classList.add('modal-open');
+    console.log('Set productToDeleteId to:', productToDeleteId);
+    
+    if (deleteProductName) {
+        deleteProductName.textContent = `"${product.name}" will be permanently deleted.`;
+    }
+    
+    if (deleteModal) {
+        deleteModal.classList.add('show');
+        document.body.classList.add('modal-open');
+        console.log('Delete modal opened');
+    } else {
+        console.error('Delete modal not found');
+    }
 }
 
 async function handleFormSubmit(e) {
@@ -943,33 +981,54 @@ function closeDeleteModalHandler() {
 }
 
 async function handleDeleteConfirmation() {
-    if (productToDeleteId) {
-        try {
-            const product = products.find(p => p.id === productToDeleteId);
+    if (!productToDeleteId) {
+        console.error('No product ID to delete');
+        return;
+    }
+
+    console.log('Starting permanent delete for product ID:', productToDeleteId);
+    
+    try {
+        const product = products.find(p => p.id === productToDeleteId);
+        console.log('Product to delete:', product);
+        
+        // Delete associated image if it's uploaded to Supabase
+        if (product && 
+            product.image && 
+            product.image.includes('supabase') &&
+            !product.image.includes('assets/img/')) {
             
-            // Delete associated image if it's uploaded to Supabase
-            if (product && 
-                product.image && 
-                product.image.includes('supabase') &&
-                !product.image.includes('assets/img/')) {
-                
-                try {
-                    const urlParts = product.image.split('/');
-                    const fileName = urlParts[urlParts.length - 1].split('?')[0];
-                    await supabaseService.deleteImage(fileName);
-                } catch (deleteError) {
-                    console.warn('Could not delete product image:', deleteError);
-                }
+            try {
+                console.log('Attempting to delete product image:', product.image);
+                const urlParts = product.image.split('/');
+                const fileName = urlParts[urlParts.length - 1].split('?')[0];
+                await supabaseService.deleteImage(fileName);
+                console.log('Product image deleted successfully');
+            } catch (deleteError) {
+                console.warn('Could not delete product image:', deleteError);
             }
+        }
+        
+        // Perform permanent delete from database
+        console.log('Permanently deleting product from database...');
+        const result = await supabaseService.deleteProduct(productToDeleteId);
+        
+        if (result) {
+            showNotification(`Product "${product ? product.name : 'Unknown'}" permanently deleted`, 'success');
             
-            await supabaseService.deleteProduct(productToDeleteId);
-            showNotification(`Product deleted successfully`, 'success');
+            console.log('Refreshing inventory after permanent deletion...');
             await initializeInventory();
             closeDeleteModalHandler();
-        } catch (error) {
-            console.error('Error deleting product:', error);
-            showNotification('Failed to delete product', 'error');
+            
+            console.log('Permanent delete operation completed successfully');
+        } else {
+            throw new Error('Delete operation returned false - product may not exist');
         }
+        
+    } catch (error) {
+        console.error('Error permanently deleting product:', error);
+        console.error('Error details:', error.message, error.stack);
+        showNotification('Failed to permanently delete product: ' + error.message, 'error');
     }
 }
 
