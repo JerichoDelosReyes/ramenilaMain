@@ -1,6 +1,4 @@
-import { getFirestore, collection, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const db = window.firestoreDB;
+import supabaseService from './supabase-service.js';
 // Transaction/POS JavaScript functionality
 class POSSystem {    constructor() {
         this.cart = [];
@@ -17,17 +15,24 @@ class POSSystem {    constructor() {
         setInterval(() => this.updateDateTime(), 1000);
     }
     async updateProductStockAfterSale() {
-    const db = window.firestoreDB;
-    try {
-        for (const item of this.cart) {
-            const newStock = item.stock - item.quantity;
-            const ref = doc(db, "products", item.id);
-            await updateDoc(ref, { stock: newStock });
+        try {
+            for (const item of this.cart) {
+                const newStock = item.stock - item.quantity;
+                await supabaseService.updateProduct(item.id, {
+                    name: item.name,
+                    category: item.category,
+                    price: item.price,
+                    stock: newStock,
+                    minStock: item.min_stock || item.minStock || 0,
+                    unit: item.unit || 'pieces',
+                    description: item.description || '',
+                    image: item.image_url || item.image || 'assets/img/ramen.png'
+                });
+            }
+            console.log("Product stocks updated after sale.");
+        } catch (error) {
+            console.error("Failed to update product stock:", error);
         }
-        console.log("Product stocks updated after sale.");
-    } catch (error) {
-        console.error("Failed to update product stock:", error);
-    }
     }
 
     generateOrderNumber() {
@@ -52,11 +57,14 @@ class POSSystem {    constructor() {
             dateTimeElement.textContent = dateTimeString;
         }
     }    async loadMenuItems() {
-        console.log('Loading products from Firestore...');
-        const querySnapshot = await getDocs(collection(db, "products"));
-        this.testProducts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        this.filteredProducts = [...this.testProducts];
-        this.renderMenuTable();
+        try {
+            console.log('Loading products from Supabase...');
+            this.testProducts = await supabaseService.getProducts();
+            this.filteredProducts = [...this.testProducts];
+            this.renderMenuTable();
+        } catch (error) {
+            console.error('Error loading menu items:', error);
+        }
     }    renderMenuTable() {
         console.log('Rendering menu table...');
         const tableBody = document.getElementById('menuTableBody');
@@ -700,10 +708,22 @@ class POSSystem {    constructor() {
     }
 
         async saveTransaction(transaction) {
-            const db = window.firestoreDB;
             try {
-                await addDoc(collection(db, "transactions"), transaction);
-                console.log("Transaction saved to Firestore:", transaction);
+                const result = await supabaseService.addTransaction({
+                    transactionNumber: transaction.orderNumber,
+                    items: transaction.items,
+                    subtotal: transaction.subtotal,
+                    taxAmount: transaction.tax,
+                    discountAmount: transaction.discount,
+                    total: transaction.total,
+                    paymentMethod: transaction.paymentMethod,
+                    paymentStatus: 'completed',
+                    status: 'completed',
+                    cashierName: 'POS System',
+                    customerName: transaction.customerName,
+                    notes: `Order Type: ${transaction.orderType}, Customer Type: ${transaction.customerType}`
+                });
+                console.log("Transaction saved to Supabase:", result);
             } catch (error) {
                 console.error("Failed to save transaction:", error);
                 this.showNotification("Failed to save transaction", "error");

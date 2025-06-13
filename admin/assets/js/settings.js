@@ -1,15 +1,19 @@
 // Settings Management System
+import supabaseService from './supabase-service.js';
+
 class SettingsManager {
     constructor() {
         this.settings = this.loadSettings();
+        this.users = [];
         this.initializeSystem();
     }
 
-    initializeSystem() {
+    async initializeSystem() {
         this.setupTabs();
         this.setupEventListeners();
+        await this.loadSettingsFromSupabase();
+        await this.loadUsersFromSupabase();
         this.loadCurrentSettings();
-        this.initializeDefaultUsers();
     }
 
     loadSettings() {
@@ -54,6 +58,41 @@ class SettingsManager {
             return { ...defaultSettings, ...JSON.parse(savedSettings) };
         }
         return defaultSettings;
+    }
+
+    async loadSettingsFromSupabase() {
+        try {
+            const supabaseSettings = await supabaseService.getSettings();
+            if (Object.keys(supabaseSettings).length > 0) {
+                this.settings = { ...this.settings, ...supabaseSettings };
+                localStorage.setItem('ramenila_settings', JSON.stringify(this.settings));
+            }
+        } catch (error) {
+            console.error('Error loading settings from Supabase:', error);
+        }
+    }
+
+    async loadUsersFromSupabase() {
+        try {
+            this.users = await supabaseService.getUsers();
+            // Format the users to match the expected structure
+            this.users = this.users.map(user => ({
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                status: user.status,
+                lastLogin: user.last_login ? new Date(user.last_login).toLocaleString() : 'Never',
+                createdAt: user.created_at
+            }));
+            
+            // Add users to the table
+            this.users.forEach(user => this.addUserToTable(user));
+        } catch (error) {
+            console.error('Error loading users from Supabase:', error);
+            // Fallback to initialize default users if Supabase fails
+            this.initializeDefaultUsers();
+        }
     }
 
     initializeDefaultUsers() {
@@ -208,7 +247,7 @@ class SettingsManager {
         document.getElementById('receipt-footer').value = this.settings.pos.receiptFooter;
     }
 
-    saveAllSettings() {
+    async saveAllSettings() {
         // Collect all settings from form elements
         const newSettings = {
             general: {
@@ -238,14 +277,22 @@ class SettingsManager {
             }
         };
 
-        // Save to localStorage
-        localStorage.setItem('ramenila_settings', JSON.stringify(newSettings));
-        this.settings = newSettings;
+        try {
+            // Save to Supabase
+            await supabaseService.saveAllSettings(newSettings);
+            
+            // Save to localStorage as backup
+            localStorage.setItem('ramenila_settings', JSON.stringify(newSettings));
+            this.settings = newSettings;
 
-        // Apply theme if changed
-        this.applyTheme(newSettings.general.theme);
+            // Apply theme if changed
+            this.applyTheme(newSettings.general.theme);
 
-        this.showNotification('Settings saved successfully!', 'success');
+            this.showNotification('Settings saved successfully!', 'success');
+        } catch (error) {
+            console.error('Error saving settings:', error);
+            this.showNotification('Failed to save settings to database', 'error');
+        }
     }
 
     collectOperatingHours() {
@@ -298,7 +345,7 @@ class SettingsManager {
         console.log(`Currency changed to ${currency} (${currencySymbols[currency]})`);
     }
 
-    addUser() {
+    async addUser() {
         const name = document.getElementById('user-name').value;
         const email = document.getElementById('user-email').value;
         const role = document.getElementById('user-role').value;
@@ -309,30 +356,39 @@ class SettingsManager {
             return;
         }
 
-        // Simulate adding user (in a real app, this would make an API call)
-        const newUser = {
-            id: Date.now(),
-            name: name,
-            email: email,
-            role: role,
-            lastLogin: 'Never',
-            status: 'active',
-            createdAt: new Date().toISOString()
-        };
+        try {
+            // Add user to Supabase
+            const newUser = await supabaseService.addUser({
+                name: name,
+                email: email,
+                role: role,
+                status: 'active'
+            });
 
-        // Save to localStorage (in real app, send to server)
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
+            // Format for local display
+            const formattedUser = {
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email,
+                role: newUser.role,
+                lastLogin: 'Never',
+                status: newUser.status,
+                createdAt: newUser.created_at
+            };
 
-        // Add to table
-        this.addUserToTable(newUser);
+            // Add to local array and table
+            this.users.push(formattedUser);
+            this.addUserToTable(formattedUser);
 
-        // Clear form and close modal
-        document.getElementById('add-user-form').reset();
-        document.getElementById('add-user-modal').style.display = 'none';
-        
-        this.showNotification('User added successfully!', 'success');
+            // Clear form and close modal
+            document.getElementById('add-user-form').reset();
+            document.getElementById('add-user-modal').style.display = 'none';
+            
+            this.showNotification('User added successfully!', 'success');
+        } catch (error) {
+            console.error('Error adding user:', error);
+            this.showNotification('Failed to add user to database', 'error');
+        }
     }
 
     addUserToTable(user) {
@@ -369,9 +425,8 @@ class SettingsManager {
     }
 
     editUser(userId) {
-        // Get user data from localStorage
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const user = users.find(u => u.id == userId);
+        // Get user data from local array
+        const user = this.users.find(u => u.id === userId);
         
         if (!user) {
             this.showNotification('User not found', 'error');
@@ -390,8 +445,8 @@ class SettingsManager {
         document.getElementById('edit-user-modal').style.display = 'block';
     }
 
-    updateUser() {
-        const userId = parseInt(document.getElementById('edit-user-id').value);
+    async updateUser() {
+        const userId = document.getElementById('edit-user-id').value;
         const name = document.getElementById('edit-user-name').value;
         const email = document.getElementById('edit-user-email').value;
         const role = document.getElementById('edit-user-role').value;
@@ -403,34 +458,38 @@ class SettingsManager {
             return;
         }
 
-        // Get users from localStorage
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const userIndex = users.findIndex(u => u.id == userId);
+        try {
+            // Update user in Supabase
+            const updatedUser = await supabaseService.updateUser(userId, {
+                name: name,
+                email: email,
+                role: role,
+                status: status
+            });
 
-        if (userIndex === -1) {
-            this.showNotification('User not found', 'error');
-            return;
+            // Update local array
+            const userIndex = this.users.findIndex(u => u.id === userId);
+            if (userIndex !== -1) {
+                this.users[userIndex] = {
+                    ...this.users[userIndex],
+                    name: name,
+                    email: email,
+                    role: role,
+                    status: status,
+                    updatedAt: new Date().toISOString()
+                };
+
+                // Update the table row
+                this.updateUserInTable(this.users[userIndex]);
+            }
+
+            // Close modal and show notification
+            document.getElementById('edit-user-modal').style.display = 'none';
+            this.showNotification('User updated successfully!', 'success');
+        } catch (error) {
+            console.error('Error updating user:', error);
+            this.showNotification('Failed to update user in database', 'error');
         }
-
-        // Update user data
-        users[userIndex] = {
-            ...users[userIndex],
-            name: name,
-            email: email,
-            role: role,
-            status: status,
-            updatedAt: new Date().toISOString()
-        };
-
-        // Save to localStorage
-        localStorage.setItem('users', JSON.stringify(users));
-
-        // Update the table row
-        this.updateUserInTable(users[userIndex]);
-
-        // Close modal and show notification
-        document.getElementById('edit-user-modal').style.display = 'none';
-        this.showNotification('User updated successfully!', 'success');
     }
 
     updateUserInTable(user) {
@@ -464,10 +523,9 @@ class SettingsManager {
         `;
     }
 
-    deleteUser(userId) {
+    async deleteUser(userId) {
         // Get user data to check role
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const user = users.find(u => u.id == userId);
+        const user = this.users.find(u => u.id === userId);
         
         if (!user) {
             this.showNotification('User not found', 'error');
@@ -481,19 +539,28 @@ class SettingsManager {
         }
 
         if (confirm(`Are you sure you want to delete ${user.name}?`)) {
-            // Remove from localStorage
-            const updatedUsers = users.filter(u => u.id != userId);
-            localStorage.setItem('users', JSON.stringify(updatedUsers));
-            
-            // Remove from table
-            const row = document.querySelector(`tr[data-user-id="${userId}"]`);
-            if (row) {
-                row.remove();
+            try {
+                // Delete from Supabase
+                await supabaseService.deleteUser(userId);
+                
+                // Remove from local array
+                this.users = this.users.filter(u => u.id !== userId);
+                
+                // Remove from table
+                const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+                if (row) {
+                    row.remove();
+                }
+                
+                this.showNotification('User deleted successfully!', 'success');
+                        } catch (error) {
+                console.error('Error deleting user:', error);
+                this.showNotification('Failed to delete user from database', 'error');
             }
-            
-            this.showNotification('User deleted successfully!', 'success');
         }
-    }    showNotification(message, type) {
+    }
+
+    showNotification(message, type) {
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.textContent = message;

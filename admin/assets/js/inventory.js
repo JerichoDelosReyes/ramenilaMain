@@ -1,7 +1,5 @@
 // Inventory Management System
-import { getDocs, collection, doc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const db = window.firestoreDB;
+import supabaseService from './supabase-service.js';
 
 
 
@@ -63,20 +61,17 @@ function hideLoadingOverlay() {
 }
 
 async function initializeInventory() {
+    showLoadingOverlay();
     try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        products = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
+        products = await supabaseService.getProducts();
+        console.log('Products loaded from Supabase:', products);
         renderProducts();
         updateActiveNavItem();
-        
-        // Hide loading overlay after data is loaded
-        hideLoadingOverlay();
+        updateDashboardStats();
     } catch (error) {
-        console.error("Error loading inventory:", error);
-        // Hide loading overlay even if there's an error
+        console.error('Error loading products:', error);
+        showNotification('Failed to load products from database', 'error');
+    } finally {
         hideLoadingOverlay();
     }
 }
@@ -278,10 +273,6 @@ function deleteProduct(id) {
 
 async function handleFormSubmit(e) {
     e.preventDefault();
-    if (!db) {
-        showNotification("Firestore not initialized", "error");
-        return;
-    }
 
     // Get form data
     const name = document.getElementById('productName').value.trim();
@@ -329,16 +320,15 @@ async function handleFormSubmit(e) {
     try {
         if (editingProductId) {
             // Update existing product
-            const ref = doc(db, "products", editingProductId);
-            await updateDoc(ref, formData);
+            await supabaseService.updateProduct(editingProductId, formData);
             showNotification("Product updated successfully!", "success");
         } else {
             // Add new product
-            await addDoc(collection(db, "products"), formData);
+            await supabaseService.addProduct(formData);
             showNotification("Product added successfully!", "success");
         }
 
-        await initializeInventory(); // Refresh product list from Firestore
+        await initializeInventory(); // Refresh product list from Supabase
         closeModal();                // Close modal
         resetForm();                 // Clear form
     } catch (error) {
@@ -526,6 +516,26 @@ function updateActiveNavItem() {
     }
 }
 
+function updateDashboardStats() {
+    const totalProducts = products.length;
+    const lowStockProducts = products.filter(p => p.stock <= p.minStock).length;
+    const outOfStockProducts = products.filter(p => p.stock === 0).length;
+    const totalValue = products.reduce((sum, p) => sum + (p.price * p.stock), 0);
+
+    // Update stats if elements exist
+    const statsElements = {
+        totalProducts: document.querySelector('.stat-card .stat-number'),
+        lowStock: document.querySelectorAll('.stat-card .stat-number')[1],
+        outOfStock: document.querySelectorAll('.stat-card .stat-number')[2],
+        totalValue: document.querySelectorAll('.stat-card .stat-number')[3]
+    };
+
+    if (statsElements.totalProducts) statsElements.totalProducts.textContent = totalProducts;
+    if (statsElements.lowStock) statsElements.lowStock.textContent = lowStockProducts;
+    if (statsElements.outOfStock) statsElements.outOfStock.textContent = outOfStockProducts;
+    if (statsElements.totalValue) statsElements.totalValue.textContent = `₱${totalValue.toLocaleString()}`;
+}
+
 // Delete Modal Functions
 function closeDeleteModalHandler() {
     deleteModal.classList.remove('show');
@@ -535,10 +545,15 @@ function closeDeleteModalHandler() {
 
 async function handleDeleteConfirmation() {
     if (productToDeleteId) {
-        await deleteDoc(doc(db, "products", productToDeleteId));
-        showNotification(`Product deleted successfully`, 'success');
-        initializeInventory();
-        closeDeleteModalHandler();
+        try {
+            await supabaseService.deleteProduct(productToDeleteId);
+            showNotification(`Product deleted successfully`, 'success');
+            await initializeInventory();
+            closeDeleteModalHandler();
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            showNotification('Failed to delete product', 'error');
+        }
     }
 }
 

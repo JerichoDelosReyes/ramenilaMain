@@ -1,6 +1,4 @@
-import { getFirestore, collection, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const db = window.firestoreDB;
+import supabaseService from './supabase-service.js';
 // Transaction History Management System
 class TransactionHistory {
     constructor() {
@@ -21,18 +19,12 @@ class TransactionHistory {
 
     async loadTransactions() {
         try {
-            const snapshot = await getDocs(collection(db, "transactions"));
-            this.transactions = snapshot.docs.map(doc => ({
-            id: doc.id, // 👈 this adds the Firestore document ID!
-            ...doc.data()
-        }));
-
-
+            this.transactions = await supabaseService.getTransactions();
             this.filteredTransactions = [...this.transactions];
             this.displayTransactions();
             this.updateSummaryCards();
         } catch (error) {
-            console.error("Error loading transactions from Firestore:", error);
+            console.error("Error loading transactions from Supabase:", error);
             this.showNotification('Failed to load transaction history', 'error');
         }
     }
@@ -423,18 +415,17 @@ class TransactionHistory {
         this.currentTransaction.refundReason = reason;
         this.currentTransaction.refundNotes = notes;
         this.currentTransaction.refundDate = new Date().toISOString();
+        
         try {
-            const transactionRef = doc(db, "transactions", this.currentTransaction.id); // must store Firestore doc ID in each transaction
-            await updateDoc(transactionRef, {
-                status: 'refunded',
-                refundReason: reason,
-                refundNotes: notes,
-                refundDate: new Date().toISOString()
+            await supabaseService.refundTransaction(this.currentTransaction.id, {
+                reason: reason,
+                notes: notes
             });
-            console.log("Transaction updated in Firestore.");
+            console.log("Transaction updated in Supabase.");
         } catch (error) {
-            console.error("Failed to update transaction in Firestore:", error);
-            this.showNotification("Failed to update Firestore", "error");
+            console.error("Failed to update transaction in Supabase:", error);
+            this.showNotification("Failed to update database", "error");
+            return;
         }
 
         

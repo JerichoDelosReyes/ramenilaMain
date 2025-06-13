@@ -1,12 +1,56 @@
 // Dashboard functionality
+import supabaseService from './supabase-service.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Update current date and time
     updateDateTime();
     setInterval(updateDateTime, 1000);
     
+    // Load and display dashboard data
+    loadDashboardData();
+    
     // Animate stats cards on load
     animateStatsCards();
 });
+
+async function loadDashboardData() {
+    try {
+        // Load products and transactions data
+        const [products, transactions] = await Promise.all([
+            supabaseService.getProducts(),
+            supabaseService.getTransactions()
+        ]);
+        
+        // Calculate today's stats
+        const today = new Date().toDateString();
+        const todayTransactions = transactions.filter(t => 
+            new Date(t.created_at).toDateString() === today && t.status === 'completed'
+        );
+        
+        const todaySales = todayTransactions.reduce((sum, t) => sum + parseFloat(t.total), 0);
+        const ordersToday = todayTransactions.length;
+        const totalProducts = products.length;
+        const lowStockItems = products.filter(p => p.stock <= p.min_stock).length;
+        
+        // Update dashboard stats
+        updateDashboardStats({
+            todaySales: `₱${todaySales.toLocaleString()}`,
+            ordersToday: ordersToday.toString(),
+            totalProducts: totalProducts.toString(),
+            lowStockItems: lowStockItems.toString()
+        });
+        
+    } catch (error) {
+        console.error('Error loading dashboard data:', error);
+        // Show default values on error
+        updateDashboardStats({
+            todaySales: '₱0',
+            ordersToday: '0',
+            totalProducts: '0',
+            lowStockItems: '0'
+        });
+    }
+}
 
 function updateDateTime() {
     const now = new Date();
@@ -40,15 +84,21 @@ function animateStatsCards() {
     });
 }
 
-// Simulated data updates (you can replace with real API calls)
-function updateDashboardStats() {
-    // This function can be called to update stats with real data
-    const stats = {
-        todaySales: '₱12,450',
-        ordersToday: '47',
-        totalProducts: '23',
-        lowStockItems: '5'
+// Update dashboard stats with real data
+function updateDashboardStats(stats) {
+    const statElements = {
+        todaySales: document.querySelector('.stat-card:nth-child(1) .stat-number'),
+        ordersToday: document.querySelector('.stat-card:nth-child(2) .stat-number'),
+        totalProducts: document.querySelector('.stat-card:nth-child(3) .stat-number'),
+        lowStockItems: document.querySelector('.stat-card:nth-child(4) .stat-number')
     };
+    
+    Object.keys(stats).forEach(key => {
+        if (statElements[key]) {
+            statElements[key].textContent = stats[key];
+        }
+    });
+}
     
     // Update the stats cards with new data
     const statCards = document.querySelectorAll('.stat-card');

@@ -49,30 +49,55 @@ Check out the live preview of the Ramenila website here:
 *   🌐 **HTML5**: For the structure of the web pages.
 *   🎨 **CSS3**: For styling and layout, ensuring a modern and responsive design.
 *   ⚙️ **JavaScript (Vanilla)**: For client-side interactivity, DOM manipulation, and dynamic content.
+*   🗄️ **Supabase**: Cloud-based PostgreSQL database with real-time features and REST API.
+*   📊 **PostgreSQL**: Relational database for robust data management and complex queries.
+*   🔄 **REST API**: RESTful API integration for seamless data operations.
 *   <img src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/favicon.ico" width="16" height="16"> **Font Awesome**: For icons used throughout the application.
 
-## 📝 Future Enhancements (Planned)
+## 📝 Database & Architecture
 
-*   🔐 **Enhanced Security**:
-    * User authentication and role-based access control
-    * Secure admin login system
-    * Data encryption for sensitive information
-*   📊 **Advanced Analytics**:
-    * Detailed sales reports and trends
-    * Customer behavior analysis
-    * Inventory optimization suggestions
-*   💾 **Backend Integration**:
-    * Real-time data synchronization
-    * Cloud-based data storage
-    * Automated backup system
-*   🎨 **UI Enhancements**:
-    * Dark mode theme
-    * Customizable dashboard layouts
-    * Enhanced mobile experience
-*   🤖 **Automation Features**:
-    * Automated inventory reordering
-    * Smart stock predictions
-    * Scheduled reports generation
+### 🏗️ **Database Schema**
+*   **PostgreSQL on Supabase**: Cloud-hosted relational database
+*   **Real-time Features**: Live updates across all connected clients
+*   **Row Level Security (RLS)**: Secure data access with policies
+*   **RESTful API**: Auto-generated API endpoints for all database operations
+
+### 📊 **Database Tables**:
+*   `categories` - Product categories (Ramen, Sides, Drinks, Desserts)
+*   `products` - Complete product catalog with inventory tracking
+*   `transactions` - Sales records with detailed order information
+*   `users` - Admin system users with role-based permissions
+*   `settings` - System configuration and preferences
+*   `product_images` - Product image management and storage
+
+### 🔄 **Real-time Synchronization**:
+*   Live inventory updates across all admin terminals
+*   Real-time transaction processing and history
+*   Instant dashboard metrics and analytics
+*   Synchronized settings across all users
+
+## 📝 Future Enhancements (Completed ✅ / Planned 📋)
+
+*   🔐 **Enhanced Security**: ✅
+    * ✅ User authentication and role-based access control
+    * ✅ Secure admin login system  
+    * ✅ Data encryption for sensitive information
+*   📊 **Advanced Analytics**: ✅
+    * ✅ Detailed sales reports and trends
+    * ✅ Real-time dashboard metrics
+    * ✅ Inventory optimization with low stock alerts
+*   💾 **Backend Integration**: ✅
+    * ✅ Real-time data synchronization
+    * ✅ Cloud-based data storage (Supabase)
+    * ✅ Automated backup system
+*   🎨 **UI Enhancements**: 📋
+    * 📋 Dark mode theme
+    * 📋 Customizable dashboard layouts
+    * ✅ Enhanced mobile experience
+*   🤖 **Automation Features**: 📋
+    * 📋 Automated inventory reordering
+    * 📋 Smart stock predictions
+    * 📋 Scheduled reports generation
 
 ---
 
