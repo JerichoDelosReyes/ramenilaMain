@@ -239,11 +239,13 @@
 
 .btn-danger {
     background: #dc3545;
+    border-color: #dc3545;
     color: white;
 }
 
 .btn-danger:hover {
     background: #c82333;
+    border-color: #bd2130;
 }
 
 /* Action Buttons */
@@ -456,6 +458,13 @@
     padding: 8px 12px;
     font-size: 0.8rem;
     flex: 1;
+}
+
+.image-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Modal Styles */

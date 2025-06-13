@@ -11,38 +11,46 @@ let editingProductId = null;
 let cropper = null;
 let currentImageData = null;
 
-// Image upload elements
-const imageUpload = document.getElementById('imageUpload');
-const uploadBtn = document.getElementById('uploadBtn');
-const removeImageBtn = document.getElementById('removeImageBtn');
-const imagePreview = document.getElementById('imagePreview');
-const previewImg = document.getElementById('previewImg');
-
-// Crop modal elements
-const cropModal = document.getElementById('cropModal');
-const closeCropModal = document.getElementById('closeCropModal');
-const cropImage = document.getElementById('cropImage');
-const cropPreview = document.getElementById('cropPreview');
-const cancelCrop = document.getElementById('cancelCrop');
-const applyCrop = document.getElementById('applyCrop');
-
-// Delete modal elements
-const deleteModal = document.getElementById('deleteModal');
-const closeDeleteModal = document.getElementById('closeDeleteModal');
-const cancelDelete = document.getElementById('cancelDelete');
-const confirmDelete = document.getElementById('confirmDelete');
-const deleteProductName = document.getElementById('deleteProductName');
+// DOM elements - will be initialized in DOMContentLoaded
+let imageUpload, uploadBtn, removeImageBtn, imagePreview, previewImg;
+let cropModal, closeCropModal, cropImage, cropPreview, cancelCrop, applyCrop;
+let deleteModal, closeDeleteModal, cancelDelete, confirmDelete, deleteProductName;
 
 // Variable to track product being deleted
 let productToDeleteId = null;
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - Initializing inventory system...');
+    
+    // Initialize DOM elements
+    imageUpload = document.getElementById('imageUpload');
+    uploadBtn = document.getElementById('uploadBtn');
+    removeImageBtn = document.getElementById('removeImageBtn');
+    imagePreview = document.getElementById('imagePreview');
+    previewImg = document.getElementById('previewImg');
+    
+    cropModal = document.getElementById('cropModal');
+    closeCropModal = document.getElementById('closeCropModal');
+    cropImage = document.getElementById('cropImage');
+    cropPreview = document.getElementById('cropPreview');
+    cancelCrop = document.getElementById('cancelCrop');
+    applyCrop = document.getElementById('applyCrop');
+    
+    deleteModal = document.getElementById('deleteModal');
+    closeDeleteModal = document.getElementById('closeDeleteModal');
+    cancelDelete = document.getElementById('cancelDelete');
+    confirmDelete = document.getElementById('confirmDelete');
+    deleteProductName = document.getElementById('deleteProductName');
+    
     // Show loading overlay initially
     showLoadingOverlay();
     
+    // Initialize components
     initializeInventory();
     setupEventListeners();
     initializeImageUpload();
+    
+    console.log('Inventory system initialized');
 });
 
 function showLoadingOverlay() {
@@ -91,31 +99,84 @@ async function initializeInventory() {
 
 function setupEventListeners() {
     // Modal controls
-    document.getElementById('addProductBtn').addEventListener('click', openAddProductModal);
-    document.getElementById('closeModal').addEventListener('click', closeModal);
-    document.getElementById('cancelBtn').addEventListener('click', closeModal);
-      // Delete modal controls
-    closeDeleteModal.addEventListener('click', closeDeleteModalHandler);
-    cancelDelete.addEventListener('click', closeDeleteModalHandler);
-    confirmDelete.addEventListener('click', handleDeleteConfirmation);
+    const addProductBtn = document.getElementById('addProductBtn');
+    const closeModalBtn = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const productForm = document.getElementById('productForm');
+    
+    if (!addProductBtn) {
+        console.error('Add Product Button not found!');
+        return;
+    }
+    
+    if (!closeModalBtn) {
+        console.error('Close Modal Button not found!');
+        return;
+    }
+    
+    if (!productForm) {
+        console.error('Product Form not found!');
+        return;
+    }
+    
+    console.log('Setting up event listeners...');
+    
+    addProductBtn.addEventListener('click', function(e) {
+        console.log('Add Product button clicked');
+        e.preventDefault();
+        openAddProductModal();
+    });
+    
+    closeModalBtn.addEventListener('click', closeModal);
+    
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeModal);
+    }
+    
+    // Delete modal controls
+    if (closeDeleteModal) {
+        closeDeleteModal.addEventListener('click', closeDeleteModalHandler);
+    }
+    if (cancelDelete) {
+        cancelDelete.addEventListener('click', closeDeleteModalHandler);
+    }
+    if (confirmDelete) {
+        confirmDelete.addEventListener('click', handleDeleteConfirmation);
+    }
     
     // Form submission
-    document.getElementById('productForm').addEventListener('submit', handleFormSubmit);
+    productForm.addEventListener('submit', handleFormSubmit);
     
     // Category change listener to update image based on category
-    document.getElementById('productCategory').addEventListener('change', updateImageBasedOnCategory);
+    const categorySelect = document.getElementById('productCategory');
+    if (categorySelect) {
+        categorySelect.addEventListener('change', updateImageBasedOnCategory);
+    }
     
     // Search and filter
-    document.getElementById('searchInput').addEventListener('input', filterProducts);
-    document.getElementById('categoryFilter').addEventListener('change', filterProducts);
-    document.getElementById('stockFilter').addEventListener('change', filterProducts);
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const stockFilter = document.getElementById('stockFilter');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', filterProducts);
+    }
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', filterProducts);
+    }
+    if (stockFilter) {
+        stockFilter.addEventListener('change', filterProducts);
+    }
     
     // Close modal when clicking outside
-    document.getElementById('productModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModal();
-        }
-    });
+    const productModal = document.getElementById('productModal');
+    if (productModal) {
+        productModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    }
       // Close delete modal when clicking outside
     deleteModal.addEventListener('click', function(e) {
         if (e.target === deleteModal) {
@@ -320,18 +381,46 @@ function filterProducts() {
 }
 
 function openAddProductModal() {
+    console.log('Opening add product modal...');
+    
     editingProductId = null;
-    document.getElementById('modalTitle').textContent = 'Add New Product';
+    
+    const modalTitle = document.getElementById('modalTitle');
+    const productModal = document.getElementById('productModal');
+    
+    if (!modalTitle) {
+        console.error('Modal title element not found!');
+        return;
+    }
+    
+    if (!productModal) {
+        console.error('Product modal element not found!');
+        return;
+    }
+    
+    modalTitle.textContent = 'Add New Product';
     resetForm();
-    document.getElementById('productModal').classList.add('show');
+    productModal.classList.add('show');
     document.body.classList.add('modal-open');
+    
+    console.log('Modal opened successfully');
 }
 
 function resetForm() {
-    document.getElementById('productForm').reset();
+    const form = document.getElementById('productForm');
+    if (form) {
+        form.reset();
+    }
+    
     currentImageData = null;
-    previewImg.src = 'assets/img/ramen.png';
-    removeImageBtn.style.display = 'none';
+    
+    if (previewImg) {
+        previewImg.src = 'assets/img/ramen.png';
+    }
+    
+    if (removeImageBtn) {
+        removeImageBtn.style.display = 'none';
+    }
 }
 
 function editProduct(id) {
@@ -376,6 +465,19 @@ function deleteProduct(id) {
 
 async function handleFormSubmit(e) {
     e.preventDefault();
+    console.log('Form submitted');
+
+    // Check if supabaseService is initialized
+    if (!supabaseService.initialized) {
+        console.log('Supabase service not initialized, attempting to initialize...');
+        try {
+            await supabaseService.initialize();
+        } catch (error) {
+            console.error('Failed to initialize Supabase service:', error);
+            showNotification('Database connection failed. Please refresh the page.', 'error');
+            return;
+        }
+    }
 
     // Get form data
     const name = document.getElementById('productName').value.trim();
@@ -385,6 +487,8 @@ async function handleFormSubmit(e) {
     const minStock = parseInt(document.getElementById('minStock').value);
     const unit = document.getElementById('productUnit').value.trim();
     const description = document.getElementById('productDescription').value.trim();
+
+    console.log('Form data:', { name, category, price, stock, minStock, unit, description });
 
     // Validate required fields
     if (!name || !category || isNaN(price) || isNaN(stock) || isNaN(minStock) || !unit) {

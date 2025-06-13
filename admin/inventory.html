@@ -160,11 +160,15 @@
                                 <i class="fas fa-camera"></i>
                                 <span>Click to upload image</span>
                             </div>
+                        </div>                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                        <div class="image-controls">
+                            <button type="button" class="btn btn-secondary btn-small" id="uploadBtn">
+                                <i class="fas fa-upload"></i> Upload Image
+                            </button>
+                            <button type="button" class="btn btn-danger btn-small" id="removeImageBtn" style="display: none;">
+                                <i class="fas fa-trash"></i> Remove Image
+                            </button>
                         </div>
-                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                        <button type="button" class="btn btn-secondary btn-small" id="uploadBtn">
-                            <i class="fas fa-upload"></i> Upload Image
-                        </button>
                         <small class="form-help">Recommended size: 300x300px. Image will be automatically cropped to fit.</small>
                     </div>
                 </div>

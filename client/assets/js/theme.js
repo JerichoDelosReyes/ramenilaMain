@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         desktop: !!themeToggle,
         mobile: !!mobileThemeToggle
     });
-    
-    // Check for saved theme preference or default to 'light'
+      // Check for saved theme preference or default to 'light'
     const savedTheme = localStorage.getItem('theme') || 'light';
     console.log('Saved theme preference:', savedTheme);
     
@@ -23,8 +22,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('dark-mode');
         updateToggleIcons('dark');
     } else {
+        // Ensure light theme is properly applied
         document.body.classList.remove('dark-mode');
         updateToggleIcons('light');
+        // Set light theme in localStorage if no preference exists
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'light');
+        }
     }
     
     // Function to update toggle button icons
