@@ -310,28 +310,40 @@ class TransactionHistory {
 
         // Modal close functionality
         this.setupModalHandlers();
-    }
-
-    setupModalHandlers() {
+    }    setupModalHandlers() {
         // Close modals when clicking outside or on close button
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
-                e.target.style.display = 'none';
+                this.closeModal(e.target);
             }
             if (e.target.classList.contains('close-btn') || e.target.classList.contains('close')) {
                 const modal = e.target.closest('.modal');
-                if (modal) modal.style.display = 'none';
+                if (modal) this.closeModal(modal);
             }
         });
 
         // Close modals with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                document.querySelectorAll('.modal').forEach(modal => {
-                    modal.style.display = 'none';
+                document.querySelectorAll('.modal.show').forEach(modal => {
+                    this.closeModal(modal);
                 });
             }
         });
+    }
+
+    showModal(modal) {
+        if (modal) {
+            modal.classList.add('show');
+            document.body.classList.add('modal-open');
+        }
+    }
+
+    closeModal(modal) {
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.classList.remove('modal-open');
+        }
     }
 
     searchTransactions(query) {
@@ -682,9 +694,8 @@ class TransactionHistory {
 
         // Display items
         if (itemsEl) {
-            if (transaction.items && Array.isArray(transaction.items)) {
-                itemsEl.innerHTML = transaction.items.map(item => `
-                    <div class="modal-item">
+            if (transaction.items && Array.isArray(transaction.items)) {                itemsEl.innerHTML = transaction.items.map(item => `
+                    <div class="item-row">
                         <span class="item-name">${item.name || item.product_name}</span>
                         <span class="item-quantity">Qty: ${item.quantity}</span>
                         <span class="item-price">₱${parseFloat(item.price || 0).toFixed(2)}</span>
@@ -692,10 +703,9 @@ class TransactionHistory {
                 `).join('');
             } else {
                 itemsEl.innerHTML = '<div class="text-muted">No items data available</div>';
-            }
-        }
+            }        }
 
-        modal.style.display = 'block';
+        this.showModal(modal);
     }
 
     showRefundModal(orderNumber = null) {
@@ -705,8 +715,9 @@ class TransactionHistory {
             const orderNumberInput = document.getElementById('refund-order-number');
             if (orderNumberInput) orderNumberInput.value = orderNumber;
         }
-        
-        if (modal) modal.style.display = 'block';
+          if (modal) {
+            this.showModal(modal);
+        }
     }    async processRefund() {
         const orderNumber = document.getElementById('refund-order-number')?.value;
         const reason = document.getElementById('refund-reason')?.value;
@@ -737,10 +748,9 @@ class TransactionHistory {
 
             const result = await supabaseService.refundTransaction(transaction.id, refundData);
 
-            if (result) {
-                this.showNotification('Refund processed successfully', 'success');
+            if (result) {                this.showNotification('Refund processed successfully', 'success');
                 const refundModal = document.getElementById('refund-modal');
-                if (refundModal) refundModal.style.display = 'none';
+                if (refundModal) this.closeModal(refundModal);
                 
                 // Clear the form
                 document.getElementById('refund-order-number').value = '';
