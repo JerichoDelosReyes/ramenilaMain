@@ -442,36 +442,63 @@ class SupabaseService {
             console.error('Error deleting image:', error);
             throw error;
         }
-    }
-
-    // TRANSACTION METHODS
-    async addTransaction(transaction) {
+    }    // TRANSACTION METHODS
+    async addTransaction(transactionData) {
         await this.initialize();
         const client = this.getClient();
         
         try {
+            console.log('📋 SupabaseService: Adding transaction to database...');
+            console.log('📋 Transaction data received:', transactionData);            // Use all available fields including customer name
+            const insertData = {
+                transaction_number: transactionData.transactionNumber,
+                items: transactionData.items, // Already a JSON string
+                subtotal: transactionData.subtotal,
+                tax_amount: transactionData.tax_amount || 0,
+                discount_amount: transactionData.discount_amount || 0,
+                total: transactionData.total,
+                amount_paid: transactionData.amount_paid || transactionData.total,
+                change_amount: transactionData.change_amount || 0,
+                customer_name: transactionData.customer_name || null,
+                payment_method: transactionData.paymentMethod,
+                status: transactionData.status || 'completed'
+            };
+            
+            console.log('📋 Insert data (with all fields):', insertData);
+            
             const { data, error } = await client
                 .from('transactions')
-                .insert([{
-                    transaction_number: transaction.orderNumber,
-                    items: JSON.stringify(transaction.items),
-                    total: transaction.total,
-                    payment_method: transaction.paymentMethod,
-                    status: transaction.status || 'completed',
-                    created_at: new Date().toISOString()
-                }])
+                .insert([insertData])
                 .select();
             
-            if (error) throw error;
-            
-            // Update product stocks
-            for (const item of transaction.items) {
-                await this.updateProductStock(item.id, -item.quantity);
+            if (error) {
+                console.error('❌ Database insert error:', error);
+                throw error;
             }
             
+            console.log('✅ Transaction inserted successfully:', data[0]);
+            
+            // Update product stocks - parse items if it's a string
+            const items = typeof transactionData.items === 'string' 
+                ? JSON.parse(transactionData.items) 
+                : transactionData.items;
+                
+            console.log('📦 Updating stock for items:', items);
+            
+            for (const item of items) {
+                try {
+                    console.log(`📦 Updating stock for product ${item.id}: -${item.quantity}`);
+                    await this.updateProductStock(item.id, -item.quantity);
+                } catch (stockError) {
+                    console.error(`❌ Failed to update stock for product ${item.id}:`, stockError);
+                    // Don't throw here - transaction is already saved
+                }
+            }
+            
+            console.log('✅ All stock updates completed');
             return data[0];
         } catch (error) {
-            console.error('Error adding transaction:', error);
+            console.error('❌ Error adding transaction:', error);
             throw error;
         }
     }
@@ -733,6 +760,93 @@ class SupabaseService {
             
         } catch (error) {
             console.error('Error in cleanup:', error);
+            throw error;
+        }
+    }
+
+    // REFUND METHODS
+    async refundTransaction(transactionId, refundData) {
+        await this.initialize();
+        const client = this.getClient();
+        
+        try {
+            console.log('💸 Processing refund for transaction:', transactionId);
+            console.log('💸 Refund data:', refundData);
+            
+            // Get the original transaction to update stock if needed
+            const { data: transaction, error: fetchError } = await client
+                .from('transactions')
+                .select('*')
+                .eq('id', transactionId)
+                .single();
+            
+            if (fetchError) {
+                console.error('❌ Failed to fetch transaction:', fetchError);
+                throw fetchError;
+            }
+            
+            if (!transaction) {
+                throw new Error('Transaction not found');
+            }            // Prepare refund data - include all refund columns
+            const refundUpdateData = {
+                status: 'refunded',
+                refund_reason: refundData.reason,
+                refund_notes: refundData.notes,
+                refund_date: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+            
+            // Add refund amount if specified (for partial refunds)
+            if (refundData.amount) {
+                refundUpdateData.refund_amount = parseFloat(refundData.amount);
+                refundUpdateData.refund_notes = `${refundData.notes || 'Partial refund'} - Amount: ₱${refundData.amount}`;
+            } else {
+                refundUpdateData.refund_amount = transaction.total; // Full refund amount
+                refundUpdateData.refund_notes = refundData.notes || 'Full refund';
+            }            console.log('💸 Updating transaction with refund data:', refundUpdateData);
+            
+            // Update transaction status and refund information
+            const { data: updatedTransaction, error: updateError } = await client
+                .from('transactions')
+                .update(refundUpdateData)
+                .eq('id', transactionId)
+                .select()
+                .single();
+            
+            if (updateError) {
+                console.error('❌ Failed to update transaction:', updateError);
+                throw updateError;
+            }
+              // If it's a full refund (no amount specified or amount equals total), restore stock for all items
+            if (!refundData.amount || refundData.amount >= transaction.total) {
+                console.log('💸 Processing full refund - restoring stock');
+                
+                try {
+                    const items = typeof transaction.items === 'string' 
+                        ? JSON.parse(transaction.items) 
+                        : transaction.items;
+                    
+                    for (const item of items) {
+                        try {
+                            console.log(`📦 Restoring stock for product ${item.id}: +${item.quantity}`);
+                            await this.updateProductStock(item.id, item.quantity);
+                        } catch (stockError) {
+                            console.error(`❌ Failed to restore stock for product ${item.id}:`, stockError);
+                        }
+                    }
+                    
+                    console.log('✅ Stock restoration completed');
+                } catch (itemsError) {
+                    console.error('❌ Error processing items for stock restoration:', itemsError);
+                }
+            } else {
+                console.log('💸 Partial refund - stock not restored');
+            }
+            
+            console.log('✅ Refund processed successfully:', updatedTransaction);
+            return updatedTransaction;
+        } catch (error) {
+            console.error('❌ Error processing refund:', error);
             throw error;
         }
     }

@@ -494,6 +494,16 @@
     border-color: #873E23;
 }
 
+.qty-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #e9ecef;
+}
+
+.qty-btn:disabled:hover {
+    background-color: #e9ecef;
+}
+
 .qty-display {
     min-width: 30px;
     text-align: center;
@@ -1010,30 +1020,79 @@
 .notification {
     position: fixed;
     top: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-100%);
-    padding: 15px 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+    margin-bottom: 10px;
     border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    z-index: 10000;
-    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.3s ease-out;
 }
 
-.notification.success {
-    background-color: #28a745;
-}
-
-.notification.error {
-    background-color: #dc3545;
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 .notification.info {
-    background-color: #17a2b8;
+    background: #d1ecf1;
+    border-left: 4px solid var(--info-color);
+    color: #0c5460;
 }
 
-.notification.show {
-    transform: translateX(-50%) translateY(0);
+.notification.success {
+    background: #d4edda;
+    border-left: 4px solid var(--success-color);
+    color: #155724;
+}
+
+.notification.error {
+    background: #f8d7da;
+    border-left: 4px solid var(--error-color);
+    color: #721c24;
+}
+
+.notification.warning {
+    background: #fff3cd;
+    border-left: 4px solid var(--warning-color);
+    color: #856404;
+}
+
+.notification-content {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-message {
+    flex: 1;
+    font-weight: 500;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: inherit;
+    padding: 0;
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-close:hover {
+    opacity: 0.7;
 }
 
 /* Processing Spinner */
@@ -1349,5 +1408,472 @@
     
     .section-header h2 {
         font-size: 1.5rem;
+    }
+}
+
+/* Mobile Responsive Improvements for Transaction Page */
+@media (max-width: 768px) {
+    /* Table container improvements */
+    .menu-table-container {
+        margin: 0 -15px;
+        border-radius: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Table responsive styling */
+    .menu-table {
+        min-width: 650px; /* Ensure table is wide enough */
+        font-size: 13px;
+    }
+    
+    /* Table header improvements */
+    .menu-table thead th {
+        padding: 10px 6px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        min-width: fit-content;
+    }
+    
+    /* Image column - make more compact */
+    .menu-table th:nth-child(1),
+    .menu-table td:nth-child(1) {
+        width: 60px;
+        min-width: 60px;
+        padding: 8px 4px;
+    }
+    
+    .product-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+    }
+    
+    /* Product name column - keep flexible but with minimum width */
+    .menu-table th:nth-child(2),
+    .menu-table td:nth-child(2) {
+        min-width: 180px;
+        padding: 8px 6px;
+    }
+    
+    .product-name {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 3px;
+        line-height: 1.2;
+    }
+    
+    .product-description {
+        font-size: 11px;
+        color: #666;
+        line-height: 1.2;        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    /* Category column - make more compact */
+    .menu-table th:nth-child(3),
+    .menu-table td:nth-child(3) {
+        width: 80px;
+        min-width: 80px;
+        padding: 8px 4px;
+    }
+    
+    .category-badge {
+        padding: 3px 6px;
+        font-size: 10px;
+        border-radius: 15px;
+        display: inline-block;
+        text-align: center;
+        min-width: 50px;
+    }
+    
+    /* Price column - keep compact */
+    .menu-table th:nth-child(4),
+    .menu-table td:nth-child(4) {
+        width: 80px;
+        min-width: 80px;
+        padding: 8px 4px;
+        text-align: center;
+    }
+    
+    .product-price {
+        font-size: 14px;
+        font-weight: 700;
+        color: #873E23;
+    }
+    
+    /* Stock column - make readable */
+    .menu-table th:nth-child(5),
+    .menu-table td:nth-child(5) {
+        min-width: 120px;
+        padding: 8px 6px;
+        text-align: center;
+    }
+    
+    .stock-info {
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 1.2;
+        display: block;
+    }
+    
+    /* Table row styling for mobile */
+    .menu-table td {
+        padding: 10px 4px;
+        vertical-align: top;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .menu-table tbody tr {
+        border-bottom: 2px solid #f8f9fa;
+    }
+    
+    .menu-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .menu-table tbody tr.out-of-stock {
+        opacity: 0.6;
+        background-color: #f5f5f5;
+    }
+    
+    /* Cart section mobile improvements */
+    .cart-section {
+        padding: 15px !important;
+        margin-bottom: 20px;
+    }
+    
+    .cart-header h2 {
+        font-size: 1.2rem;
+    }
+    
+    /* Menu section mobile improvements */
+    .menu-section {
+        padding: 15px;
+        height: auto;
+        max-height: none;
+    }
+    
+    .section-header h2 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+    
+    /* Category tabs mobile */
+    .category-tabs {
+        gap: 6px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+        border-radius: 15px;
+        min-width: fit-content;
+    }
+    
+    /* Search box mobile */
+    .search-box {
+        margin-bottom: 15px;
+    }
+    
+    .search-box input {
+        padding: 12px 15px 12px 40px;
+        font-size: 16px; /* Prevent zoom on iOS */
+        border-radius: 8px;
+    }
+    
+    .search-box i {
+        left: 12px;
+        font-size: 14px;
+    }
+    
+    /* Better scrolling indicator */
+    .menu-table-container::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    .menu-table-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+    
+    .menu-table-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+    
+    .menu-table-container::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    
+    /* Add visual indicator for clickable rows */
+    .menu-table tbody tr:not(.out-of-stock) {
+        position: relative;
+    }
+    
+    .menu-table tbody tr:not(.out-of-stock):after {
+        content: "👆 Tap to add";
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 10px;
+        color: #873E23;
+        opacity: 0.7;
+        font-weight: 500;
+        pointer-events: none;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+    .pos-container {
+        gap: 10px;
+    }
+    
+    .menu-section,
+    .cart-section {
+        padding: 10px !important;
+    }
+    
+    .menu-table-container {
+        margin: 0 -10px;
+    }
+    
+    .menu-table {
+        min-width: 600px;
+        font-size: 12px;
+    }
+    
+    .menu-table thead th {
+        padding: 8px 3px;
+        font-size: 11px;
+    }
+    
+    .menu-table td {
+        padding: 8px 3px;
+    }
+    
+    /* Make product image even smaller on tiny screens */
+    .product-image {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .menu-table th:nth-child(1),
+    .menu-table td:nth-child(1) {
+        width: 50px;
+        min-width: 50px;
+    }
+    
+    /* Adjust minimum widths for very small screens */
+    .menu-table th:nth-child(2),
+    .menu-table td:nth-child(2) {
+        min-width: 150px;
+    }
+    
+    .product-name {
+        font-size: 12px;
+    }
+    
+    .product-description {
+        font-size: 10px;
+    }
+    
+    .category-badge {
+        font-size: 9px;
+        padding: 2px 4px;
+        min-width: 45px;
+    }
+    
+    .stock-info {
+        font-size: 10px;
+    }
+    
+    .product-price {
+        font-size: 13px;
+    }
+    
+    /* Smaller tap indicator */
+    .menu-table tbody tr:not(.out-of-stock):after {
+        content: "👆";
+        font-size: 12px;
+        right: 5px;
+    }
+    
+    .section-header h2 {
+        font-size: 1.2rem;
+    }
+    
+    .tab-btn {
+        padding: 5px 8px;
+        font-size: 11px;
+    }
+}
+
+/* Loading Overlay Styles */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #B8860B, #CD853F, #D2691E);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loading-container {
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.loading-logo-section {
+    margin-bottom: 20px;
+}
+
+.logo-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    z-index: 2;
+    position: relative;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.logo-spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 120px;
+}
+
+.spinner-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 3px solid transparent;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+}
+
+.spinner-ring:nth-child(1) {
+    border-top-color: rgba(255, 255, 255, 0.9);
+    border-right-color: rgba(255, 255, 255, 0.9);
+    animation-duration: 2s;
+    transform: scale(1);
+}
+
+.spinner-ring:nth-child(2) {
+    border-top-color: rgba(255, 255, 255, 0.6);
+    border-left-color: rgba(255, 255, 255, 0.6);
+    animation-duration: 1.5s;
+    animation-direction: reverse;
+    transform: scale(0.85);
+}
+
+.spinner-ring:nth-child(3) {
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+    border-right-color: rgba(255, 255, 255, 0.3);
+    animation-duration: 1s;
+    transform: scale(0.7);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg) scale(var(--scale, 1));
+    }
+    100% {
+        transform: rotate(360deg) scale(var(--scale, 1));
+    }
+}
+
+.loading-text h3 {
+    margin: 0 0 10px 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.loading-text p {
+    margin: 0 0 20px 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.loading-dots span {
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    animation: dotBounce 1.4s ease-in-out infinite both;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.loading-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+.loading-dots span:nth-child(3) {
+    animation-delay: 0s;
+}
+
+@keyframes dotBounce {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1.2);
+        opacity: 1;
     }
 }

@@ -79,3 +79,108 @@
         gap: 10px;
     }
 }
+
+/* Transaction History Mobile Specific Fixes */
+@media (max-width: 768px) {
+    /* Ensure proper viewport behavior */
+    body {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+    
+    /* Transaction table mobile improvements */
+    .transactions-table-container {
+        position: relative;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 8px;
+    }
+    
+    /* Better touch scrolling for tables */
+    .table-container::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    .table-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+    
+    .table-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+    
+    .table-container::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    
+    /* Pagination mobile fixes */
+    .pagination {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    .pagination button {
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+        -webkit-touch-callout: none;
+    }
+    
+    /* Modal improvements for mobile */
+    .modal {
+        padding: 10px;
+    }
+    
+    .modal-content {
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    /* Search and filter improvements */
+    .search-box input,
+    .filter-group select {
+        border-radius: 8px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+    
+    /* iOS specific fixes */
+    input, select, textarea {
+        -webkit-border-radius: 8px;
+        border-radius: 8px;
+    }
+    
+    /* Android specific fixes */
+    select {
+        background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        background-size: 12px;
+        padding-right: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screen optimizations */
+    .pagination button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .transactions-table th,
+    .transactions-table td {
+        padding: 6px 4px;
+        font-size: 11px;
+    }
+    
+    /* Compact status badges */
+    .status-badge,
+    .payment-badge {
+        padding: 1px 4px;
+        font-size: 9px;
+        border-radius: 3px;
+    }
+}

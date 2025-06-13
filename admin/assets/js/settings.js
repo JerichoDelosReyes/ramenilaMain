@@ -6,14 +6,16 @@ class SettingsManager {
         this.settings = this.loadSettings();
         this.users = [];
         this.initializeSystem();
-    }
-
-    async initializeSystem() {
-        this.setupTabs();
-        this.setupEventListeners();
-        await this.loadSettingsFromSupabase();
-        await this.loadUsersFromSupabase();
-        this.loadCurrentSettings();
+    }    async initializeSystem() {
+        try {
+            this.setupTabs();
+            this.setupEventListeners();
+            await this.loadSettingsFromSupabase();
+            await this.loadUsersFromSupabase();
+            this.loadCurrentSettings();
+        } catch (error) {
+            console.error('Error initializing settings:', error);
+        }
     }
 
     loadSettings() {

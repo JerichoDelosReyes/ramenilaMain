@@ -1,4 +1,22 @@
 import supabaseService from './supabase-service.js';
+
+// Loading overlay functions
+function showLoadingOverlay() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('hidden');
+    }
+}
+
+function hideLoadingOverlay() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        setTimeout(() => {
+            loadingOverlay.classList.add('hidden');
+        }, 400); // Fast loading - 0.4 second delay
+    }
+}
+
 // Transaction/POS JavaScript functionality
 class POSSystem {    constructor() {
         this.cart = [];
@@ -6,6 +24,10 @@ class POSSystem {    constructor() {
         this.orderNumber = this.generateOrderNumber();
         this.paymentMethod = 'cash';
         this.customerType = 'regular'; // Track customer type for discounts
+        
+        // Show loading overlay initially
+        showLoadingOverlay();
+        
         this.initializeSystem();
     }    initializeSystem() {
         this.loadMenuItems();
@@ -62,10 +84,14 @@ class POSSystem {    constructor() {
             this.testProducts = await supabaseService.getProducts();
             this.filteredProducts = [...this.testProducts];
             this.renderMenuTable();
+            console.log('Menu items loaded successfully');
         } catch (error) {
             console.error('Error loading menu items:', error);
+        } finally {
+            // Hide loading overlay after menu items load attempt
+            hideLoadingOverlay();
         }
-    }    renderMenuTable() {
+    }renderMenuTable() {
         console.log('Rendering menu table...');
         const tableBody = document.getElementById('menuTableBody');
         if (!tableBody) {
@@ -83,7 +109,8 @@ class POSSystem {    constructor() {
         console.log('Table rendered with', this.filteredProducts.length, 'products');
     }    createTableRow(product) {
         const row = document.createElement('tr');
-        const isOutOfStock = product.stock === 0;
+        const availableStock = this.getAvailableStock(product.id);
+        const isOutOfStock = availableStock === 0;
         
         if (isOutOfStock) {
             row.classList.add('out-of-stock');
@@ -91,6 +118,14 @@ class POSSystem {    constructor() {
 
         // Get image based on category
         const categoryImage = this.getCategoryImage(product);
+        
+        // Show cart quantity if item is in cart
+        const cartItem = this.cart.find(item => item.id === product.id);
+        const cartQuantity = cartItem ? cartItem.quantity : 0;
+        
+        const stockDisplay = isOutOfStock ? 'Out of Stock' : 
+                           cartQuantity > 0 ? `${availableStock} available (${cartQuantity} in cart)` :
+                           `${availableStock} available`;
 
         row.innerHTML = `
             <td>
@@ -107,8 +142,8 @@ class POSSystem {    constructor() {
                 <span class="product-price">₱${product.price.toFixed(2)}</span>
             </td>
             <td>
-                <span class="stock-info ${this.getStockClass(product.stock)}">
-                    ${isOutOfStock ? 'Out of Stock' : `${product.stock} available`}
+                <span class="stock-info ${this.getStockClass(availableStock)}">
+                    ${stockDisplay}
                 </span>
             </td>
         `;
@@ -298,29 +333,80 @@ class POSSystem {    constructor() {
         window.pos = new POSSystem();
      });
     }    addToCart(item) {
+        // Check if there's enough stock available
+        const availableStock = this.getAvailableStock(item.id);
+        
         const existingItem = this.cart.find(cartItem => cartItem.id === item.id);
         if (existingItem) {
+            // Check if we can add one more
+            if (existingItem.quantity >= availableStock) {
+                this.showNotification(`Not enough stock available. Only ${availableStock} items in stock.`, 'error');
+                return;
+            }
             existingItem.quantity += 1;
         } else {
+            // Check if we have any stock
+            if (availableStock <= 0) {
+                this.showNotification(`${item.name} is out of stock.`, 'error');
+                return;
+            }
             this.cart.push({...item, quantity: 1});
         }
+        
         this.updateCartDisplay();
-    }
-
-    removeFromCart(itemId) {
-        this.cart = this.cart.filter(item => item.id !== itemId);
-        this.updateCartDisplay();
-    }    updateQuantity(itemId, change) {
-        const item = this.cart.find(cartItem => cartItem.id === itemId);
-        if (item) {
-            item.quantity += change;
-            if (item.quantity <= 0) {
-                this.removeFromCart(itemId);
-            } else {
-                this.updateCartDisplay();
-            }
+        this.renderMenuTable(); // Refresh to show updated available stock
+    }    removeFromCart(itemId) {
+        console.log('removeFromCart called with:', { itemId, itemIdType: typeof itemId });
+        
+        // Convert itemId to string for comparison
+        const itemIdStr = String(itemId);
+        const originalLength = this.cart.length;
+        
+        this.cart = this.cart.filter(item => String(item.id) !== itemIdStr);
+        
+        if (this.cart.length < originalLength) {
+            console.log('Item removed from cart');
+            this.updateCartDisplay();
+            this.renderMenuTable(); // Refresh to show updated available stock
+        } else {
+            console.error('Item not found in cart for removal, ID:', itemId);
         }
-    }    // Calculate discount based on customer type
+    }updateQuantity(itemId, change) {
+        console.log('updateQuantity called with:', { itemId, change, itemIdType: typeof itemId });
+        
+        // Convert itemId to string for comparison (since HTML might pass it as string)
+        const itemIdStr = String(itemId);
+        const item = this.cart.find(cartItem => String(cartItem.id) === itemIdStr);
+        
+        console.log('Found item:', item);
+        
+        if (item) {
+            const newQuantity = item.quantity + change;
+            
+            if (newQuantity <= 0) {
+                // Remove item from cart
+                this.removeFromCart(itemId);
+                return;
+            }
+            
+            // Check stock availability when increasing quantity
+            if (change > 0) {
+                const availableStock = this.getAvailableStock(item.id);
+                if (newQuantity > availableStock) {
+                    this.showNotification(`Not enough stock available. Only ${availableStock} items in stock.`, 'error');
+                    return;
+                }
+            }
+            
+            item.quantity = newQuantity;
+            this.updateCartDisplay();
+            this.renderMenuTable(); // Refresh to show updated available stock
+            
+            console.log('Updated quantity for item:', item.name, 'New quantity:', item.quantity);
+        } else {
+            console.error('Item not found in cart for ID:', itemId);
+        }
+    }// Calculate discount based on customer type
     calculateDiscount(subtotal) {
         const discountRates = {
             'regular': 0,
@@ -369,13 +455,14 @@ class POSSystem {    constructor() {
 
         // Calculate subtotal
         let subtotal = 0;
-        let totalItems = 0;
-
-        if (cartItems) {
+        let totalItems = 0;        if (cartItems) {
             cartItems.innerHTML = '';
             this.cart.forEach(item => {
                 subtotal += item.price * item.quantity;
                 totalItems += item.quantity;
+                
+                const availableStock = this.getAvailableStock(item.id);
+                const canIncrease = item.quantity < availableStock;
 
                 const cartItem = document.createElement('div');
                 cartItem.className = 'cart-item';
@@ -385,10 +472,10 @@ class POSSystem {    constructor() {
                         <span class="cart-item-price">₱${(item.price * item.quantity).toFixed(2)}</span>
                     </div>
                     <div class="cart-item-controls">
-                        <button onclick="pos.updateQuantity(${item.id}, -1)" class="qty-btn minus">-</button>
+                        <button onclick="pos.updateQuantity('${item.id}', -1)" class="qty-btn minus">-</button>
                         <span class="quantity">${item.quantity}</span>
-                        <button onclick="pos.updateQuantity(${item.id}, 1)" class="qty-btn plus">+</button>
-                        <button onclick="pos.removeFromCart(${item.id})" class="remove-btn">
+                        <button onclick="pos.updateQuantity('${item.id}', 1)" class="qty-btn plus" ${!canIncrease ? 'disabled' : ''}>+</button>
+                        <button onclick="pos.removeFromCart('${item.id}')" class="remove-btn">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -621,7 +708,7 @@ class POSSystem {    constructor() {
         }
 
         // Get payment modal data
-        const customerName = document.getElementById('customerName')?.value.trim() || 'Walk-in Customer';
+        const customerName = document.getElementById('customerName')?.value.trim() || null;
         const orderType = document.getElementById('orderType')?.value || 'dine-in';
         const paymentType = document.getElementById('paymentType')?.value || 'cash';
         
@@ -705,30 +792,34 @@ class POSSystem {    constructor() {
             customerTypeSelect.value = 'regular';
             this.customerType = 'regular';
         }
-    }
-
-        async saveTransaction(transaction) {
+    }        async saveTransaction(transaction) {
             try {
                 console.log('💾 Starting transaction save process...');
-                
-                // Prepare transaction data for Supabase
+                console.log('💾 Full transaction object:', transaction);                // Prepare transaction data for Supabase - including customer name
                 const transactionData = {
                     transactionNumber: transaction.orderNumber,
                     items: JSON.stringify(transaction.items), // Ensure items are JSON string
                     subtotal: parseFloat(transaction.subtotal || 0),
-                    taxAmount: parseFloat(transaction.tax || 0),
-                    discountAmount: parseFloat(transaction.discount || 0),
+                    tax_amount: parseFloat(transaction.tax || 0),
+                    discount_amount: parseFloat(transaction.discount || 0),
                     total: parseFloat(transaction.total || 0),
+                    amount_paid: parseFloat(transaction.amountReceived || transaction.total || 0),
+                    change_amount: parseFloat(transaction.change || 0),
+                    customer_name: transaction.customerName || null,
                     paymentMethod: transaction.paymentMethod,
-                    paymentStatus: 'completed',
-                    status: 'completed',
-                    cashierName: 'POS System',
-                    customerName: transaction.customerName || 'Walk-in Customer',
-                    notes: `Order Type: ${transaction.orderType || 'dine-in'}, Customer Type: ${transaction.customerType || 'regular'}, Reference: ${transaction.referenceNumber || 'N/A'}`
+                    status: 'completed'
                 };
 
                 console.log("💾 Saving transaction to Supabase...");
-                console.log("📋 Transaction data:", transactionData);
+                console.log("📋 Transaction data prepared (with all fields):", transactionData);
+                
+                // Test database connection first
+                const connectionTest = await supabaseService.testConnection();
+                console.log('🔗 Database connection test:', connectionTest);
+                
+                if (!connectionTest) {
+                    throw new Error('Database connection failed');
+                }
                 
                 const result = await supabaseService.addTransaction(transactionData);
                 
@@ -759,8 +850,17 @@ class POSSystem {    constructor() {
                 return result;
             } catch (error) {
                 console.error("❌ Failed to save transaction:", error);
+                console.error("❌ Error message:", error.message);
+                console.error("❌ Error stack:", error.stack);
                 console.error("📋 Transaction data that failed:", transaction);
-                this.showNotification("❌ Failed to save transaction to database", "error");
+                
+                // Show more specific error message
+                let errorMessage = "Failed to save transaction to database";
+                if (error.message) {
+                    errorMessage += ": " + error.message;
+                }
+                
+                this.showNotification("❌ " + errorMessage, "error");
                 throw error;
             }
         }
@@ -795,7 +895,7 @@ class POSSystem {    constructor() {
                 </div>
                 
                 <div class="receipt-details">
-                    <p><strong>Customer:</strong> ${transaction.customerName}</p>
+                    <p><strong>Customer:</strong> ${transaction.customerName || 'Walk-in Customer'}</p>
                     <p><strong>Customer Type:</strong> ${transaction.customerType.charAt(0).toUpperCase() + transaction.customerType.slice(1)}</p>
                     <p><strong>Order Type:</strong> ${transaction.orderType.charAt(0).toUpperCase() + transaction.orderType.slice(1)}</p>
                     <p><strong>Payment Method:</strong> ${transaction.paymentMethod.toUpperCase()}</p>
@@ -1008,27 +1108,42 @@ class POSSystem {    constructor() {
         }
     }
 
+    // Get available stock for a product (original stock minus cart quantity)
+    getAvailableStock(productId) {
+        const product = this.testProducts.find(p => p.id === productId);
+        if (!product) return 0;
+        
+        const cartItem = this.cart.find(item => item.id === productId);
+        const cartQuantity = cartItem ? cartItem.quantity : 0;
+        
+        const availableStock = product.stock - cartQuantity;
+        console.log(`Available stock for ${product.name}: ${product.stock} - ${cartQuantity} = ${availableStock}`);
+        
+        return Math.max(0, availableStock);
+    }
+
+    // Show notification to user
     showNotification(message, type = 'info') {
+        console.log(`${type.toUpperCase()}: ${message}`);
+        
+        // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.innerHTML = `
-            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-            <span>${message}</span>
+            <div class="notification-content">
+                <span class="notification-message">${message}</span>
+                <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+            </div>
         `;
         
+        // Add to page
         document.body.appendChild(notification);
         
+        // Auto-remove after 3 seconds
         setTimeout(() => {
-            notification.classList.add('show');
-        }, 100);
-        
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                if (document.body.contains(notification)) {
-                    document.body.removeChild(notification);
-                }
-            }, 300);
+            if (notification.parentElement) {
+                notification.remove();
+            }
         }, 3000);
     }
 }

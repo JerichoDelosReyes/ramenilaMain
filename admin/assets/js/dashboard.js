@@ -1,15 +1,32 @@
 // Dashboard functionality
 import supabaseService from './supabase-service.js';
 
+// Loading overlay functions
+function showLoadingOverlay() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('hidden');
+    }
+}
+
+function hideLoadingOverlay() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        setTimeout(() => {
+            loadingOverlay.classList.add('hidden');
+        }, 400); // Fast loading - 0.4 second delay
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('📊 Dashboard initializing...');
+    
+    // Show loading overlay initially
+    showLoadingOverlay();
     
     // Update current date and time
     updateDateTime();
     setInterval(updateDateTime, 1000);
-    
-    // Show loading state
-    showLoadingState();
     
     // Load and display dashboard data
     loadDashboardData();
@@ -86,6 +103,9 @@ async function loadDashboardData() {
         
         // Show error states for dynamic content
         showErrorState();
+    } finally {
+        // Hide loading overlay after data load attempt
+        hideLoadingOverlay();
     }
 }
 

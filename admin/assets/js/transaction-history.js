@@ -1,21 +1,40 @@
 // Transaction History Management System
 import supabaseService from './supabase-service.js';
 
+// Loading overlay functions
+function showLoadingOverlay() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('hidden');
+    }
+}
+
+function hideLoadingOverlay() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        setTimeout(() => {
+            loadingOverlay.classList.add('hidden');
+        }, 400); // Fast loading - 0.4 second delay
+    }
+}
+
 class TransactionHistory {
     constructor() {
         this.transactions = [];
         this.filteredTransactions = [];
         this.currentPage = 1;
-        this.itemsPerPage = 10;
+        this.itemsPerPage = 5;
         this.currentTransaction = null;
         this.sortColumn = 'created_at';
         this.sortDirection = 'desc';
         this.isLoading = false;
         this.searchQuery = '';
+        
+        // Show loading overlay initially
+        showLoadingOverlay();
+        
         this.initializeSystem();
-    }
-
-    async initializeSystem() {
+    }    async initializeSystem() {
         try {
             console.log('🔄 Initializing Transaction History System...');
             
@@ -55,6 +74,9 @@ class TransactionHistory {
             this.hideLoading();
             this.showErrorState();
             throw error;
+        } finally {
+            // Hide loading overlay after initialization attempt
+            hideLoadingOverlay();
         }
     }
 
@@ -591,9 +613,7 @@ class TransactionHistory {
         return `<span class="payment-badge payment-${method}">
             <i class="fas fa-${icon}"></i> ${method.toUpperCase()}
         </span>`;
-    }
-
-    updatePaginationInfo() {
+    }    updatePaginationInfo() {
         const totalPages = Math.ceil(this.filteredTransactions.length / this.itemsPerPage);
         const startItem = (this.currentPage - 1) * this.itemsPerPage + 1;
         const endItem = Math.min(this.currentPage * this.itemsPerPage, this.filteredTransactions.length);
@@ -602,6 +622,12 @@ class TransactionHistory {
         if (paginationInfo) {
             paginationInfo.textContent = 
                 `Showing ${startItem}-${endItem} of ${this.filteredTransactions.length} transactions`;
+        }
+        
+        // Update the "Page X of Y" display
+        const pageInfo = document.getElementById('page-info');
+        if (pageInfo) {
+            pageInfo.textContent = `Page ${this.currentPage} of ${totalPages}`;
         }
         
         const prevBtn = document.getElementById('prev-page');
@@ -681,12 +707,11 @@ class TransactionHistory {
         }
         
         if (modal) modal.style.display = 'block';
-    }
-
-    async processRefund() {
+    }    async processRefund() {
         const orderNumber = document.getElementById('refund-order-number')?.value;
         const reason = document.getElementById('refund-reason')?.value;
         const amount = document.getElementById('refund-amount')?.value;
+        const notes = document.getElementById('refund-notes')?.value;
 
         if (!orderNumber || !reason) {
             this.showNotification('Please fill in all required fields', 'error');
@@ -701,21 +726,34 @@ class TransactionHistory {
                 return;
             }
 
-            const result = await supabaseService.refundTransaction(transaction.id, {
+            // Prepare refund data
+            const refundData = {
                 reason: reason,
-                notes: amount ? `Partial refund: ₱${amount}` : 'Full refund',
+                notes: notes || (amount ? `Partial refund: ₱${amount}` : 'Full refund'),
                 amount: amount ? parseFloat(amount) : null
-            });
+            };
+
+            console.log('Processing refund with data:', refundData);
+
+            const result = await supabaseService.refundTransaction(transaction.id, refundData);
 
             if (result) {
                 this.showNotification('Refund processed successfully', 'success');
                 const refundModal = document.getElementById('refund-modal');
                 if (refundModal) refundModal.style.display = 'none';
-                this.loadTransactions(); // Refresh the list
+                
+                // Clear the form
+                document.getElementById('refund-order-number').value = '';
+                document.getElementById('refund-reason').selectedIndex = 0;
+                document.getElementById('refund-amount').value = '';
+                document.getElementById('refund-notes').value = '';
+                
+                // Refresh the transactions list
+                await this.loadTransactions();
             }
         } catch (error) {
             console.error('Error processing refund:', error);
-            this.showNotification('Error processing refund', 'error');
+            this.showNotification(`Error processing refund: ${error.message}`, 'error');
         }
     }
 

@@ -42,6 +42,8 @@ CREATE TABLE transactions (
     tax_amount DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (tax_amount >= 0),
     discount_amount DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (discount_amount >= 0),
     total DECIMAL(10,2) NOT NULL CHECK (total >= 0),
+    amount_paid DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (amount_paid >= 0),
+    change_amount DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (change_amount >= 0),
     payment_method VARCHAR(50) NOT NULL,
     payment_status VARCHAR(50) NOT NULL DEFAULT 'completed',
     status VARCHAR(50) NOT NULL DEFAULT 'completed',
