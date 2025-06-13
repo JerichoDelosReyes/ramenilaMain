@@ -668,6 +668,36 @@ form {
     gap: 15px;
 }
 
+.upload-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+}
+
+.btn-outline:hover {
+    background: #dc3545;
+    color: white;
+}
+
+.form-help {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-top: 5px;
+}
+
+.form-help i {
+    color: #873E23;
+    margin-right: 5px;
+}
+
 .image-preview {
     position: relative;
     width: 200px;
@@ -682,6 +712,17 @@ form {
 .image-preview:hover {
     border-color: #873E23;
     transform: scale(1.02);
+}
+
+.image-preview.drag-over {
+    border-color: #4f46e5;
+    background: rgba(79, 70, 229, 0.1);
+    transform: scale(1.05);
+}
+
+.image-preview.drag-over .upload-overlay {
+    opacity: 1;
+    background: rgba(79, 70, 229, 0.8);
 }
 
 .image-preview img {
@@ -781,6 +822,18 @@ form {
     max-height: 400px;
     display: block;
     border-radius: 8px;
+}
+
+.crop-info {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    z-index: 10;
 }
 
 .crop-preview {

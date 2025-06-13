@@ -210,6 +210,47 @@
     color: #856404;
 }
 
+.stock-level.normal {
+    background: #d4edda;
+    color: #155724;
+}
+
+.stock-level.outofstock {
+    background: #f8d7da;
+    color: #721c24;
+    font-weight: 600;
+}
+
+/* Status Badge Styles */
+.status {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status.completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status.cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status.refunded {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
 /* Notification Styles */
 .notification {
     position: fixed;

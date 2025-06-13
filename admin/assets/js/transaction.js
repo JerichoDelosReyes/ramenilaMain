@@ -709,24 +709,59 @@ class POSSystem {    constructor() {
 
         async saveTransaction(transaction) {
             try {
-                const result = await supabaseService.addTransaction({
+                console.log('💾 Starting transaction save process...');
+                
+                // Prepare transaction data for Supabase
+                const transactionData = {
                     transactionNumber: transaction.orderNumber,
-                    items: transaction.items,
-                    subtotal: transaction.subtotal,
-                    taxAmount: transaction.tax,
-                    discountAmount: transaction.discount,
-                    total: transaction.total,
+                    items: JSON.stringify(transaction.items), // Ensure items are JSON string
+                    subtotal: parseFloat(transaction.subtotal || 0),
+                    taxAmount: parseFloat(transaction.tax || 0),
+                    discountAmount: parseFloat(transaction.discount || 0),
+                    total: parseFloat(transaction.total || 0),
                     paymentMethod: transaction.paymentMethod,
                     paymentStatus: 'completed',
                     status: 'completed',
                     cashierName: 'POS System',
-                    customerName: transaction.customerName,
-                    notes: `Order Type: ${transaction.orderType}, Customer Type: ${transaction.customerType}`
-                });
-                console.log("Transaction saved to Supabase:", result);
+                    customerName: transaction.customerName || 'Walk-in Customer',
+                    notes: `Order Type: ${transaction.orderType || 'dine-in'}, Customer Type: ${transaction.customerType || 'regular'}, Reference: ${transaction.referenceNumber || 'N/A'}`
+                };
+
+                console.log("💾 Saving transaction to Supabase...");
+                console.log("📋 Transaction data:", transactionData);
+                
+                const result = await supabaseService.addTransaction(transactionData);
+                
+                console.log("✅ Transaction saved successfully to database!");
+                console.log("📋 Saved transaction result:", result);
+                
+                this.showNotification("✅ Transaction saved successfully", "success");
+                
+                // Verify the transaction was saved by checking if it appears in the database
+                setTimeout(async () => {
+                    try {
+                        console.log('🔍 Verifying transaction was saved...');
+                        const allTransactions = await supabaseService.getTransactions();
+                        const foundTransaction = allTransactions.find(t => t.transaction_number === transactionData.transactionNumber);
+                        
+                        if (foundTransaction) {
+                            console.log('✅ Transaction verification successful - appears in database');
+                            this.showNotification("✅ Transaction verified in database", "success");
+                        } else {
+                            console.log('⚠️ Transaction verification failed - not found in database');
+                            this.showNotification("⚠️ Transaction may not have been saved properly", "warning");
+                        }
+                    } catch (verifyError) {
+                        console.error('❌ Transaction verification failed:', verifyError);
+                    }
+                }, 2000);
+                
+                return result;
             } catch (error) {
-                console.error("Failed to save transaction:", error);
-                this.showNotification("Failed to save transaction", "error");
+                console.error("❌ Failed to save transaction:", error);
+                console.error("📋 Transaction data that failed:", transaction);
+                this.showNotification("❌ Failed to save transaction to database", "error");
+                throw error;
             }
         }
         showOrderModal(transaction) {

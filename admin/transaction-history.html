@@ -86,7 +86,7 @@
                 <div class="search-filters">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="search-transactions" placeholder="Search by order number, items...">
+                        <input type="text" id="search-transactions" placeholder="Search by order number, items, payment method...">
                     </div>
                     
                     <div class="filter-group">
@@ -95,24 +95,40 @@
                             <option value="completed">Completed</option>
                             <option value="cancelled">Cancelled</option>
                             <option value="refunded">Refunded</option>
+                            <option value="pending">Pending</option>
                         </select>
                         
                         <select id="payment-filter">
                             <option value="">All Payment Methods</option>
                             <option value="cash">Cash</option>
                             <option value="card">Card</option>
+                            <option value="gcash">GCash</option>
                         </select>
                         
                         <input type="date" id="date-from" title="From Date">
                         <input type="date" id="date-to" title="To Date">
                         
                         <button id="apply-filters" class="btn btn-primary">
-                            <i class="fas fa-filter"></i> Apply Filters
+                            <i class="fas fa-filter"></i> Apply
                         </button>
                         
                         <button id="clear-filters" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Clear
-                        </button>                    </div>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="refresh-btn" class="btn btn-outline">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button id="export-csv" class="btn btn-success">
+                        <i class="fas fa-file-csv"></i> Export CSV
+                    </button>
+                    <button id="export-pdf" class="btn btn-danger">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </button>
                 </div>
             </div>
 
@@ -130,30 +146,51 @@
                 
                 <div class="card">
                     <div class="card-icon">
-                        <i class="fa-solid fa-peso-sign"></i>                    </div>
+                        <i class="fas fa-check-circle"></i>
+                    </div>
                     <div class="card-content">
-                        <h3 id="total-revenue">₱0.00</h3>
+                        <h3 id="completed-transactions">0</h3>
+                        <p>Completed</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="pending-transactions">0</h3>
+                        <p>Pending</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="cancelled-transactions">0</h3>
+                        <p>Cancelled</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-undo"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="refunded-transactions">0</h3>
+                        <p>Refunded</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fa-solid fa-peso-sign"></i>                    
+                    </div>
+                    <div class="card-content">
+                        <h3 id="total-revenue">$0.00</h3>
                         <p>Total Revenue</p>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-calendar-day"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 id="today-transactions">0</h3>
-                        <p>Today's Transactions</p>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 id="avg-order-value">₱0.00</h3>
-                        <p>Average Order Value</p>
                     </div>
                 </div>
             </div>
@@ -162,8 +199,20 @@
             <div class="transactions-section">
                 <div class="section-header">
                     <h2>Transaction Records</h2>
-                    <div class="pagination-info">
-                        <span id="showing-info">Showing 0 of 0 transactions</span>
+                    <div class="table-controls">
+                        <div class="pagination-info">
+                            <span id="pagination-info">Showing 0 of 0 transactions</span>
+                        </div>
+                        <div class="items-per-page">
+                            <label for="items-per-page">Show:</label>
+                            <select id="items-per-page">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span>per page</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -171,12 +220,22 @@
                     <table class="transactions-table">
                         <thead>
                             <tr>
-                                <th>Order #</th>
-                                <th>Date & Time</th>
+                                <th class="sortable" data-column="order_number">
+                                    Order # <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-column="timestamp">
+                                    Date & Time <i class="fas fa-sort"></i>
+                                </th>
                                 <th>Items</th>
-                                <th>Payment Method</th>
-                                <th>Status</th>
-                                <th>Total</th>
+                                <th class="sortable" data-column="payment_method">
+                                    Payment <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-column="status">
+                                    Status <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sortable" data-column="total">
+                                    Total <i class="fas fa-sort"></i>
+                                </th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -207,7 +266,30 @@
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body" id="transaction-details">
-                <!-- Transaction details will be populated here -->
+                <div class="transaction-info">
+                    <div class="info-row">
+                        <strong>Order Number:</strong> <span id="modal-order-number">-</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Date & Time:</strong> <span id="modal-timestamp">-</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Status:</strong> <span id="modal-status" class="status-badge">-</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Payment Method:</strong> <span id="modal-payment-method">-</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Total:</strong> <span id="modal-total">-</span>
+                    </div>
+                </div>
+                
+                <div class="transaction-items">
+                    <h4>Items Ordered:</h4>
+                    <div id="modal-items">
+                        <!-- Items will be populated here -->
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button id="print-receipt-modal" class="btn btn-primary">
@@ -229,6 +311,10 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
+                    <label for="refund-order-number">Order Number</label>
+                    <input type="text" id="refund-order-number" readonly>
+                </div>
+                <div class="form-group">
                     <label for="refund-reason">Refund Reason</label>
                     <select id="refund-reason">
                         <option value="customer-request">Customer Request</option>
@@ -239,15 +325,16 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="refund-amount">Partial Refund Amount (Leave empty for full refund)</label>
+                    <input type="number" id="refund-amount" step="0.01" placeholder="Enter amount">
+                </div>
+                <div class="form-group">
                     <label for="refund-notes">Additional Notes</label>
                     <textarea id="refund-notes" rows="3" placeholder="Enter additional notes..."></textarea>
                 </div>
-                <div class="refund-amount">
-                    <strong>Refund Amount: <span id="refund-amount">₱0.00</span></strong>
-                </div>
             </div>
             <div class="modal-footer">
-                <button id="confirm-refund" class="btn btn-danger">
+                <button onclick="transactionHistory.processRefund()" class="btn btn-danger">
                     <i class="fas fa-check"></i> Confirm Refund
                 </button>
                 <button class="btn btn-secondary" onclick="document.getElementById('refund-modal').style.display='none'">

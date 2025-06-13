@@ -1,12 +1,59 @@
 // Supabase Configuration
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import configLoader from './config-loader.js'
 
-const supabaseUrl = 'https://quhvblahkpwxdurcuahx.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1aHZibGFoa3B3eGR1cmN1YWh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk3NDQ3OTcsImV4cCI6MjA2NTMyMDc5N30.Eg_s-CUIvtlzRZcZwJGp6Ipn6uWK9FctcN914p89hTU'
+let supabase = null;
 
-export const supabase = createClient(supabaseUrl, supabaseKey)
+// Initialize Supabase client asynchronously
+async function initializeSupabase() {
+    if (supabase) return supabase;
+    
+    try {
+        const config = await configLoader.loadConfig();
+        const supabaseUrl = config.SUPABASE_URL;
+        const supabaseKey = config.SUPABASE_ANON_KEY;
+        
+        if (!supabaseUrl || !supabaseKey) {
+            throw new Error('Missing Supabase configuration');
+        }
+        
+        supabase = createClient(supabaseUrl, supabaseKey, {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+            },
+            global: {
+                headers: {
+                    'X-Client-Info': 'ramen-pos'
+                }
+            }
+        });
+        
+        console.log('Supabase client initialized successfully');
+        return supabase;
+    } catch (error) {
+        console.error('Failed to initialize Supabase:', error);
+        throw error;
+    }
+}
 
-// Make it globally accessible
-window.supabase = supabase
+// Export the initialization function
+export { initializeSupabase }
 
-export default supabase
+// For backward compatibility, export a getter
+export const getSupabase = () => {
+    if (!supabase) {
+        throw new Error('Supabase not initialized. Call initializeSupabase() first.');
+    }
+    return supabase;
+}
+
+// Initialize immediately for global access
+initializeSupabase().then((client) => {
+    // Make it globally accessible
+    window.supabase = client;
+}).catch(error => {
+    console.error('Failed to initialize Supabase globally:', error);
+});
+
+export default { initializeSupabase, getSupabase };
