@@ -94,6 +94,18 @@ CREATE INDEX idx_users_status ON users(status);
 CREATE INDEX idx_settings_key ON settings(key);
 CREATE INDEX idx_settings_category ON settings(category);
 
+-- Insert default categories
+INSERT INTO categories (name, display_name, description, image_url) VALUES
+('ramen', 'Ramen', 'Traditional Japanese noodle soup', 'assets/img/ramen.png'),
+('drinks', 'Drinks', 'Beverages and refreshments', 'assets/img/drinks.png'),
+('desserts', 'Desserts', 'Sweet treats and desserts', 'assets/img/desserts.png');
+
+-- Insert default users
+INSERT INTO users (name, email, role, status, last_login) VALUES
+('Admin User', 'jericho.dlsreyes@gmail.com', 'admin', 'active', NOW()),
+('Manager User', 'justinecoronel001@gmail.com', 'manager', 'active', NOW() - INTERVAL '1 day'),
+('Cashier User', 'norona.leeadrian022804@gmail.com', 'cashier', 'active', NOW() - INTERVAL '2 days');
+
 -- Create updated_at triggers
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -174,4 +186,3 @@ COMMENT ON TABLE users IS 'System users and staff management';
 COMMENT ON TABLE settings IS 'Application configuration settings';
 COMMENT ON TABLE categories IS 'Product categories';
 COMMENT ON TABLE product_images IS 'Product image storage references';
-    
