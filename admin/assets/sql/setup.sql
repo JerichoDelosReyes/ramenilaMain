@@ -119,52 +119,6 @@ CREATE INDEX idx_users_status ON users(status);
 CREATE INDEX idx_settings_key ON settings(key);
 CREATE INDEX idx_settings_category ON settings(category);
 
--- Insert default categories
-INSERT INTO categories (name, display_name, description, image_url) VALUES
-('ramen', 'Ramen', 'Traditional Japanese noodle soup', 'assets/img/ramen.png'),
-('drinks', 'Drinks', 'Beverages and refreshments', 'assets/img/drinks.png'),
-('desserts', 'Desserts', 'Sweet treats and desserts', 'assets/img/desserts.png'),
-('sides', 'Sides', 'Side dishes and appetizers', 'assets/img/sides.png');
-
--- Insert sample products
-INSERT INTO products (name, category, price, stock, min_stock, unit, description, image_url) VALUES
-('Tonkotsu Ramen', 'ramen', 280.00, 50, 10, 'bowls', 'Rich pork bone broth with tender chashu', 'assets/img/ramen.png'),
-('Shoyu Ramen', 'ramen', 260.00, 45, 10, 'bowls', 'Light soy sauce based broth', 'assets/img/ramen.png'),
-('Miso Ramen', 'ramen', 270.00, 40, 10, 'bowls', 'Fermented soybean paste broth', 'assets/img/ramen.png'),
-('Gyoza (6 pcs)', 'sides', 120.00, 100, 20, 'pieces', 'Pan-fried pork dumplings', 'assets/img/sides.png'),
-('Chicken Karaage', 'sides', 150.00, 80, 15, 'pieces', 'Japanese fried chicken', 'assets/img/sides.png'),
-('Green Tea', 'drinks', 80.00, 200, 30, 'cups', 'Hot Japanese green tea', 'assets/img/drinks.png'),
-('Soft Drinks', 'drinks', 60.00, 150, 25, 'cans', 'Assorted soft drinks', 'assets/img/drinks.png'),
-('Mochi Ice Cream', 'desserts', 90.00, 60, 10, 'pieces', 'Sweet rice cake with ice cream', 'assets/img/desserts.png'),
-('Dorayaki', 'desserts', 110.00, 40, 8, 'pieces', 'Pancake sandwich with filling', 'assets/img/desserts.png');
-
--- Insert default settings
-INSERT INTO settings (key, value, category, description) VALUES
-('general_theme', '"light"', 'general', 'Application theme'),
-('general_language', '"en"', 'general', 'Application language'),
-('general_currency', '"PHP"', 'general', 'Default currency'),
-('general_timezone', '"Asia/Manila"', 'general', 'Default timezone'),
-('general_date_format', '"MM/DD/YYYY"', 'general', 'Date format'),
-('general_time_format', '"12"', 'general', 'Time format'),
-('restaurant_name', '"Ramenila"', 'restaurant', 'Restaurant name'),
-('restaurant_address', '""', 'restaurant', 'Restaurant address'),
-('restaurant_phone', '""', 'restaurant', 'Restaurant phone'),
-('restaurant_email', '""', 'restaurant', 'Restaurant email'),
-('pos_cash_enabled', 'true', 'pos', 'Enable cash payments'),
-('pos_card_enabled', 'true', 'pos', 'Enable card payments'),
-('pos_mobile_enabled', 'false', 'pos', 'Enable mobile payments'),
-('pos_tax_rate', '8.25', 'pos', 'Tax rate percentage'),
-('pos_tip_suggestions', '"15,18,20,25"', 'pos', 'Tip suggestions'),
-('pos_auto_print', 'true', 'pos', 'Auto print receipts'),
-('pos_email_receipts', 'false', 'pos', 'Email receipts'),
-('pos_receipt_footer', '"Thank you for visiting Ramenila!"', 'pos', 'Receipt footer text');
-
--- Insert default users
-INSERT INTO users (name, email, role, status, last_login) VALUES
-('Admin User', 'jericho.dlsreyes@gmail.com', 'admin', 'active', NOW()),
-('Manager User', 'justinecoronel001@gmail.com', 'manager', 'active', NOW() - INTERVAL '1 day'),
-('Cashier User', 'norona.leeadrian022804@gmail.com', 'cashier', 'active', NOW() - INTERVAL '2 days');
-
 -- Create updated_at triggers
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
