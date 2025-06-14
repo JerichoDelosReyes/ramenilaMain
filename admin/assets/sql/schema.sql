@@ -70,17 +70,6 @@ CREATE TABLE users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create settings table
-CREATE TABLE settings (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    key VARCHAR(255) UNIQUE NOT NULL,
-    value JSONB NOT NULL,
-    category VARCHAR(100) NOT NULL,
-    description TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
 -- Create product_images table for image management
 CREATE TABLE product_images (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -185,3 +174,4 @@ COMMENT ON TABLE users IS 'System users and staff management';
 COMMENT ON TABLE settings IS 'Application configuration settings';
 COMMENT ON TABLE categories IS 'Product categories';
 COMMENT ON TABLE product_images IS 'Product image storage references';
+    

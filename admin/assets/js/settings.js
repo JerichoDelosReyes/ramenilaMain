@@ -1,27 +1,67 @@
 // Settings Management System
-import supabaseService from './supabase-service.js';
+// Local Storage Only - No Database Integration
 
 class SettingsManager {
     constructor() {
         this.settings = this.loadSettings();
-        this.users = [];
+        this.users = this.loadUsers();
         this.initializeSystem();
     }    async initializeSystem() {
         try {
             this.setupTabs();
             this.setupEventListeners();
-            await this.loadSettingsFromSupabase();
-            await this.loadUsersFromSupabase();
             this.loadCurrentSettings();
+            this.renderUsers();
+            this.initializeDefaultUsers();
         } catch (error) {
             console.error('Error initializing settings:', error);
         }
     }
 
+    loadUsers() {
+        const defaultUsers = [
+            {
+                id: 1,
+                name: 'Admin User',
+                email: 'jericho.dlsreyes@gmail.com',
+                role: 'admin',
+                lastLogin: 'Today, 2:30 PM',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: 2,
+                name: 'Manager User',
+                email: 'justinecoronel001@gmail.com',
+                role: 'manager',
+                lastLogin: 'Yesterday, 5:45 PM',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: 3,
+                name: 'Cashier User',
+                email: 'norona.leeadrian022804@gmail.com',
+                role: 'cashier',
+                lastLogin: '2 days ago',
+                status: 'active',
+                createdAt: new Date().toISOString()
+            }
+        ];
+
+        const savedUsers = localStorage.getItem('ramenila_users');
+        if (savedUsers) {
+            return JSON.parse(savedUsers);
+        }
+        
+        // Save default users if none exist
+        localStorage.setItem('ramenila_users', JSON.stringify(defaultUsers));
+        return defaultUsers;
+    }
+
     loadSettings() {
         const defaultSettings = {
             general: {
-                theme: 'light',
                 language: 'en',
                 currency: 'PHP',
                 timezone: 'Asia/Manila',
@@ -62,76 +102,10 @@ class SettingsManager {
         return defaultSettings;
     }
 
-    async loadSettingsFromSupabase() {
-        try {
-            const supabaseSettings = await supabaseService.getSettings();
-            if (Object.keys(supabaseSettings).length > 0) {
-                this.settings = { ...this.settings, ...supabaseSettings };
-                localStorage.setItem('ramenila_settings', JSON.stringify(this.settings));
-            }
-        } catch (error) {
-            console.error('Error loading settings from Supabase:', error);
-        }
-    }
-
-    async loadUsersFromSupabase() {
-        try {
-            this.users = await supabaseService.getUsers();
-            // Format the users to match the expected structure
-            this.users = this.users.map(user => ({
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-                status: user.status,
-                lastLogin: user.last_login ? new Date(user.last_login).toLocaleString() : 'Never',
-                createdAt: user.created_at
-            }));
-            
-            // Add users to the table
-            this.users.forEach(user => this.addUserToTable(user));
-        } catch (error) {
-            console.error('Error loading users from Supabase:', error);
-            // Fallback to initialize default users if Supabase fails
-            this.initializeDefaultUsers();
-        }
-    }
-
     initializeDefaultUsers() {
-        // Initialize default users if not already in localStorage
-        const existingUsers = localStorage.getItem('users');
-        if (!existingUsers) {
-            const defaultUsers = [
-                {
-                    id: 1,
-                    name: 'Admin User',
-                    email: 'jericho.dlsreyes@gmail.com',
-                    role: 'admin',
-                    lastLogin: 'Today, 2:30 PM',
-                    status: 'active',
-                    createdAt: new Date().toISOString()
-                },
-                {
-                    id: 2,
-                    name: 'Manager User',
-                    email: 'justinecoronel001@gmail.com',
-                    role: 'manager',
-                    lastLogin: 'Yesterday, 5:45 PM',
-                    status: 'active',
-                    createdAt: new Date().toISOString()
-                },
-                {
-                    id: 3,
-                    name: 'Cashier User',
-                    email: 'norona.leeadrian022804@gmail.com',
-                    role: 'cashier',
-                    lastLogin: '2 days ago',
-                    status: 'active',
-                    createdAt: new Date().toISOString()
-                }
-            ];
-            localStorage.setItem('users', JSON.stringify(defaultUsers));
-        }
+        // This method is no longer needed as users are handled in loadUsers()
+        // Keep for compatibility but it's essentially empty now
+        console.log('Default users already initialized in loadUsers()');
     }
 
     setupTabs() {
@@ -198,11 +172,6 @@ class SettingsManager {
     }
 
     setupRealTimeUpdates() {
-        // Theme changes
-        document.getElementById('theme-select').addEventListener('change', (e) => {
-            this.applyTheme(e.target.value);
-        });
-
         // Currency changes
         document.getElementById('currency-select').addEventListener('change', (e) => {
             this.updateCurrencyDisplay(e.target.value);
@@ -211,7 +180,6 @@ class SettingsManager {
 
     loadCurrentSettings() {
         // General settings
-        document.getElementById('theme-select').value = this.settings.general.theme;
         document.getElementById('language-select').value = this.settings.general.language;
         document.getElementById('currency-select').value = this.settings.general.currency;
         document.getElementById('timezone-select').value = this.settings.general.timezone;
@@ -253,7 +221,6 @@ class SettingsManager {
         // Collect all settings from form elements
         const newSettings = {
             general: {
-                theme: document.getElementById('theme-select').value,
                 language: document.getElementById('language-select').value,
                 currency: document.getElementById('currency-select').value,
                 timezone: document.getElementById('timezone-select').value,
@@ -280,20 +247,14 @@ class SettingsManager {
         };
 
         try {
-            // Save to Supabase
-            await supabaseService.saveAllSettings(newSettings);
-            
-            // Save to localStorage as backup
+            // Save to localStorage only
             localStorage.setItem('ramenila_settings', JSON.stringify(newSettings));
             this.settings = newSettings;
-
-            // Apply theme if changed
-            this.applyTheme(newSettings.general.theme);
 
             this.showNotification('Settings saved successfully!', 'success');
         } catch (error) {
             console.error('Error saving settings:', error);
-            this.showNotification('Failed to save settings to database', 'error');
+            this.showNotification('Failed to save settings', 'error');
         }
     }
 
@@ -316,21 +277,6 @@ class SettingsManager {
         });
 
         return hours;
-    }
-
-    applyTheme(theme) {
-        const body = document.body;
-        body.classList.remove('light-theme', 'dark-theme');
-        
-        if (theme === 'dark') {
-            body.classList.add('dark-theme');
-        } else if (theme === 'light') {
-            body.classList.add('light-theme');
-        } else {
-            // Auto theme - detect system preference
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            body.classList.add(prefersDark ? 'dark-theme' : 'light-theme');
-        }
     }
 
     updateCurrencyDisplay(currency) {
@@ -359,28 +305,27 @@ class SettingsManager {
         }
 
         try {
-            // Add user to Supabase
-            const newUser = await supabaseService.addUser({
+            // Generate new user ID
+            const newId = Math.max(...this.users.map(u => u.id), 0) + 1;
+            
+            const newUser = {
+                id: newId,
                 name: name,
                 email: email,
                 role: role,
-                status: 'active'
-            });
-
-            // Format for local display
-            const formattedUser = {
-                id: newUser.id,
-                name: newUser.name,
-                email: newUser.email,
-                role: newUser.role,
+                status: 'active',
                 lastLogin: 'Never',
-                status: newUser.status,
-                createdAt: newUser.created_at
+                createdAt: new Date().toISOString()
             };
 
-            // Add to local array and table
-            this.users.push(formattedUser);
-            this.addUserToTable(formattedUser);
+            // Add to local array
+            this.users.push(newUser);
+            
+            // Save to localStorage
+            localStorage.setItem('ramenila_users', JSON.stringify(this.users));
+            
+            // Add to table
+            this.addUserToTable(newUser);
 
             // Clear form and close modal
             document.getElementById('add-user-form').reset();
@@ -389,7 +334,7 @@ class SettingsManager {
             this.showNotification('User added successfully!', 'success');
         } catch (error) {
             console.error('Error adding user:', error);
-            this.showNotification('Failed to add user to database', 'error');
+            this.showNotification('Failed to add user', 'error');
         }
     }
 
@@ -448,7 +393,7 @@ class SettingsManager {
     }
 
     async updateUser() {
-        const userId = document.getElementById('edit-user-id').value;
+        const userId = parseInt(document.getElementById('edit-user-id').value);
         const name = document.getElementById('edit-user-name').value;
         const email = document.getElementById('edit-user-email').value;
         const role = document.getElementById('edit-user-role').value;
@@ -461,14 +406,6 @@ class SettingsManager {
         }
 
         try {
-            // Update user in Supabase
-            const updatedUser = await supabaseService.updateUser(userId, {
-                name: name,
-                email: email,
-                role: role,
-                status: status
-            });
-
             // Update local array
             const userIndex = this.users.findIndex(u => u.id === userId);
             if (userIndex !== -1) {
@@ -481,6 +418,9 @@ class SettingsManager {
                     updatedAt: new Date().toISOString()
                 };
 
+                // Save to localStorage
+                localStorage.setItem('ramenila_users', JSON.stringify(this.users));
+
                 // Update the table row
                 this.updateUserInTable(this.users[userIndex]);
             }
@@ -490,7 +430,7 @@ class SettingsManager {
             this.showNotification('User updated successfully!', 'success');
         } catch (error) {
             console.error('Error updating user:', error);
-            this.showNotification('Failed to update user in database', 'error');
+            this.showNotification('Failed to update user', 'error');
         }
     }
 
@@ -542,11 +482,11 @@ class SettingsManager {
 
         if (confirm(`Are you sure you want to delete ${user.name}?`)) {
             try {
-                // Delete from Supabase
-                await supabaseService.deleteUser(userId);
-                
                 // Remove from local array
                 this.users = this.users.filter(u => u.id !== userId);
+                
+                // Save to localStorage
+                localStorage.setItem('ramenila_users', JSON.stringify(this.users));
                 
                 // Remove from table
                 const row = document.querySelector(`tr[data-user-id="${userId}"]`);
@@ -555,9 +495,9 @@ class SettingsManager {
                 }
                 
                 this.showNotification('User deleted successfully!', 'success');
-                        } catch (error) {
+            } catch (error) {
                 console.error('Error deleting user:', error);
-                this.showNotification('Failed to delete user from database', 'error');
+                this.showNotification('Failed to delete user', 'error');
             }
         }
     }
