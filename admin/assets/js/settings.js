@@ -112,8 +112,14 @@ class SettingsManager {
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabPanes = document.querySelectorAll('.tab-pane');
 
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
+        console.log('Setting up tabs...');
+        console.log('Found tab buttons:', tabBtns.length);
+        console.log('Found tab panes:', tabPanes.length);
+
+        tabBtns.forEach((btn, index) => {
+            console.log(`Tab button ${index}:`, btn.dataset.tab);
+            btn.addEventListener('click', (e) => {
+                console.log('Tab clicked:', btn.dataset.tab);
                 const targetTab = btn.dataset.tab;
                 
                 // Update active tab button
@@ -125,6 +131,7 @@ class SettingsManager {
                     pane.classList.remove('active');
                     if (pane.id === `${targetTab}-tab`) {
                         pane.classList.add('active');
+                        console.log('Activated tab pane:', pane.id);
                     }
                 });
             });
@@ -524,9 +531,89 @@ class SettingsManager {
 
 // Initialize Settings Manager when page loads
 let settingsManager;
-document.addEventListener('DOMContentLoaded', () => {
-    settingsManager = new SettingsManager();
+
+// Multiple initialization attempts for GitHub Pages compatibility
+function initializeSettingsManager() {
+    try {
+        console.log('Attempting to initialize Settings Manager...');
+        settingsManager = new SettingsManager();
+        // Export for global access after initialization
+        window.settingsManager = settingsManager;
+        console.log('Settings Manager initialized successfully');
+        return true;
+    } catch (error) {
+        console.error('Failed to initialize Settings Manager:', error);
+        return false;
+    }
+}
+
+// Try multiple initialization methods for GitHub Pages compatibility
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded');
+    
+    // Immediate attempt
+    if (!initializeSettingsManager()) {
+        console.log('First attempt failed, trying with delay...');
+        
+        // Try again after a short delay
+        setTimeout(function() {
+            if (!initializeSettingsManager()) {
+                console.log('Second attempt failed, setting up basic tab functionality...');
+                
+                // Fallback: Set up basic tab functionality without the full class
+                setupBasicTabs();
+            }
+        }, 100);
+    }
 });
 
-// Export for global access
-window.settingsManager = settingsManager;
+// Fallback function for basic tab functionality
+function setupBasicTabs() {
+    console.log('Setting up basic tab functionality...');
+    
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    
+    console.log('Found', tabBtns.length, 'tab buttons');
+    console.log('Found', tabPanes.length, 'tab panes');
+    
+    if (tabBtns.length === 0 || tabPanes.length === 0) {
+        console.error('Tab elements not found!');
+        return;
+    }
+    
+    tabBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            console.log('Basic tab clicked:', btn.dataset.tab);
+            const targetTab = btn.dataset.tab;
+            
+            // Update active tab button
+            tabBtns.forEach(function(b) {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            
+            // Update active tab pane
+            tabPanes.forEach(function(pane) {
+                pane.classList.remove('active');
+                if (pane.id === targetTab + '-tab') {
+                    pane.classList.add('active');
+                    console.log('Activated pane:', pane.id);
+                }
+            });
+        });
+    });
+    
+    console.log('Basic tab functionality set up successfully');
+}
+
+// Also try initialization when window fully loads
+window.addEventListener('load', function() {
+    console.log('Window fully loaded');
+    if (!window.settingsManager) {
+        console.log('Settings manager still not initialized, trying again...');
+        if (!initializeSettingsManager()) {
+            setupBasicTabs();
+        }
+    }
+});

@@ -471,5 +471,51 @@
     <!-- JavaScript -->
     <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/settings.js"></script>
+    
+    <!-- GitHub Pages compatibility script -->
+    <script>
+        // Fallback tab functionality in case the main script doesn't load properly
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, checking for tabs...');
+            
+            // Add a small delay to ensure all scripts are loaded
+            setTimeout(function() {
+                const tabBtns = document.querySelectorAll('.tab-btn');
+                const tabPanes = document.querySelectorAll('.tab-pane');
+                
+                console.log('Fallback: Found', tabBtns.length, 'tab buttons');
+                console.log('Fallback: Found', tabPanes.length, 'tab panes');
+                
+                // If the main script didn't initialize, set up basic tab functionality
+                if (!window.settingsManager) {
+                    console.log('Settings manager not found, setting up fallback tabs...');
+                    
+                    tabBtns.forEach(function(btn) {
+                        btn.addEventListener('click', function() {
+                            console.log('Fallback tab clicked:', btn.dataset.tab);
+                            const targetTab = btn.dataset.tab;
+                            
+                            // Update active tab button
+                            tabBtns.forEach(function(b) {
+                                b.classList.remove('active');
+                            });
+                            btn.classList.add('active');
+                            
+                            // Update active tab pane
+                            tabPanes.forEach(function(pane) {
+                                pane.classList.remove('active');
+                                if (pane.id === targetTab + '-tab') {
+                                    pane.classList.add('active');
+                                    console.log('Fallback activated:', pane.id);
+                                }
+                            });
+                        });
+                    });
+                } else {
+                    console.log('Settings manager found, using main functionality');
+                }
+            }, 100);
+        });
+    </script>
 </body>
 </html>
