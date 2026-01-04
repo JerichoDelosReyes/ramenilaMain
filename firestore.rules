@@ -1,0 +1,52 @@
+rules_version = '2';
+
+// Firestore Security Rules for Ramenila POS System
+// Deploy these rules in Firebase Console > Firestore Database > Rules
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // For development/testing - allow all reads and writes
+    // WARNING: Change these rules before going to production!
+    
+    // Products collection
+    match /products/{productId} {
+      // Allow read access to everyone (for menu display)
+      allow read: if true;
+      
+      // Allow write access (for admin operations)
+      // In production, restrict to authenticated admin users:
+      // allow write: if isAuthenticated() && request.auth.token.admin == true;
+      allow write: if true;
+    }
+    
+    // Categories collection
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    // Transactions collection
+    match /transactions/{transactionId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    // Settings collection
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    // Users collection (if you add authentication later)
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

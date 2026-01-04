@@ -529,3 +529,50 @@
         overflow-x: auto;
     }
 }
+
+/* Skeleton Loading Styles */
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.skeleton-stat-value {
+    height: 32px;
+    width: 100px;
+    margin-bottom: 8px;
+}
+
+.skeleton-stat-label {
+    height: 16px;
+    width: 80px;
+}
+
+.skeleton-row td {
+    padding: 12px 8px;
+}
+
+.skeleton-text {
+    height: 16px;
+    display: inline-block;
+}
+
+.skeleton-alert {
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}

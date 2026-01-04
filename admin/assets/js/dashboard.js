@@ -1,28 +1,59 @@
 // Dashboard functionality
-import supabaseService from './supabase-service.js';
+import supabaseService from './firebase-service.js';
 
-// Loading overlay functions
-function showLoadingOverlay() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    if (loadingOverlay) {
-        loadingOverlay.classList.remove('hidden');
+// Skeleton loading functions
+function showDashboardSkeleton() {
+    // Show skeleton for stats cards
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach(card => {
+        const content = card.querySelector('.stat-content');
+        if (content) {
+            content.innerHTML = `
+                <div class="skeleton skeleton-stat-value"></div>
+                <div class="skeleton skeleton-stat-label"></div>
+            `;
+        }
+    });
+    
+    // Show skeleton for recent orders table
+    const ordersTable = document.getElementById('recentOrdersTable');
+    if (ordersTable) {
+        const tbody = ordersTable.querySelector('tbody');
+        if (tbody) {
+            tbody.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                tbody.innerHTML += `
+                    <tr class="skeleton-row">
+                        <td><div class="skeleton skeleton-text" style="width: 80px;"></div></td>
+                        <td><div class="skeleton skeleton-text" style="width: 120px;"></div></td>
+                        <td><div class="skeleton skeleton-text" style="width: 60px;"></div></td>
+                        <td><div class="skeleton skeleton-text" style="width: 70px;"></div></td>
+                    </tr>
+                `;
+            }
+        }
     }
-}
-
-function hideLoadingOverlay() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    if (loadingOverlay) {
-        setTimeout(() => {
-            loadingOverlay.classList.add('hidden');
-        }, 400); // Fast loading - 0.4 second delay
+    
+    // Show skeleton for low stock alerts
+    const alertsList = document.querySelector('.alerts-list');
+    if (alertsList) {
+        alertsList.innerHTML = '';
+        for (let i = 0; i < 3; i++) {
+            alertsList.innerHTML += `
+                <div class="alert-item skeleton-alert">
+                    <div class="skeleton skeleton-text" style="width: 100px;"></div>
+                    <div class="skeleton skeleton-text" style="width: 60px;"></div>
+                </div>
+            `;
+        }
     }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('📊 Dashboard initializing...');
     
-    // Show loading overlay initially
-    showLoadingOverlay();
+    // Show skeleton loading initially
+    showDashboardSkeleton();
     
     // Update current date and time
     updateDateTime();
@@ -103,9 +134,6 @@ async function loadDashboardData() {
         
         // Show error states for dynamic content
         showErrorState();
-    } finally {
-        // Hide loading overlay after data load attempt
-        hideLoadingOverlay();
     }
 }
 

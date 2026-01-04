@@ -67,31 +67,6 @@
         </button>
     </div>    <!-- Main Content Area -->
     <div class="main-content expanded" id="mainContent">
-        <!-- Loading Spinner -->
-        <div class="loading-overlay" id="loadingOverlay">
-            <div class="loading-container">
-                <div class="loading-logo-section">
-                    <div class="logo-wrapper">
-                        <img src="assets/img/logowhite.png" alt="Ramenila Logo" class="loading-logo">
-                        <div class="logo-spinner">
-                            <div class="spinner-ring"></div>
-                            <div class="spinner-ring"></div>
-                            <div class="spinner-ring"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="loading-text">
-                    <h3>Loading Dashboard</h3>
-                    <p>Please wait while we prepare your dashboard...</p>
-                    <div class="loading-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="dashboard-header">
             <h1>Ramenila Admin Dashboard</h1>
             <p class="date-time" id="currentDateTime"></p>
@@ -215,7 +190,7 @@
         </div>
     </div>    <!-- JavaScript -->
     <script type="module">
-        import './assets/js/supabase-config.js';
+        import './assets/js/firebase-config.js';
     </script>
     <script src="assets/js/sidebar.js"></script>
     <script type="module" src="assets/js/dashboard.js"></script>

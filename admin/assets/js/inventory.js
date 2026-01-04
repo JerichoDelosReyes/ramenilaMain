@@ -1,5 +1,5 @@
 // Inventory Management System
-import supabaseService from './supabase-service.js';
+import supabaseService from './firebase-service.js';
 
 
 
@@ -42,8 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
     confirmDelete = document.getElementById('confirmDelete');
     deleteProductName = document.getElementById('deleteProductName');
     
-    // Show loading overlay initially
-    showLoadingOverlay();
+    // Show skeleton loading initially
+    showInventorySkeleton();
     
     // Initialize components
     initializeInventory();
@@ -53,24 +53,31 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Inventory system initialized');
 });
 
-function showLoadingOverlay() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    if (loadingOverlay) {
-        loadingOverlay.classList.remove('hidden');
-    }
-}
-
-function hideLoadingOverlay() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    if (loadingOverlay) {
-        setTimeout(() => {
-            loadingOverlay.classList.add('hidden');
-        }, 400); // Fast loading - 0.4 second delay
+// Skeleton loading functions
+function showInventorySkeleton() {
+    const productGrid = document.getElementById('productGrid');
+    if (!productGrid) return;
+    
+    productGrid.innerHTML = '';
+    
+    // Create 8 skeleton product cards
+    for (let i = 0; i < 8; i++) {
+        const card = document.createElement('div');
+        card.classList.add('product-card', 'skeleton-card');
+        card.innerHTML = `
+            <div class="skeleton skeleton-card-image"></div>
+            <div class="skeleton-card-content">
+                <div class="skeleton skeleton-title"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-price"></div>
+            </div>
+        `;
+        productGrid.appendChild(card);
     }
 }
 
 async function initializeInventory() {
-    showLoadingOverlay();
+    showInventorySkeleton();
     try {
         // Test database connection first
         const connectionTest = await supabaseService.testConnection();
@@ -112,8 +119,6 @@ async function initializeInventory() {
     } catch (error) {
         console.error('Error loading products:', error);
         showNotification('Failed to load products from database: ' + error.message, 'error');
-    } finally {
-        hideLoadingOverlay();
     }
 }
 

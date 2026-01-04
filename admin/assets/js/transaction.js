@@ -1,20 +1,32 @@
-import supabaseService from './supabase-service.js';
+import supabaseService from './firebase-service.js';
 
-// Loading overlay functions
-function showLoadingOverlay() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    if (loadingOverlay) {
-        loadingOverlay.classList.remove('hidden');
+// Skeleton loading functions
+function showSkeletonLoading() {
+    const tableBody = document.getElementById('menuTableBody');
+    if (!tableBody) return;
+    
+    tableBody.innerHTML = '';
+    
+    // Create 6 skeleton rows
+    for (let i = 0; i < 6; i++) {
+        const row = document.createElement('tr');
+        row.classList.add('skeleton-row');
+        row.innerHTML = `
+            <td><div class="skeleton skeleton-image"></div></td>
+            <td>
+                <div class="skeleton skeleton-title"></div>
+                <div class="skeleton skeleton-text"></div>
+            </td>
+            <td><div class="skeleton skeleton-text" style="width: 70px;"></div></td>
+            <td><div class="skeleton skeleton-price"></div></td>
+            <td><div class="skeleton skeleton-stock"></div></td>
+        `;
+        tableBody.appendChild(row);
     }
 }
 
-function hideLoadingOverlay() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    if (loadingOverlay) {
-        setTimeout(() => {
-            loadingOverlay.classList.add('hidden');
-        }, 400); // Fast loading - 0.4 second delay
-    }
+function hideSkeletonLoading() {
+    // Skeleton is replaced automatically when renderMenuTable() is called
 }
 
 // Transaction/POS JavaScript functionality
@@ -25,8 +37,8 @@ class POSSystem {    constructor() {
         this.paymentMethod = 'cash';
         this.customerType = 'regular'; // Track customer type for discounts
         
-        // Show loading overlay initially
-        showLoadingOverlay();
+        // Show skeleton loading initially
+        showSkeletonLoading();
         
         this.initializeSystem();
     }    initializeSystem() {
@@ -80,16 +92,18 @@ class POSSystem {    constructor() {
         }
     }    async loadMenuItems() {
         try {
-            console.log('Loading products from Supabase...');
+            console.log('Loading products from Firebase...');
             this.testProducts = await supabaseService.getProducts();
             this.filteredProducts = [...this.testProducts];
             this.renderMenuTable();
             console.log('Menu items loaded successfully');
         } catch (error) {
             console.error('Error loading menu items:', error);
-        } finally {
-            // Hide loading overlay after menu items load attempt
-            hideLoadingOverlay();
+            // Show error state in table
+            const tableBody = document.getElementById('menuTableBody');
+            if (tableBody) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem; color: #ff6b6b;">Failed to load menu items. Please refresh the page.</td></tr>';
+            }
         }
     }renderMenuTable() {
         console.log('Rendering menu table...');
@@ -153,6 +167,9 @@ class POSSystem {    constructor() {
             row.style.cursor = 'pointer';
             row.addEventListener('click', () => this.addToCart(product));
             row.title = 'Click to add to cart';
+        } else {
+            row.style.cursor = 'not-allowed';
+            row.title = 'Out of stock - cannot be ordered';
         }
 
         return row;
@@ -274,6 +291,10 @@ class POSSystem {    constructor() {
         const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
         if (confirmPaymentBtn) {
             confirmPaymentBtn.addEventListener('click', () => {
+                // Prevent double-click
+                if (confirmPaymentBtn.disabled) return;
+                confirmPaymentBtn.disabled = true;
+                confirmPaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 this.processOrder();
             });
         }
@@ -534,6 +555,13 @@ class POSSystem {    constructor() {
 
         const modal = document.getElementById('paymentModal');
         if (modal) {
+            // Reset confirm button state
+            const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+            if (confirmPaymentBtn) {
+                confirmPaymentBtn.disabled = false;
+                confirmPaymentBtn.innerHTML = '<i class="fas fa-check"></i> Confirm Payment';
+            }
+            
             this.populatePaymentModal();
             modal.classList.add('show');
             modal.style.display = 'flex';
@@ -702,8 +730,18 @@ class POSSystem {    constructor() {
             }
         }
     }    processOrder() {
+        const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+        
+        const resetButton = () => {
+            if (confirmPaymentBtn) {
+                confirmPaymentBtn.disabled = false;
+                confirmPaymentBtn.innerHTML = '<i class="fas fa-check"></i> Confirm Payment';
+            }
+        };
+        
         if (this.cart.length === 0) {
             this.showNotification('Cart is empty', 'error');
+            resetButton();
             return;
         }
 
@@ -726,6 +764,7 @@ class POSSystem {    constructor() {
             
             if (received < total) {
                 this.showNotification('Insufficient amount received', 'error');
+                resetButton();
                 return;
             }
         } else {
@@ -733,6 +772,7 @@ class POSSystem {    constructor() {
             const referenceNumber = document.getElementById('referenceNumber')?.value.trim();
             if (!referenceNumber) {
                 this.showNotification('Reference number is required for digital payments', 'error');
+                resetButton();
                 return;
             }
         }        // Close payment modal
@@ -956,11 +996,15 @@ class POSSystem {    constructor() {
         const spinner = document.getElementById('processingSpinner');
         if (spinner) {
             spinner.style.display = 'flex';
+            // Prevent scrolling on body
+            document.body.style.overflow = 'hidden';
         }
     }    hideProcessingSpinner() {
         const spinner = document.getElementById('processingSpinner');
         if (spinner) {
             spinner.style.display = 'none';
+            // Re-enable scrolling
+            document.body.style.overflow = '';
         }
     }
 

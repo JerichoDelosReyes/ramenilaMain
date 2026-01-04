@@ -13,7 +13,7 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="module">
-        import './assets/js/supabase-config.js';
+        import './assets/js/firebase-config.js';
     </script>
 </head>
 <body>
@@ -73,31 +73,7 @@
             <i class="fas fa-chevron-left"></i>
         </button>
     </div>    <!-- Main Content -->
-    <div class="main-content" id="mainContent">        <!-- Loading Overlay -->
-        <div class="loading-overlay hidden" id="loadingOverlay">
-            <div class="loading-container">
-                <div class="loading-logo-section">
-                    <div class="logo-wrapper">
-                        <img src="assets/img/logowhite.png" alt="Ramenila Logo" class="loading-logo">
-                        <div class="logo-spinner">
-                            <div class="spinner-ring"></div>
-                            <div class="spinner-ring"></div>
-                            <div class="spinner-ring"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="loading-text">
-                    <h3>Loading Transaction History</h3>
-                    <p>Please wait while we fetch your transaction records...</p>
-                    <div class="loading-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
+    <div class="main-content" id="mainContent">
         <div class="content-wrapper">
             <!-- Header -->
             <div class="page-header">

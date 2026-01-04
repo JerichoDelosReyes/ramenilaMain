@@ -49,17 +49,17 @@ Check out the live preview of the Ramenila website here:
 *   🌐 **HTML5**: For the structure of the web pages.
 *   🎨 **CSS3**: For styling and layout, ensuring a modern and responsive design.
 *   ⚙️ **JavaScript (Vanilla)**: For client-side interactivity, DOM manipulation, and dynamic content.
-*   🗄️ **Supabase**: Cloud-based PostgreSQL database with real-time features and REST API.
-*   📊 **PostgreSQL**: Relational database for robust data management and complex queries.
+*   � **Firebase**: Google's cloud platform for database, authentication, and storage.
+*   📊 **Firestore**: NoSQL document database for flexible data management.
 *   🔄 **REST API**: RESTful API integration for seamless data operations.
 *   <img src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/favicon.ico" width="16" height="16"> **Font Awesome**: For icons used throughout the application.
 
 ## 📝 Database & Architecture
 
 ### 🏗️ **Database Schema**
-*   **PostgreSQL on Supabase**: Cloud-hosted relational database
+*   **Firestore on Firebase**: Cloud-hosted NoSQL document database
 *   **Real-time Features**: Live updates across all connected clients
-*   **Row Level Security (RLS)**: Secure data access with policies
+*   **Firebase Security Rules**: Secure data access with custom rules
 *   **RESTful API**: Auto-generated API endpoints for all database operations
 
 ### 📊 **Database Tables**:
@@ -88,7 +88,7 @@ Check out the live preview of the Ramenila website here:
     * ✅ Inventory optimization with low stock alerts
 *   💾 **Backend Integration**: ✅
     * ✅ Real-time data synchronization
-    * ✅ Cloud-based data storage (Supabase)
+    * ✅ Cloud-based data storage (Firebase)
     * ✅ Automated backup system
 *   🎨 **UI Enhancements**: 📋
     * 📋 Dark mode theme

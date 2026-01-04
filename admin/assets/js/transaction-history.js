@@ -1,20 +1,27 @@
 // Transaction History Management System
-import supabaseService from './supabase-service.js';
+import supabaseService from './firebase-service.js';
 
-// Loading overlay functions
-function showLoadingOverlay() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    if (loadingOverlay) {
-        loadingOverlay.classList.remove('hidden');
-    }
-}
-
-function hideLoadingOverlay() {
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    if (loadingOverlay) {
-        setTimeout(() => {
-            loadingOverlay.classList.add('hidden');
-        }, 100); // Reduced to 0.1 second delay
+// Skeleton loading functions
+function showSkeletonLoading() {
+    const tbody = document.getElementById('transactions-tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    // Create 5 skeleton rows
+    for (let i = 0; i < 5; i++) {
+        const row = document.createElement('tr');
+        row.classList.add('skeleton-row');
+        row.innerHTML = `
+            <td><div class="skeleton skeleton-text" style="width: 100px;"></div></td>
+            <td><div class="skeleton skeleton-text" style="width: 140px;"></div></td>
+            <td><div class="skeleton skeleton-text" style="width: 60px;"></div></td>
+            <td><div class="skeleton skeleton-text" style="width: 80px;"></div></td>
+            <td><div class="skeleton skeleton-text" style="width: 90px;"></div></td>
+            <td><div class="skeleton skeleton-text" style="width: 70px;"></div></td>
+            <td><div class="skeleton skeleton-text" style="width: 80px;"></div></td>
+        `;
+        tbody.appendChild(row);
     }
 }
 
@@ -30,8 +37,8 @@ class TransactionHistory {
         this.isLoading = false;
         this.searchQuery = '';
         
-        // Show loading overlay initially
-        showLoadingOverlay();
+        // Show skeleton loading initially
+        showSkeletonLoading();
         
         this.initializeSystem();
     }    async initializeSystem() {
@@ -44,94 +51,42 @@ class TransactionHistory {
                 throw new Error('Required DOM element "transactions-tbody" not found');
             }
             
-            this.showLoading();
-              console.log('📋 Loading transactions...');
-            
-            // Show a quick notification that we're loading
-            this.showNotification('Loading transaction history...', 'info');
-            
-            // Start loading transactions with quick fallback
-            const loadingPromise = this.loadTransactions();
-            
-            // Quick fallback after 2 seconds if no data loaded
-            const quickFallbackPromise = new Promise((resolve) => {
-                setTimeout(() => {
-                    if (this.transactions.length === 0) {
-                        console.log('⚡ Quick fallback: Loading sample data due to slow response');
-                        this.loadSampleData();
-                    }
-                    resolve();
-                }, 2000);
-            });
-            
-            // Wait for either the actual load or the quick fallback
-            await Promise.race([loadingPromise, quickFallbackPromise]);
+            // Load transactions directly - skeleton is already showing
+            await this.loadTransactions();
             
             console.log('⚙️ Setting up event listeners...');
             this.setupEventListeners();
             
-            console.log('📊 Updating summary cards...');
-            this.updateSummaryCards();
-            
-            console.log('🖼️ Displaying transactions...');
-            this.displayTransactions();
-            
-            this.hideLoading();
-            
             console.log('✅ Transaction History System initialized successfully');
             console.log(`📈 Loaded ${this.transactions.length} transactions`);
             
-            // Set up auto-refresh every 30 seconds
+            // Set up auto-refresh every 60 seconds
             setInterval(() => {
                 console.log('🔄 Auto-refreshing transactions...');
                 this.loadTransactions();
-            }, 30000);
+            }, 60000);
             
         } catch (error) {
             console.error('❌ Transaction History initialization failed:', error);
-            this.hideLoading();
             this.showErrorState();
             throw error;
-        } finally {
-            // Hide loading overlay after initialization attempt
-            hideLoadingOverlay();
         }
     }
 
     showLoading() {
         this.isLoading = true;
-        const tbody = document.getElementById('transactions-tbody');
-        if (tbody) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="7" style="text-align: center; padding: 40px;">
-                        <div class="loading-spinner">
-                            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #873E23; margin-bottom: 15px;"></i>
-                            <div>Loading transactions...</div>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        }
+        showSkeletonLoading();
     }
 
     hideLoading() {
         this.isLoading = false;
     }    async loadTransactions() {
         try {
-            console.log('📋 Loading transactions from Supabase...');
-              // Add timeout for database call
-            const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error('Database request timed out after 5 seconds')), 5000);
-            });
+            console.log('📋 Loading transactions from Firebase...');
             
-            const loadPromise = supabaseService.getTransactions();
-            
-            // Race between actual load and timeout
-            const rawTransactions = await Promise.race([loadPromise, timeoutPromise]);
+            const rawTransactions = await supabaseService.getTransactions(50);
             
             console.log(`✅ Raw transactions loaded: ${rawTransactions.length}`);
-            console.log('Raw transactions from database:', rawTransactions);
             
             if (rawTransactions.length === 0) {
                 console.log('⚠️ No transactions found in database');
@@ -161,30 +116,21 @@ class TransactionHistory {
                     customer_name: transaction.customer_name,
                     customerName: transaction.customer_name
                 };
-                
-                console.log(`✅ Processed transaction: ${processed.order_number} - ₱${processed.total}`);
                 return processed;
             });
 
-            console.log(`✅ Processed ${this.transactions.length} transactions successfully`);
+            console.log(`✅ Loaded ${this.transactions.length} transactions`);
             
-            // Sort by timestamp (newest first)
+            // Sort by timestamp (newest first) - already sorted by Firebase but double-check
             this.transactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             
             this.filteredTransactions = [...this.transactions];
             this.displayTransactions();
             this.updateSummaryCards();
-            
-            console.log('🎉 Transaction loading completed successfully');
               } catch (error) {
             console.error("❌ Error loading transactions:", error);
-            console.log('🔄 Attempting to load with sample data...');
-            
-            // Show notification about the error
-            this.showNotification('Database connection issue. Loading with sample data.', 'warning');
-            
-            // Load sample data as fallback
-            this.loadSampleData();
+            this.showNotification('Failed to load transactions. Please refresh the page.', 'error');
+            this.showEmptyState();
         }
     }
 

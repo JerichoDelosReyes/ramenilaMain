@@ -13,7 +13,7 @@ class ConfigLoader {
             await this.waitForConfig();
             
             // First check if config is already loaded via script tag
-            if (window.RAMENILA_CONFIG && window.RAMENILA_CONFIG.SUPABASE_URL) {
+            if (window.RAMENILA_CONFIG && window.RAMENILA_CONFIG.FIREBASE) {
                 this.config = window.RAMENILA_CONFIG;
                 console.log('✅ Loaded config from window.RAMENILA_CONFIG');
                 this.isLoaded = true;
@@ -31,7 +31,7 @@ class ConfigLoader {
             for (const path of possiblePaths) {
                 try {
                     await this.loadScript(path);
-                    if (window.RAMENILA_CONFIG && window.RAMENILA_CONFIG.SUPABASE_URL) {
+                    if (window.RAMENILA_CONFIG && window.RAMENILA_CONFIG.FIREBASE) {
                         this.config = window.RAMENILA_CONFIG;
                         console.log('✅ Loaded config from:', path);
                         this.isLoaded = true;
@@ -59,7 +59,7 @@ class ConfigLoader {
     async waitForConfig(maxWait = 1000) {
         const start = Date.now();
         while (Date.now() - start < maxWait) {
-            if (window.RAMENILA_CONFIG && window.RAMENILA_CONFIG.SUPABASE_URL) {
+            if (window.RAMENILA_CONFIG && window.RAMENILA_CONFIG.FIREBASE) {
                 return true;
             }
             await new Promise(resolve => setTimeout(resolve, 50));
@@ -97,10 +97,9 @@ class ConfigLoader {
     getEmbeddedConfig() {
         // Configuration must be loaded from config.js file
         // Never commit API keys to the repository
-        console.error('No config.js file found. Please copy config.example.js to config.js and add your Supabase credentials');
+        console.error('No config.js file found. Please copy config.example.js to config.js and add your Firebase credentials');
         return {
-            SUPABASE_URL: '',
-            SUPABASE_ANON_KEY: ''
+            FIREBASE: null
         };
     }
 
