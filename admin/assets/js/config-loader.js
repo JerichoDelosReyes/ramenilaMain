@@ -9,45 +9,42 @@ class ConfigLoader {
         if (this.isLoaded) return this.config;
 
         try {
-            // For client-side apps, we need to handle env vars differently
-            // In a production environment, these should be injected at build time
+            // Wait a bit for script tags to load
+            await this.waitForConfig();
             
-            // Check if we're running in development with a local server
-            const isDev = window.location.hostname === 'localhost' || 
-                         window.location.hostname === '127.0.0.1' ||
-                         window.location.hostname.includes('local');
+            // First check if config is already loaded via script tag
+            if (window.RAMENILA_CONFIG && window.RAMENILA_CONFIG.SUPABASE_URL) {
+                this.config = window.RAMENILA_CONFIG;
+                console.log('✅ Loaded config from window.RAMENILA_CONFIG');
+                this.isLoaded = true;
+                return this.config;
+            }
 
-            if (isDev) {
-                // For development, try to load from env.config file via fetch
+            // Try to load config.js dynamically
+            const possiblePaths = [
+                '/config.js',
+                '../config.js',
+                '../../config.js',
+                '../../../config.js'
+            ];
+
+            for (const path of possiblePaths) {
                 try {
-                    const response = await fetch('/env.config');
-                    if (response.ok) {
-                        const envText = await response.text();
-                        this.config = this.parseEnvFile(envText);
-                    } else {
-                        // Fallback to embedded config for development
-                        this.config = this.getEmbeddedConfig();
+                    await this.loadScript(path);
+                    if (window.RAMENILA_CONFIG && window.RAMENILA_CONFIG.SUPABASE_URL) {
+                        this.config = window.RAMENILA_CONFIG;
+                        console.log('✅ Loaded config from:', path);
+                        this.isLoaded = true;
+                        return this.config;
                     }
-                } catch (error) {
-                    console.warn('Could not load env.config file, using embedded config:', error);
-                    this.config = this.getEmbeddedConfig();
-                }
-            } else {
-                // For production, also try to load from env.config file
-                try {
-                    const response = await fetch('/env.config');
-                    if (response.ok) {
-                        const envText = await response.text();
-                        this.config = this.parseEnvFile(envText);
-                    } else {
-                        this.config = this.getEmbeddedConfig();
-                    }
-                } catch (error) {
-                    console.warn('Could not load env.config file:', error);
-                    this.config = this.getEmbeddedConfig();
+                } catch (e) {
+                    // Try next path
                 }
             }
 
+            // If no config found, use embedded (empty) config
+            console.warn('Could not load config.js from any path');
+            this.config = this.getEmbeddedConfig();
             this.isLoaded = true;
             return this.config;
         } catch (error) {
@@ -57,6 +54,27 @@ class ConfigLoader {
             this.isLoaded = true;
             return this.config;
         }
+    }
+
+    async waitForConfig(maxWait = 1000) {
+        const start = Date.now();
+        while (Date.now() - start < maxWait) {
+            if (window.RAMENILA_CONFIG && window.RAMENILA_CONFIG.SUPABASE_URL) {
+                return true;
+            }
+            await new Promise(resolve => setTimeout(resolve, 50));
+        }
+        return false;
+    }
+
+    loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
     }
 
     parseEnvFile(envText) {
@@ -77,9 +95,9 @@ class ConfigLoader {
     }
 
     getEmbeddedConfig() {
-        // Configuration must be loaded from env.config file
+        // Configuration must be loaded from config.js file
         // Never commit API keys to the repository
-        console.error('No env.config file found. Please create an env.config file with SUPABASE_URL and SUPABASE_ANON_KEY');
+        console.error('No config.js file found. Please copy config.example.js to config.js and add your Supabase credentials');
         return {
             SUPABASE_URL: '',
             SUPABASE_ANON_KEY: ''

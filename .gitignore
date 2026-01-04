@@ -3,6 +3,7 @@
 .env.local
 .env.production
 env.config
+config.js
 
 # Node modules
 node_modules/
