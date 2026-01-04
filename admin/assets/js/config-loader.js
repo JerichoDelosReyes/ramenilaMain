@@ -18,9 +18,9 @@ class ConfigLoader {
                          window.location.hostname.includes('local');
 
             if (isDev) {
-                // For development, try to load from .env file via fetch
+                // For development, try to load from env.config file via fetch
                 try {
-                    const response = await fetch('/.env');
+                    const response = await fetch('/env.config');
                     if (response.ok) {
                         const envText = await response.text();
                         this.config = this.parseEnvFile(envText);
@@ -29,15 +29,23 @@ class ConfigLoader {
                         this.config = this.getEmbeddedConfig();
                     }
                 } catch (error) {
-                    console.warn('Could not load .env file, using embedded config:', error);
+                    console.warn('Could not load env.config file, using embedded config:', error);
                     this.config = this.getEmbeddedConfig();
                 }
             } else {
-                // For production, use environment variables or embedded config
-                this.config = {
-                    SUPABASE_URL: process.env.SUPABASE_URL || this.getEmbeddedConfig().SUPABASE_URL,
-                    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY || this.getEmbeddedConfig().SUPABASE_ANON_KEY
-                };
+                // For production, also try to load from env.config file
+                try {
+                    const response = await fetch('/env.config');
+                    if (response.ok) {
+                        const envText = await response.text();
+                        this.config = this.parseEnvFile(envText);
+                    } else {
+                        this.config = this.getEmbeddedConfig();
+                    }
+                } catch (error) {
+                    console.warn('Could not load env.config file:', error);
+                    this.config = this.getEmbeddedConfig();
+                }
             }
 
             this.isLoaded = true;
@@ -69,10 +77,12 @@ class ConfigLoader {
     }
 
     getEmbeddedConfig() {
-        // This is a fallback - in production, these should come from environment variables
+        // Configuration must be loaded from env.config file
+        // Never commit API keys to the repository
+        console.error('No env.config file found. Please create an env.config file with SUPABASE_URL and SUPABASE_ANON_KEY');
         return {
-            SUPABASE_URL: 'https://quhvblahkpwxdurcuahx.supabase.co',
-            SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1aHZibGFoa3B3eGR1cmN1YWh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk3NDQ3OTcsImV4cCI6MjA2NTMyMDc5N30.Eg_s-CUIvtlzRZcZwJGp6Ipn6uWK9FctcN914p89hTU'
+            SUPABASE_URL: '',
+            SUPABASE_ANON_KEY: ''
         };
     }
 
